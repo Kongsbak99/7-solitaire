@@ -2,5 +2,8 @@
 
 def checkFoundationPile():
     foundation_piles = ['test', 'test']
-    standard_piles = ['test', 'test']
-    return
+    regular_piles = ['test', 'test']
+
+    total_piles = foundation_piles + regular_piles
+
+    return total_piles
