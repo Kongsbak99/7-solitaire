@@ -1,5 +1,5 @@
 from Algorithms import foundationPile, standardPile
-
+from ImageRecognition import image, video
 
 def main(name):
     # Use a breakpoint in the code line below to debug your script.
