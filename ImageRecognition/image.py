@@ -33,10 +33,11 @@ while(1):
     res3 = cv.bitwise_and(frame, frame, mask = mask3)
     
     img4 = cv.add(mask,mask2)
-    
+    img5 = cv.add(img4,mask3)  
+
     cv.imshow('Original',frame)
     cv.imshow("black", mask3)
-    cv.imshow("black", res3)
+    cv.imshow("combined", img5)
     cv.imshow('red',img4)
 
     k = cv.waitKey(5) & 0xFF
