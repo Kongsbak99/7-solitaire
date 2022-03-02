@@ -31,15 +31,13 @@ while(1):
 
     mask3 = cv.inRange(hsv, lower_black, upper_black)
     res3 = cv.bitwise_and(frame, frame, mask = mask3)
-
     
-    img4 = cv.add(mask,mask2,mask3)
-    
-
-
+    img4 = cv.add(mask,mask2)
     
     cv.imshow('Original',frame)
-    cv.imshow('res4',img4)
+    cv.imshow("black", mask3)
+    cv.imshow("black", res3)
+    cv.imshow('red',img4)
 
     k = cv.waitKey(5) & 0xFF
     if k == 27:
