@@ -1,0 +1,59 @@
+{
+    "stock-pile": 23,
+    "waste-pile": {
+        "top-card": "2D",
+        "locked-cards": []
+    },
+
+    "foundation-piles": {
+        "f-pile-1": "",
+        "f-pile-2": "",
+        "f-pile-3": "",
+        "f-pile-4": ""
+    },
+
+    "tableau-piles": {
+        "t-pile-1": 
+        {
+            "top-card": "5H",
+            "remaining": 0,
+            "visible": [""]
+        },
+        "t-pile-2": 
+        {
+            "top-card": "7H",
+            "remaining": 1,
+            "visible": [""]
+        },
+        "t-pile-3": 
+        {
+            "top-card": "2C",
+            "remaining": 2,
+            "visible": [""]
+        },
+        "t-pile-4": 
+        {
+            "top-card": "6D",
+            "remaining": 3,
+            "visible": [""]
+        },
+        "t-pile-5": 
+        {
+            "top-card": "KD",
+            "remaining": 4,
+            "visible": [""]
+        },
+        "t-pile-6": 
+        {
+            "top-card": "QS",
+            "remaining": 5,
+            "visible": [""]
+        },
+        "t-pile-7": 
+        {
+            "top-card": "3H",
+            "remaining": 6,
+            "visible": [""]
+        }
+    }
+}

@@ -1,20 +1,14 @@
 
 
-class HistoryManager():
+
+def test_method():
+    print("Hello World!")
     
-    def __init__(self, input):
-        self.input = input
-        self.stockPile = input.stockPile
-        self.wastePile = input.wastePile
-        self.foundationPile = input.foundationPile
 
 
-    def getValues():
-        pass
-
-
-    def setValues():
-        pass
+def main():
+    test_method()
+        
 
 
     

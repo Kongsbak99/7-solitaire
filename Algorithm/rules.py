@@ -1,6 +1,7 @@
 
 
-class MoveManager():
+
+class Rules():
     
     def __init__(self):
         pass
@@ -8,3 +9,6 @@ class MoveManager():
     def test_method(self):
         print("Hello World!")
 
+
+    def main(self):
+        self.test_method()
