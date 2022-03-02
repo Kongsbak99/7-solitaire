@@ -27,7 +27,7 @@ while(1):
 
     #Black mask
     lower_black = np.array([0,0,0])
-    upper_black = np.array([179, 255, 155])
+    upper_black = np.array([179, 90, 90])
 
     mask3 = cv.inRange(hsv, lower_black, upper_black)
     res3 = cv.bitwise_and(frame, frame, mask = mask3)
