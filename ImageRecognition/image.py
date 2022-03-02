@@ -27,14 +27,14 @@ while(1):
 
     #Black mask
     lower_black = np.array([0,0,0])
-    upper_black = np.array([100,100,100])
+    upper_black = np.array([179, 255, 155])
 
     mask3 = cv.inRange(hsv, lower_black, upper_black)
     res3 = cv.bitwise_and(frame, frame, mask = mask3)
     
     img4 = cv.add(mask,mask2)
-    img5 = cv.add(img4,mask3)  
-
+    img5 = cv.add(img4, mask3)
+    
     cv.imshow('Original',frame)
     cv.imshow("black", mask3)
     cv.imshow("combined", img5)
