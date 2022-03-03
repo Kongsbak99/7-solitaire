@@ -1,59 +1,59 @@
 {
     "stock-pile": 23,
     "waste-pile": {
-        "top-card": "2D",
+        "top-card": "QH",
         "locked-cards": []
     },
 
-    "foundation-piles": {
-        "f-pile-1": "",
-        "f-pile-2": "",
-        "f-pile-3": "",
-        "f-pile-4": ""
+    "suit-stack": {
+        "suit-1": "",
+        "suit-2": "",
+        "suit-3": "",
+        "suit-4": ""
     },
 
-    "tableau-piles": {
-        "t-pile-1": 
+    "row-stack": {
+        "row-1": 
         {
-            "top-card": "5H",
+            "top-card": "6S",
             "remaining": 0,
-            "visible": [""]
+            "visible": []
         },
-        "t-pile-2": 
+        "row-2": 
+        {
+            "top-card": "AD",
+            "remaining": 1,
+            "visible": []
+        },
+        "row-3": 
         {
             "top-card": "7H",
-            "remaining": 1,
-            "visible": [""]
-        },
-        "t-pile-3": 
-        {
-            "top-card": "2C",
             "remaining": 2,
-            "visible": [""]
+            "visible": ["8C"]
         },
-        "t-pile-4": 
+        "row-4": 
         {
             "top-card": "6D",
             "remaining": 3,
-            "visible": [""]
+            "visible": []
         },
-        "t-pile-5": 
+        "row-5": 
         {
             "top-card": "KD",
             "remaining": 4,
-            "visible": [""]
+            "visible": []
         },
-        "t-pile-6": 
+        "row-6": 
         {
             "top-card": "QS",
             "remaining": 5,
-            "visible": [""]
+            "visible": []
         },
-        "t-pile-7": 
+        "row-7": 
         {
             "top-card": "3H",
             "remaining": 6,
-            "visible": [""]
+            "visible": []
         }
     }
 }
