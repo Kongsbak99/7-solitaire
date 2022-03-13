@@ -19,7 +19,7 @@ class HistoryManager():
         with open('./boardHistory.json') as f:
            self.history = json.load(f)
 
-        self.stock_pile = self.data['stock-pile']
+        self.stock_pile = self.data['stock-pile']["suit-1"]
         self.waste_pile = self.data['waste-pile']
         self.suit_stack = self.data['suit-stack']
         self.row_stack = self.data['row-stack']

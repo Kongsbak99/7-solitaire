@@ -78,3 +78,33 @@ class Cards:
         for card in Cards.card_array:
             if card.card_id == card_id:
                 return card.value
+
+    # Small method to get name of a card by id
+    def cardName(card_id):
+        card_value = Cards.getCardValue(card_id)
+        card_suit = Cards.getCardSuit(card_id)
+        card_value_string = ""
+        card_suit_string = ""
+
+        if card_suit == 1:
+            card_suit_string = "Spades"
+        if card_suit == 2:
+            card_suit_string = "Clubs"
+        if card_suit == 3:
+            card_suit_string = "Hearts"
+        if card_suit == 4:
+            card_suit_string = "Diamonds"
+
+        if (card_value >= 2) and (card_value <= 10):
+            card_value_string = str(card_value)
+        if card_value == 1:
+            card_value_string = "Ace"
+        if card_value == 11:
+            card_value_string = "Jack"
+        if card_value == 12:
+            card_value_string = "Queen"
+        if card_value == 13:
+            card_value_string = "King"
+
+        card_name = card_value_string + " of " + card_suit_string
+        return card_name
