@@ -11,13 +11,14 @@ from ImageRecognition import image
 
 def main():
     # Use a breakpoint in the code line below to debug your script.
-    hm = HistoryManager()
+    #hm = HistoryManager(1)
     settings = Settings()
     rules = Rules()
     mm = MoveManager()
     sm = StrategyManager()
 
-    hm.check_history()
+    #hm.check_history()
+    print(HistoryManager(2).getCard()['value'])
 
 
 # Press the green button in the gutter to run the script.

@@ -1,15 +1,16 @@
 import json
 from operator import contains
+import re
 
 
 class HistoryManager():
-    def __init__(self):
+    def __init__(self, id):
         #with open('./board.json') as f:
         #   self.data = json.load(f)
 
         #with open('boardHistory.json', 'w') as h:
         #    json.dump(self.data, h)
-        pass
+        self.id = id
 
 
     def check_history(self):
@@ -76,17 +77,16 @@ class HistoryManager():
                 else:
                     self.historic_row_stack[index]['visible'].append(self.historic_row_stack[f'row-{i}']['top-card'])
                     self.historic_row_stack[index]['top-card'] = self.row_stack[stack]['top-card']
-            
+                
+
+                ###### OBS: The case where more than one card is moved, isnt handled
+
+
             i += 1
-
-
 
         
         with open('boardHistory.json', 'w') as h:
-            json.dump(self.history, h)
-
-        
-        
+            json.dump(self.history, h)     
 
 
 
