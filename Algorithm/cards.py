@@ -80,7 +80,7 @@ class Cards:
                 return card.value
 
     # Small method to get name of a card by id
-    def cardName(card_id):
+    def getCardName(card_id):
         card_value = Cards.getCardValue(card_id)
         card_suit = Cards.getCardSuit(card_id)
         card_value_string = ""
