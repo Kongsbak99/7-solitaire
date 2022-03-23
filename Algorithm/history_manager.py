@@ -4,14 +4,13 @@ import re
 
 
 class HistoryManager():
-    def __init__(self, id):
+    def __init__(self):
         #with open('./board.json') as f:
         #   self.data = json.load(f)
 
         #with open('boardHistory.json', 'w') as h:
         #    json.dump(self.data, h)
-        self.id = id
-
+        pass
 
 # Tag imod nyt input med alle face-up
 # Primære opgave: Finde ud af hvilke nye kort der er. 
@@ -33,9 +32,41 @@ class HistoryManager():
         self.historic_suit_stack = self.history['suit-stack']
         self.historic_row_stack = self.history['row-stack']
 
+        #Handle change in suit stack
+        for stack in self.suit_stack:
+            if self.suit_stack[stack] != self.historic_suit_stack[stack]:
+                self.historic_suit_stack[stack] = self.suit_stack[stack]
+
+        #Handle new card in waste pile
+        if self.waste_pile != self.historic_waste_pile['top-card']:
+            old_top = self.historic_waste_pile['top-card']
+            moved_to_row = False
+
+            #check if old card is on board. 
+            # If not, add to locked cards and make top-card the new card
+            for stack in self.row_stack:
+                if len(self.row_stack[stack]) > 0:
+                    if old_top == self.row_stack[stack][0]:
+                        moved_to_row = True
+                    else:
+                        moved_to_row = False
+                else:
+                    continue
+            
+            if moved_to_row == False:
+                #First add previous top card to locked cards, then change top-card to new
+                self.historic_waste_pile['locked-cards'].append(self.historic_waste_pile['top-card'])
+                self.historic_waste_pile['top-card'] = self.waste_pile
+            
+            if moved_to_row == True:
+                #First remove card from locked, then add that card as the top-card
+                self.historic_waste_pile['locked-cards'].remove(self.waste_pile)
+                self.historic_waste_pile['top-card'] = self.waste_pile
+        
+        #Handle row stacks
         for stack in self.row_stack:
-            new = self.row_stack[stack]['top-card']
-            old = self.historic_row_stack[stack]['top-card']
+            #new = self.row_stack[stack]['top-card']
+            #old = self.historic_row_stack[stack]['top-card']
 
             # Create a tmp stack to use for comparison with the new row_stacks
             _hist_stack = []
@@ -55,6 +86,8 @@ class HistoryManager():
                 self.historic_row_stack[stack] = self.row_stack[stack]
 
                 #If length of stack is > 1, that would mean that no new card has been turned over
+                #And therefore the stack has grown
+                #OBS: hist is now updated to new
                 if len(self.historic_row_stack[stack]) > 1:
                     for facedown in _facedown_cards:
                         self.historic_row_stack[stack].append(facedown)
@@ -63,11 +96,16 @@ class HistoryManager():
                 #If only one card, that would mean a new card is available in that row. If one or more facedown cards exists
                 #That would mean the new card comes from a facedown card
                 elif len(self.historic_row_stack[stack]) < 2:
+                    # If any facedown cards, remove one.
                     if len(_facedown_cards) > 0:
-                        _facedown_cards.pop
+                        _facedown_cards.pop()
+                        #If more facedown cards are left, add them to the stack again.
                         if len(_facedown_cards) > 0:
                             for facedown in _facedown_cards:
                                 self.historic_row_stack[stack].append(facedown)
+                    elif len(_facedown_cards) == 0:
+                        # In case of no facedown cards. 
+                        continue
 
 
 

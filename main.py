@@ -11,7 +11,7 @@ from ImageRecognition import image
 
 def main():
     # Use a breakpoint in the code line below to debug your script.
-    hm = HistoryManager(1)
+    hm = HistoryManager()
     settings = Settings()
     rules = Rules()
     mm = MoveManager()
