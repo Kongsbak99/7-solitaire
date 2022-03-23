@@ -1,1 +1,22 @@
-{"stock-pile": 23, "waste-pile": {"top-card": 46, "locked-cards": [51, 38]}, "suit-stack": {"suit-1": 4, "suit-2": 0, "suit-3": 0, "suit-4": 0}, "row-stack": {"row-1": [1], "row-2": [2], "row-3": [16, 0, 0], "row-4": [18, 0, 0, 0], "row-5": [32, 0, 0, 0, 0], "row-6": [2, 0, 0, 0, 0, 0], "row-7": [10, 0, 0, 0, 0, 0, 0]}}
+{
+    "stock-pile": 23,
+    "waste-pile": {
+      "top-card": 46,
+      "locked-cards": [51, 38]
+    },
+    "suit-stack": {
+      "suit-1": 0,
+      "suit-2": 0,
+      "suit-3": 0,
+      "suit-4": 0
+    },
+    "row-stack": {
+      "row-1": [1],
+      "row-2": [4, 0],
+      "row-3": [16, 0, 0],
+      "row-4": [18, 0, 0, 0],
+      "row-5": [32, 0, 0, 0, 0],
+      "row-6": [2, 0, 0, 0, 0, 0],
+      "row-7": [10, 0, 0, 0, 0, 0, 0]
+    }
+  }
