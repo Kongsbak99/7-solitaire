@@ -1,1 +1,19 @@
-{"stock-pile": 23, "waste-pile": {"top-card": "QH", "locked-cards": ["2D", "AS"]}, "suit-stack": {"suit-1": 6, "suit-2": 0, "suit-3": 0, "suit-4": 48}, "row-stack": {"row-1": {"top-card": "6S", "remaining": 0, "visible": []}, "row-2": {"top-card": "7H", "remaining": 1, "visible": []}, "row-3": {"top-card": "8C", "remaining": 2, "visible": []}, "row-4": {"top-card": "6D", "remaining": 3, "visible": []}, "row-5": {"top-card": "KD", "remaining": 4, "visible": []}, "row-6": {"top-card": "QS", "remaining": 5, "visible": []}, "row-7": {"top-card": "3H", "remaining": 6, "visible": []}}}
+{
+  "stock-pile": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  "waste-pile": [13, 51, 12],
+  "suit-stack": {
+    "suit-1": [],
+    "suit-2": [],
+    "suit-3": [],
+    "suit-4": []
+  },
+  "row-stack": {
+    "row-1": [1],
+    "row-2": [4, 0],
+    "row-3": [16, 0, 0],
+    "row-4": [18, 0, 0, 0],
+    "row-5": [32, 0, 0, 0, 0],
+    "row-6": [2, 0, 0, 0, 0, 0],
+    "row-7": [10, 0, 0, 0, 0, 0, 0]
+  }
+}
