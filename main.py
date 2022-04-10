@@ -1,5 +1,6 @@
+from Algorithm.cards import Cards
 from Algorithm.history_manager import HistoryManager
-from Algorithm.move_manager import MoveManager
+from Algorithm.move_manager2 import MoveManager
 from Algorithm.rules import Rules
 from Algorithm.settings import Settings
 from Algorithm.strategy_manager import StrategyManager
@@ -17,7 +18,11 @@ def main():
     mm = MoveManager()
     sm = StrategyManager()
 
-    hm.check_history()
+    # hm.check_history()
+
+    MoveManager.movables()
+    print(MoveManager.legal_moves)
+
 
 
 # Press the green button in the gutter to run the script.

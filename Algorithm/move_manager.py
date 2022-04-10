@@ -59,7 +59,7 @@ class MoveManager:
         if card_1_value == card_2_value - 1:
             if (card_1_suit == 1 or card_1_suit == 2) and (card_2_suit == 3 or card_2_suit == 4):
                 return True
-            elif (card_1_suit == 3 or card_1_suit == 3) and (card_2_suit == 1 or card_2_suit == 2):
+            elif (card_1_suit == 3 or card_1_suit == 4) and (card_2_suit == 1 or card_2_suit == 2):
                 return True
         else:
             return False
