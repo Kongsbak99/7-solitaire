@@ -1,10 +1,12 @@
+from ImageRecognition.edgeDetectionLive2 import GetCardCorner
+
 import os
 
 import cv2
 import argparse
 
 cv2.namedWindow("preview")
-vc = cv2.VideoCapture(0)
+vc = cv2.VideoCapture(1)
 
 if vc.isOpened(): # try to get the first frame
     rval, frame = vc.read()
@@ -12,6 +14,8 @@ else:
     rval = False
 
 while rval:
+    cardCorner = GetCardCorner()
+
     cv2.imshow("preview", frame)
     rval, frame = vc.read()
     key = cv2.waitKey(20)
@@ -48,16 +52,19 @@ while rval:
         cv2.rectangle(frame, (0, 0), (cX*2, cY), color=(255, 0, 0), thickness=5)
         cv2.rectangle(frame, (cX*2, 0), (cX*6, cY), color=(255, 0, 0), thickness=5)
 
-        cv2.imshow("Field1", Field1)
-        cv2.imshow("Field2", Field2)
-        cv2.imshow("Field3", Field3)
-        cv2.imshow("Field4", Field4)
-        cv2.imshow("Field5", Field5)
-        cv2.imshow("Field6", Field6)
-        cv2.imshow("Field7", Field7)
-        cv2.imshow("Draw", DrawField)
-        cv2.imshow("AceStacks", AceStacks)
-  #      cv2.imshow("Test77", Test8)
+        #cv2.imshow("Field1", Field1)
+        #cv2.imshow("Field2", Field2)
+        #cv2.imshow("Field3", Field3)
+        #cv2.imshow("Field4", Field4)
+        #cv2.imshow("Field5", Field5)
+        #cv2.imshow("Field6", Field6)
+        #cv2.imshow("Field7", Field7)
+        #cv2.imshow("Draw", DrawField)
+        #cv2.imshow("AceStacks", AceStacks)
+
+        cardCorner.GetCardCorner(AceStacks)
+
+        #      cv2.imshow("Test77", Test8)
 
 
 
