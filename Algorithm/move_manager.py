@@ -1,18 +1,26 @@
 from Algorithm.cards import Cards
 import json
 
+output = [
+    {
+        "hejsa": "hsahdas",
+
+    }
+]
+
+usyduhsd = output[0]["hejsa"]
 
 def movablePositions():
     legal_moves = []
 
-    stockpile_card = MoveManager.board["waste-pile"]["top-card"]
-    row1_topcard = MoveManager.board["row-stack"]["row-1"]["top-card"]
-    row2_topcard = MoveManager.board["row-stack"]["row-2"]["top-card"]
-    row3_topcard = MoveManager.board["row-stack"]["row-3"]["top-card"]
-    row4_topcard = MoveManager.board["row-stack"]["row-4"]["top-card"]
-    row5_topcard = MoveManager.board["row-stack"]["row-5"]["top-card"]
-    row6_topcard = MoveManager.board["row-stack"]["row-6"]["top-card"]
-    row7_topcard = MoveManager.board["row-stack"]["row-7"]["top-card"]
+    stockpile_card = MoveManager.board["waste-pile"][0]
+    row1_topcard = MoveManager.board["row-stack"]["row-1"][0]
+    row2_topcard = MoveManager.board["row-stack"]["row-2"][0]
+    row3_topcard = MoveManager.board["row-stack"]["row-3"][0]
+    row4_topcard = MoveManager.board["row-stack"]["row-4"][0]
+    row5_topcard = MoveManager.board["row-stack"]["row-5"][0]
+    row6_topcard = MoveManager.board["row-stack"]["row-6"][0]
+    row7_topcard = MoveManager.board["row-stack"]["row-7"][0]
 
     cards = [row1_topcard, row2_topcard, row3_topcard, row4_topcard, row5_topcard, row6_topcard, row7_topcard]
 
@@ -66,10 +74,10 @@ class MoveManager:
 
     # Can the card be moved to a suit stack?
     def canSuitStacked(card_id):
-        stack1_topcard = MoveManager.board["suit-stack"]["suit-1"]
-        stack2_topcard = MoveManager.board["suit-stack"]["suit-2"]
-        stack3_topcard = MoveManager.board["suit-stack"]["suit-3"]
-        stack4_topcard = MoveManager.board["suit-stack"]["suit-4"]
+        stack1_topcard = MoveManager.board["suit-stack"]["suit-1"][0]
+        stack2_topcard = MoveManager.board["suit-stack"]["suit-2"][0]
+        stack3_topcard = MoveManager.board["suit-stack"]["suit-3"][0]
+        stack4_topcard = MoveManager.board["suit-stack"]["suit-4"][0]
 
         if ((card_id == stack1_topcard + 1) and (card_id >= 1) and (card_id <= 13)) or ((card_id == 1) and (stack1_topcard == 0)):
             return Cards.getCardName(card_id) + " can be moved to suit stack 1 (spades)"
