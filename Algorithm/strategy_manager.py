@@ -2,12 +2,9 @@
 
 class StrategyManager():
     
-    def __init__(self):
-        pass
+    def __init__(self, moves):
+        self.moves = moves
 
-    def test_method(self):
-        print("Hello World!")
-
-
-    def main(self):
-        self.test_method()
+    def best_move(self):
+        return self.moves[0]
+    

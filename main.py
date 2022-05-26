@@ -1,7 +1,7 @@
 from Algorithm.cards import Cards
 from Algorithm.history_manager import HistoryManager
 from Algorithm.mock_input import create_mock_input
-from Algorithm.move_manager2 import MoveManager
+from Algorithm.move_manager import MoveManager
 from Algorithm.strategy_manager import StrategyManager
 
 
@@ -26,6 +26,14 @@ def main():
     ##After init of board, check for moves
     MoveManager.movables()
     print(MoveManager.legal_moves)
+
+    ##Init Strategy Manager and pass legal moves from Move Manager
+    sm = StrategyManager(MoveManager.legal_moves)
+
+    ##Make move
+    board_after_move = MoveManager.make_move(sm.best_move())
+
+    hm.update_board(board_after_move)
 
     ##Send moves to strategy manager 
     # this part of the flow, should end up with an updated board

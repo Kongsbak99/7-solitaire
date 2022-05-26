@@ -54,6 +54,9 @@ class HistoryManager():
         with open('board.json', 'w') as h:
             json.dump(self.board, h)
 
+    
+    ##Check for victory
+
         
         
 
