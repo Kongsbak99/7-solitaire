@@ -1,6 +1,6 @@
 from Algorithm.cards import Cards
 from Algorithm.history_manager import HistoryManager
-from Algorithm.move_manager2 import MoveManager
+from Algorithm.move_manager3 import MoveManager
 from Algorithm.rules import Rules
 from Algorithm.settings import Settings
 from Algorithm.strategy_manager import StrategyManager
