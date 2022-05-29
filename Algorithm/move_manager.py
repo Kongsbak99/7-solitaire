@@ -4,26 +4,25 @@ import json
 
 
 class MoveManager:
-    legal_moves = []
-
-    board = {}
-    with open('./board.json') as f:
-        board = json.load(f)
-
     def __init__(self):
-        pass
+        self.legal_moves = []
+
+        with open('./board.json') as f:
+            self.board = json.load(f)
+
+    
 
     # Function to create JSON object of moves and add them to the list
-    def createMoveObject(card_ids, move_location):
+    def createMoveObject(self, card_ids, move_location):
         move = {
-            "moveId": int((len(MoveManager.legal_moves) + 1)),
+            "moveId": int((len(self.legal_moves) + 1)),
             "cards": card_ids,
             "to": move_location
         }
-        MoveManager.legal_moves.append(move)
+        self.legal_moves.append(move)
 
     # Check whether 1st card can be put on top of 2nd card in the rows (E.g. Ace of Spaces on Two of Hearts)
-    def canOverlay(card_id_1, card_id_2):
+    def canOverlay(self, card_id_1, card_id_2):
         card_1_value = Cards.getCardValue(card_id_1)
         card_1_suit = Cards.getCardSuit(card_id_1)
 
@@ -43,69 +42,72 @@ class MoveManager:
                 return False
 
     # Return which suit stack a card is in
-    def getSuitStack(card_id):
+    def getSuitStack(self, card_id):
         result = ""
-        if card_id == MoveManager.board["row-stack"]["row-1"][0]:
+        if card_id == self.board["row-stack"]["row-1"][0]:
             result = "row-1"
-        elif card_id == MoveManager.board["row-stack"]["row-2"][0]:
+        elif card_id == self.board["row-stack"]["row-2"][0]:
             result = "row-2"
-        elif card_id == MoveManager.board["row-stack"]["row-3"][0]:
+        elif card_id == self.board["row-stack"]["row-3"][0]:
             result = "row-3"
-        elif card_id == MoveManager.board["row-stack"]["row-4"][0]:
+        elif card_id == self.board["row-stack"]["row-4"][0]:
             result = "row-4"
-        elif card_id == MoveManager.board["row-stack"]["row-5"][0]:
+        elif card_id == self.board["row-stack"]["row-5"][0]:
             result = "row-5"
-        elif card_id == MoveManager.board["row-stack"]["row-6"][0]:
+        elif card_id == self.board["row-stack"]["row-6"][0]:
             result = "row-6"
-        elif card_id == MoveManager.board["row-stack"]["row-7"][0]:
+        elif card_id == self.board["row-stack"]["row-7"][0]:
             result = "row-7"
         else:
             print("Whoops. Check function getSuitStack()")
         return result
 
     # Check whether a card can be moved to one of the four suit stacks and create their JSON move object
-    def canSuitStacked(card_id):
-        stack1 = MoveManager.board["suit-stack"]["suit-1"]
-        stack2 = MoveManager.board["suit-stack"]["suit-2"]
-        stack3 = MoveManager.board["suit-stack"]["suit-3"]
-        stack4 = MoveManager.board["suit-stack"]["suit-4"]
+    def canSuitStacked(self, card_id):
+        stack1 = self.board["suit-stack"]["suit-1"]
+        stack2 = self.board["suit-stack"]["suit-2"]
+        stack3 = self.board["suit-stack"]["suit-3"]
+        stack4 = self.board["suit-stack"]["suit-4"]
 
         # Extra check since list can be empty
         if not stack1 and card_id == 1:
-            MoveManager.createMoveObject([card_id], "suit-1")
+            self.createMoveObject([card_id], "suit-1")
         elif stack1:
             if ((card_id == stack1[0] + 1) and (card_id >= 1) and (card_id <= 13)):
-                MoveManager.createMoveObject([card_id], "suit-1")
+                self.createMoveObject([card_id], "suit-1")
 
         if not stack2 and card_id == 14:
-            MoveManager.createMoveObject([card_id], "suit-2")
+            self.createMoveObject([card_id], "suit-2")
         elif stack2:
             if ((card_id == stack2[0] + 1) and (card_id >= 14) and (card_id <= 26)):
-                MoveManager.createMoveObject([card_id], "suit-2")
+                self.createMoveObject([card_id], "suit-2")
 
         if not stack2 and card_id == 27:
-            MoveManager.createMoveObject([card_id], "suit-3")
+            self.createMoveObject([card_id], "suit-3")
         elif stack3:
             if ((card_id == stack3[0] + 1) and (card_id >= 27) and (card_id <= 39)):
-                MoveManager.createMoveObject([card_id], "suit-3")
+                self.createMoveObject([card_id], "suit-3")
 
         if not stack4 and card_id == 40:
-            MoveManager.createMoveObject([card_id], "suit-4")
+            self.createMoveObject([card_id], "suit-4")
         elif stack4:
             if ((card_id == stack4[0] + 1) and (card_id >= 40) and (card_id <= 52)):
-                MoveManager.createMoveObject([card_id], "suit-4")
+                self.createMoveObject([card_id], "suit-4")
 
 
     # Create JSON for all possible moves
-    def movables():
-        wastepile_card1 = MoveManager.board["waste-pile"][0]
-        row1_topcard = MoveManager.board["row-stack"]["row-1"][0]
-        row2_topcard = MoveManager.board["row-stack"]["row-2"][0]
-        row3_topcard = MoveManager.board["row-stack"]["row-3"][0]
-        row4_topcard = MoveManager.board["row-stack"]["row-4"][0]
-        row5_topcard = MoveManager.board["row-stack"]["row-5"][0]
-        row6_topcard = MoveManager.board["row-stack"]["row-6"][0]
-        row7_topcard = MoveManager.board["row-stack"]["row-7"][0]
+    def movables(self):
+        with open('./board.json') as f:
+            board = json.load(f)
+
+        wastepile_card1 = board["waste-pile"][0]
+        row1_topcard = board["row-stack"]["row-1"][0]
+        row2_topcard = board["row-stack"]["row-2"][0]
+        row3_topcard = board["row-stack"]["row-3"][0]
+        row4_topcard = board["row-stack"]["row-4"][0]
+        row5_topcard = board["row-stack"]["row-5"][0]
+        row6_topcard = board["row-stack"]["row-6"][0]
+        row7_topcard = board["row-stack"]["row-7"][0]
 
         cards = [row1_topcard, row2_topcard, row3_topcard, row4_topcard, row5_topcard, row6_topcard, row7_topcard]
 
@@ -113,25 +115,21 @@ class MoveManager:
         for top_card_looking in cards:
             # Check movables in row stacks
             for top_card_looked in cards:
-                if MoveManager.canOverlay(top_card_looking, top_card_looked):
-                    MoveManager.createMoveObject([top_card_looking], MoveManager.getSuitStack(top_card_looked))
+                if self.canOverlay(top_card_looking, top_card_looked):
+                    self.createMoveObject([top_card_looking], self.getSuitStack(top_card_looked))
 
             # Check movables of waste-pile card moved to rows
-            if MoveManager.canOverlay(wastepile_card1, top_card_looking):
-                MoveManager.createMoveObject([wastepile_card1], MoveManager.getSuitStack(top_card_looking))
+            if self.canOverlay(wastepile_card1, top_card_looking):
+                self.createMoveObject([wastepile_card1], self.getSuitStack(top_card_looking))
 
             # Check movables of row cards to suit stack
-            MoveManager.canSuitStacked(top_card_looking)
+            self.canSuitStacked(top_card_looking)
 
         # Check movables of waste pile card to suit stack
-        MoveManager.canSuitStacked(wastepile_card1)
+        self.canSuitStacked(wastepile_card1)
 
 
-    def make_move(move):
-        #Load board
-        with open('./board.json') as f:
-            board = json.load(f)
-
+    def make_move(self, move, board):
     ############ First cleanup old location of card(s) ############
         bottom_card = move['cards'][0]
         ##If moved from waste pile, simply just remove card from array
@@ -168,6 +166,7 @@ class MoveManager:
                 new_row.append(board['row-stack'][row])
                 #Update board row. 
                 board['row-stack'][row] = new_row
-
+        
+        self.board = board
     ############ Finally return the new board, with the move made and a potential new unknown card. ############
-        return board
+        return board 

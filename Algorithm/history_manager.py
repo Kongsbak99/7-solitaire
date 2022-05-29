@@ -33,6 +33,8 @@ class HistoryManager():
     ##Find where unknown card is.
     ##Change to new input
     def update_board(self, new_input):
+        with open('./board.json') as f:
+           self.board = json.load(f)
         ##Check if new input is from strategy manager, or from image rec
         if 'suit-stack' in new_input:
             self.board = new_input
@@ -53,9 +55,13 @@ class HistoryManager():
 
         with open('board.json', 'w') as h:
             json.dump(self.board, h)
+        
+        return self.board
 
     
     ##Check for victory
+    def check_for_victory():
+        pass
 
         
         
