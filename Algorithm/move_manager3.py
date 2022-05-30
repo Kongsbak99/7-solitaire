@@ -42,7 +42,7 @@ class MoveManager:
                 return False
 
     # Return which suit stack a card is in
-    def getSuitStack(card_id):
+    def getRow(card_id):
         result = ""
         if card_id == MoveManager.board["row-stack"]["row-1"][0]:
             result = "row-1"
@@ -97,33 +97,30 @@ class MoveManager:
     # Create JSON for all possible moves
     def movables():
         movable_sets = []
-        sets_topcard = []
-        print("movable_sets: " + str(movable_sets))
 
-
-        cards = []
+        row_topcards = []
         rows = []
         if MoveManager.board["row-stack"]["row-1"]:
             rows.append(MoveManager.board["row-stack"]["row-1"])
-            cards.append(MoveManager.board["row-stack"]["row-1"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-1"][0])
         if MoveManager.board["row-stack"]["row-2"]:
             rows.append(MoveManager.board["row-stack"]["row-2"])
-            cards.append(MoveManager.board["row-stack"]["row-2"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-2"][0])
         if MoveManager.board["row-stack"]["row-3"]:
             rows.append(MoveManager.board["row-stack"]["row-3"])
-            cards.append(MoveManager.board["row-stack"]["row-3"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-3"][0])
         if MoveManager.board["row-stack"]["row-4"]:
             rows.append(MoveManager.board["row-stack"]["row-4"])
-            cards.append(MoveManager.board["row-stack"]["row-4"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-4"][0])
         if MoveManager.board["row-stack"]["row-5"]:
             rows.append(MoveManager.board["row-stack"]["row-5"])
-            cards.append(MoveManager.board["row-stack"]["row-5"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-5"][0])
         if MoveManager.board["row-stack"]["row-6"]:
             rows.append(MoveManager.board["row-stack"]["row-6"])
-            cards.append(MoveManager.board["row-stack"]["row-6"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-6"][0])
         if MoveManager.board["row-stack"]["row-7"]:
             rows.append(MoveManager.board["row-stack"]["row-7"])
-            cards.append(MoveManager.board["row-stack"]["row-7"][0])
+            row_topcards.append(MoveManager.board["row-stack"]["row-7"][0])
 
         if MoveManager.board["waste-pile"]:
             wastepile_card1 = MoveManager.board["waste-pile"][0]
@@ -134,25 +131,22 @@ class MoveManager:
             for card in row:
                 if card > 0:
                     temp_set.append(card)
-                    print("temp_set = " + str(temp_set))
                     movable_sets.append(temp_set[:])
 
-        print("movable_sets: " + str(movable_sets))
-        print("sets_topcard: " + str(sets_topcard))
 
-        # Check whether any top card can be moved on any of the other ones
-        for top_card_looking in cards:
-            # Check movables in row stacks
-            for top_card_looked in cards:
-                if MoveManager.canOverlay(top_card_looking, top_card_looked):
-                    MoveManager.createMoveObject([top_card_looking], MoveManager.getSuitStack(top_card_looked))
+        # Check whether any movable_sets can be moved to any of the other row's top card
+        for card_set in movable_sets:
+            check_card = card_set[len(card_set)-1]
+            for topcard in row_topcards:
+                if MoveManager.canOverlay(check_card, topcard):
+                    MoveManager.createMoveObject(card_set, MoveManager.getRow(topcard))
 
-            # Check movables of waste-pile card moved to rows
-            if MoveManager.canOverlay(wastepile_card1, top_card_looking):
-                MoveManager.createMoveObject([wastepile_card1], MoveManager.getSuitStack(top_card_looking))
-
-            # Check movables of row cards to suit stack
-            MoveManager.canSuitStacked(top_card_looking)
+        # Check whether the top waste-pile card can be moved to a row
+        # And if a row top-card can be moved to its suit stack
+        for topcard in row_topcards:
+            if MoveManager.canOverlay(wastepile_card1, topcard):
+                MoveManager.createMoveObject([wastepile_card1], MoveManager.getRow(topcard))
+            MoveManager.canSuitStacked(topcard)
 
         # Check movables of waste pile card to suit stack
         MoveManager.canSuitStacked(wastepile_card1)
