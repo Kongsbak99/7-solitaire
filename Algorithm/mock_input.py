@@ -6,12 +6,12 @@ from unittest import mock
 def init_mock_input():
     
     mock_input = {
-    "waste-pile": [41, 1, 8],
+    "waste-pile": [41, 2, 8],
     "row-stack": {
-        "row-1": 12,
+        "row-1": 1,
         "row-2": 18,
         "row-3": 50,
-        "row-4": 7,
+        "row-4": 14,
         "row-5": 5,
         "row-6": 12,
         "row-7": 32

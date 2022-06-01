@@ -27,8 +27,6 @@ def main():
         mm.movables()
         print(f"Possible moves: {mm.legal_moves}")
 
-        ##TODO: Handle no moves (should turn cards from waste pile)
-
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(mm.legal_moves)
 
