@@ -5,7 +5,7 @@ class StrategyManager():
     def __init__(self, moves):
         self.moves = moves
 
-    #main method for general flow of strategy manager
+    #main method for general flow of strategy manager 
     def best_move(self):
         if len(self.moves) > 0:
             best_move = self.row_stack_move() ##overwrite best_move

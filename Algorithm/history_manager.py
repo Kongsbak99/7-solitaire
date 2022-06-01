@@ -12,7 +12,7 @@ class HistoryManager():
         self.new_waste = input["waste-pile"]
         self.new_rows = input["row-stack"]
 
-        ## init board from initBoard.json (empty board only with unknowns)
+        ## init board from initBoard.json (empty board only with unknowns) 
         self.init_stock = self.data['stock-pile']
         self.init_waste = self.data['waste-pile']
         self.init_deprecated_waste = self.data['deprecated-waste']
@@ -43,7 +43,8 @@ class HistoryManager():
         ##Check if new input is from strategy manager, or from image rec
         if 'suit-stack' in new_input:
             self.board = new_input
-        else: ##In suit stack is not in new input, new input is from image rec. 
+        
+        else: ##If suit stack is not in new input, new input is from image rec. 
             unknown_found = False
             ##Search for unknown card and stop when found
             while unknown_found == False:
