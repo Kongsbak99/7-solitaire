@@ -43,8 +43,8 @@ class HistoryManager():
         ##Check if new input is from strategy manager, or from image rec
         if 'suit-stack' in new_input:
             self.board = new_input
-        
-        else: ##If suit stack is not in new input, new input is from image rec. 
+        ##If suit stack is not in new input, new input is from image rec. 
+        else: 
             unknown_found = False
             ##Search for unknown card and stop when found
             while unknown_found == False:
