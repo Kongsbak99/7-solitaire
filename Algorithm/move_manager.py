@@ -73,27 +73,34 @@ class MoveManager:
         if not stack1 and card_id == 1:
             self.createMoveObject([card_id], "suit-1")
         elif stack1:
-            if ((card_id == stack1[0] + 1) and (card_id >= 1) and (card_id <= 13)):
+            if ((card_id == stack1[len(stack1)-1] + 1) and (card_id >= 1) and (card_id <= 13)):
+                self.createMoveObject([card_id], "suit-1")
+            elif card_id == 1 and len(stack1) <= 1:
                 self.createMoveObject([card_id], "suit-1")
 
         if not stack2 and card_id == 14:
             self.createMoveObject([card_id], "suit-2")
         elif stack2:
-            if ((card_id == stack2[0] + 1) and (card_id >= 14) and (card_id <= 26)):
+            if ((card_id == stack2[len(stack2)-1] + 1) and (card_id >= 14) and (card_id <= 26)):
+                self.createMoveObject([card_id], "suit-2")
+            elif card_id == 14 and len(stack2) <= 1:
                 self.createMoveObject([card_id], "suit-2")
 
         if not stack2 and card_id == 27:
             self.createMoveObject([card_id], "suit-3")
         elif stack3:
-            if ((card_id == stack3[0] + 1) and (card_id >= 27) and (card_id <= 39)):
+            if ((card_id == stack3[len(stack3)-1] + 1) and (card_id >= 27) and (card_id <= 39)):
+                self.createMoveObject([card_id], "suit-3")
+            elif card_id == 27 and len(stack3) <= 1:
                 self.createMoveObject([card_id], "suit-3")
 
         if not stack4 and card_id == 40:
             self.createMoveObject([card_id], "suit-4")
         elif stack4:
-            if ((card_id == stack4[0] + 1) and (card_id >= 40) and (card_id <= 52)):
+            if ((card_id == stack4[len(stack2)-1] + 1) and (card_id >= 40) and (card_id <= 52)):
                 self.createMoveObject([card_id], "suit-4")
-
+            elif card_id == 40 and len(stack4) <= 1:
+                self.createMoveObject([card_id], "suit-4")
 
     # Create JSON for all possible moves
     def movables(self):
@@ -101,6 +108,8 @@ class MoveManager:
             board = json.load(f)
 
         wastepile_card1 = board["waste-pile"][0]
+        wastepile_card2 = board["waste-pile"][1]
+        wastepile_card3 = board["waste-pile"][2]
         row1_topcard = board["row-stack"]["row-1"][0]
         row2_topcard = board["row-stack"]["row-2"][0]
         row3_topcard = board["row-stack"]["row-3"][0]
@@ -111,6 +120,8 @@ class MoveManager:
 
         cards = [row1_topcard, row2_topcard, row3_topcard, row4_topcard, row5_topcard, row6_topcard, row7_topcard]
 
+        waste_pile_cards = [wastepile_card1, wastepile_card2, wastepile_card3]
+
         # Check whether any card can be moved on any of the other ones
         for top_card_looking in cards:
             # Check movables in row stacks
@@ -118,55 +129,77 @@ class MoveManager:
                 if self.canOverlay(top_card_looking, top_card_looked):
                     self.createMoveObject([top_card_looking], self.getSuitStack(top_card_looked))
 
-            # Check movables of waste-pile card moved to rows
-            if self.canOverlay(wastepile_card1, top_card_looking):
-                self.createMoveObject([wastepile_card1], self.getSuitStack(top_card_looking))
+            # Check movables of waste-pile
+            for card in waste_pile_cards:
+                # heck movables for waste pile card moved to row
+                if self.canOverlay(card, top_card_looking):
+                    self.createMoveObject([wastepile_card1], self.getSuitStack(top_card_looking))
+            
 
             # Check movables of row cards to suit stack
             self.canSuitStacked(top_card_looking)
 
-        # Check movables of waste pile card to suit stack
-        self.canSuitStacked(wastepile_card1)
+        for card in waste_pile_cards:
+            # Check movables of waste pile card to suit stack
+            self.canSuitStacked(card)
 
 
     def make_move(self, move, board):
-    ############ First cleanup old location of card(s) ############
-        bottom_card = move['cards'][0]
-        ##If moved from waste pile, simply just remove card from array
-        for card in board['waste-pile']:
-            if card == bottom_card:
-                board['waste-pile'].remove(card)
-        
-        ##If moved from row stack, create new row with potential unknown card. 
-        for row in board['row-stack']:
-            ##if card matches, cleanup row and make unknown (-1)
-            if board['row-stack'][row][0] == bottom_card: 
-                new_row = []
-                for card in board['row-stack'][row]:
-                    if card == 0:
-                        new_row.append(card)
-                ##If bottom card is 0, then make that an unknown card (-1)
-                if new_row[0] == 0:
-                    new_row[0] = -1
-                #Update board with new row. 
-                board['row-stack'][row] = new_row
+    
+        try:
+            ############ Check if no moves, turn new waste pile ############
+            if len(move) == 0:
+                board['deprecated-waste'].append(board['waste-pile'])
+                board['waste-pile'] = [-1, -1, -1]
+                board['stock-pile'].remove(0)
+                board['stock-pile'].remove(0)
+                board['stock-pile'].remove(0)
+            ############ Cleanup old location of card(s) ############
+            else:
+                bottom_card = move['cards'][0]
+                ##If moved from waste pile, simply just remove card from array
+                for card in board['waste-pile']:
+                    if card == bottom_card:
+                        board['waste-pile'].remove(card)
+                
+                ##If moved from row stack, create new row with potential unknown card. 
+                for row in board['row-stack']:
+                    ##if card matches, cleanup row and make unknown (-1)
+                    if board['row-stack'][row][0] == bottom_card: 
+                        new_row = []
+                        for card in board['row-stack'][row]:
+                            if card == 0:
+                                new_row.append(card)
+                        ##If bottom card is 0, then make that an unknown card (-1)
+                        if new_row[0] == 0:
+                            new_row[0] = -1
+                        #Update board with new row. 
+                        board['row-stack'][row] = new_row
 
-    ############ Then update new location of card(s) ############
-        #Check if cards should be moved to suit stack
-        for stack in board['suit-stack']:
-            if stack == move['to']:
-                for card in move['cards']:
-                    board['suit-stack'][stack].append(card)
-        
-        ##Check if cards should be moved to row stack
-        for row in board['row-stack']:
-            if row == move['to']:
-                #make new row in correct order
-                new_row = move['cards']
-                new_row.append(board['row-stack'][row])
-                #Update board row. 
-                board['row-stack'][row] = new_row
-        
-        self.board = board
-    ############ Finally return the new board, with the move made and a potential new unknown card. ############
-        return board 
+            ############ Then update new location of card(s) ############
+                #Check if cards should be moved to suit stack
+                for stack in board['suit-stack']:
+                    if stack == move['to']:
+                        for card in move['cards']:
+                            board['suit-stack'][stack].append(card)
+                
+                ##Check if cards should be moved to row stack
+                for row in board['row-stack']:
+                    if row == move['to']:
+                        #make new row in correct order
+                        new_row = move['cards']
+                        for card in board['row-stack'][row]:
+                            new_row.append(card)
+                        #Update board row. 
+                        board['row-stack'][row] = new_row
+                print(" ")
+                print(f"made move: {move}")
+                print(" ")
+            
+            self.board = board
+            ############ Finally return the new board, with the move made and a potential new unknown card. ############
+            return board
+        except Exception as e:
+            print(f"Failed to make move: {move}")
+            print(f"Threw exception {e}")
+     

@@ -1,21 +1,22 @@
 import json
 from operator import contains
 import re
+from unittest import mock
 
-def create_mock_input():
+def init_mock_input():
     
     mock_input = {
-    "waste-pile": [13, 51, 12],
+    "waste-pile": [41, 1, 8],
     "row-stack": {
-        "row-1": 16,
-        "row-2": 4,
-        "row-3": 1,
-        "row-4": 18,
-        "row-5": 32,
-        "row-6": 2,
-        "row-7": 10
+        "row-1": 12,
+        "row-2": 18,
+        "row-3": 50,
+        "row-4": 7,
+        "row-5": 5,
+        "row-6": 12,
+        "row-7": 32
+      }
     }
-  }
     
     return mock_input
 
@@ -26,12 +27,15 @@ def mock_image_rec(board, unknown):
     "row-stack": board['row-stack']
   }
 
-  for i in mock_input['waste-pile']:
-    if i == -1:
-      i = unknown
-  for row in mock_input['row-stack']:
-    if mock_input['row-stack'][row][0] == -1:
-      mock_input['row-stack'][row][0] = unknown
+  if len(unknown) > 1: ## = new waste pile
+    mock_input['waste-pile'] = unknown
+  else:
+    for i in mock_input['waste-pile']:
+      if i == -1:
+        i = unknown[0]
+    for row in mock_input['row-stack']:
+      if mock_input['row-stack'][row][0] == -1:
+        mock_input['row-stack'][row][0] = unknown[0]
   
   return {
     "waste-pile": mock_input['waste-pile'],

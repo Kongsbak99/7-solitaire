@@ -8,11 +8,14 @@ class HistoryManager():
         with open('./initBoard.json') as f:
            self.data = json.load(f)
 
+        ## init input from image rec
         self.new_waste = input["waste-pile"]
         self.new_rows = input["row-stack"]
 
+        ## init board from initBoard.json (empty board only with unknowns)
         self.init_stock = self.data['stock-pile']
         self.init_waste = self.data['waste-pile']
+        self.init_deprecated_waste = self.data['deprecated-waste']
         self.init_suit = self.data['suit-stack']
         self.init_rows = self.data['row-stack']
 
@@ -23,10 +26,12 @@ class HistoryManager():
         self.board = {
             "stock-pile": self.init_stock,
             "waste-pile": self.init_waste,
+            "deprecated-waste": self.init_deprecated_waste,
             "suit-stack": self.init_suit,
             "row-stack": self.init_rows
         }
 
+        ## Save starting board
         with open('board.json', 'w') as h:
             json.dump(self.board, h)            
 
@@ -44,6 +49,10 @@ class HistoryManager():
             while unknown_found == False:
                 ##check if waste-pile has changed
                 if self.board['waste-pile'] != new_input['waste-pile']:
+                    ##Check if deprecated waste pile has changed
+                    #if self.board['deprecated-waste'] != new_input['deprecated-waste']:
+                    #    self.board['deprecated-waste'] = new_input['deprecated-waste']
+                    #Update waste pile
                     self.board['waste-pile'] = new_input['waste-pile']
                     unknown_found = True
                 ## Else run through the row stack, untill the new card is found. 
@@ -60,8 +69,17 @@ class HistoryManager():
 
     
     ##Check for victory
-    def check_for_victory():
-        pass
+    def check_for_victory(self):
+        with open('./board.json') as f:
+           self.board = json.load(f)
+        suit1_top = self.board['suit-stack']['suit-1'][len(self.board['suit-stack']['suit-1']) - 1]
+        suit2_top = self.board['suit-stack']['suit-2'][len(self.board['suit-stack']['suit-2']) - 1]
+        suit3_top = self.board['suit-stack']['suit-3'][len(self.board['suit-stack']['suit-3']) - 1]
+        suit4_top = self.board['suit-stack']['suit-4'][len(self.board['suit-stack']['suit-4']) - 1]
+        # Check if top card of each stack is the final card.
+        if suit1_top == 13 and suit2_top == 26 and suit3_top == 39 and suit4_top == 52:
+            return True
+        else: return False
 
         
         
