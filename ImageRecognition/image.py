@@ -10,7 +10,7 @@ while(1):
     # define range of red color in HSV
     # Threshold the HSV image to get only blue colors
     # Bitwise-AND mask and original image
-
+    
     #lower red
     lower_red = np.array([0,50,50])
     upper_red = np.array([10,255,255])
