@@ -50,6 +50,13 @@ def botShortenX(x1, x2, height, width):
     x2 = x2 + x1
     return x2
 
+def correctOrientation(n):
+    try:
+        corrected = [None]*8 #empty array at fixed size
+        #for j in n:
+        return corrected
+    except:
+        return n
 
 # Going through every contours found in the image.
 for cnt in contours:
