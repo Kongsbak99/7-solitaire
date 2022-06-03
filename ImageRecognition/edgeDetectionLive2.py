@@ -10,12 +10,13 @@ class GetCardCorner:
     def GetCardCorner(self, frame):
         font = cv2.FONT_HERSHEY_COMPLEX
 
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #COLOR_BGR2GRAY
         imgGray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+
 
         # Converting image to a binary image
         # ( black and white only image).
-        _, threshold = cv2.threshold(imgGray, 110, 255, cv2.THRESH_BINARY)
+        _, threshold = cv2.threshold(imgGray, 150, 255, cv2.THRESH_BINARY)
 
         # Detecting contours in image.
         contours, _ = cv2.findContours(threshold, cv2.RETR_TREE,
@@ -31,13 +32,13 @@ class GetCardCorner:
 
         def botShortenY(y1, y2, height, width):
             y2 = y2 - y1
-            y2 = (y2 / height) * (width / 2.2)
+            y2 = (y2 / height) * (width / 1.5) #2.2
             y2 = y2 + y1
             return y2
 
         def botShortenX(x1, x2, height, width):
             x2 = x2 - x1
-            x2 = (x2 / width) * (width / 5)
+            x2 = (x2 / width) * (width / 3.5) #5
             x2 = x2 + x1
             return x2
 
@@ -85,7 +86,7 @@ class GetCardCorner:
             approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt, True), True)
             n = approx.ravel()  # flattens array
             i = 0
-            minLineSize = 100
+            minLineSize = 90
 
             for j in n:
                 # if n[i] < 10:
@@ -177,7 +178,7 @@ class GetCardCorner:
                             botCut = np.float32([[0, 0], [0, 240], [120, 240], [120, 0]])  # the coordinates/size of the new image
                             botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)
                             botDst = cv2.warpPerspective(imgGray, botM, (120, 240))
-                            cv2.imshow("card zoom", botDst)
+                            cv2.imshow("corner zoom", botDst)
 
                             # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
                             # Also works with a video stream: check out cv2.fastNlMeansDenoisingMulti()
