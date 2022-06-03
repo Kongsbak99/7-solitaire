@@ -20,7 +20,7 @@ while rval:
     rval, frame = vc.read()
     key = cv2.waitKey(20)
     (h, w) = frame.shape[:2]
-    (cX, cY) = (w // 7, h // 4)
+    (cX, cY) = (w // 7, (h // 5)+(h // 7))
     #(dX, dY) = (w // 7, h // 5)
     # (aX, aY) = (w//7, h // 3)
 
@@ -34,23 +34,29 @@ while rval:
     Field5 = frame[cY:h, cX*4:cX*5]
     Field6 = frame[cY:h, cX*5:cX*6]
     Field7 = frame[cY:h, cX*6:cX*7]
-    DrawField = frame[0:cY, 0:cX*2]
-    AceStacks = frame[0:cY, cX*2:cX*6]
+    DrawField = frame[0:cY, 2:cX*3]
+    AceStack1 = frame[0:cY, cX*3:cX*4]
+    AceStack2 = frame[0:cY, cX * 4:cX * 5]
+    AceStack3 = frame[0:cY, cX * 5:cX * 6]
+    AceStack4 = frame[0:cY, cX * 6:cX * 7]
 
 
     if key == 27: # exit on ESC
         break
     else:
 
-        cv2.rectangle(frame, (0, cY), (cX,h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX, cY), (cX*2, h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX*2, cY), (cX*3, h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX*3, cY), (cX*4, h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX*4, cY), (cX*5, h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX*5, cY), (cX*6, h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX*6, cY), (cX*7, h), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (0, 0), (cX*2, cY), color=(255, 0, 0), thickness=5)
-        cv2.rectangle(frame, (cX*2, 0), (cX*6, cY), color=(255, 0, 0), thickness=5)
+        cv2.rectangle(frame, (0, cY), (cX,h), color=(255, 0, 0), thickness=5) #field1
+        cv2.rectangle(frame, (cX, cY), (cX*2, h), color=(255, 0, 0), thickness=5) #field2
+        cv2.rectangle(frame, (cX*2, cY), (cX*3, h), color=(255, 0, 0), thickness=5) #field3
+        cv2.rectangle(frame, (cX*3, cY), (cX*4, h), color=(255, 0, 0), thickness=5) #field4
+        cv2.rectangle(frame, (cX*4, cY), (cX*5, h), color=(255, 0, 0), thickness=5) #field5
+        cv2.rectangle(frame, (cX*5, cY), (cX*6, h), color=(255, 0, 0), thickness=5) #field6
+        cv2.rectangle(frame, (cX*6, cY), (cX*7, h), color=(255, 0, 0), thickness=5) #field7
+        cv2.rectangle(frame, (cX*2, 0), (cX*3, cY), color=(255, 0, 0), thickness=5) #stack
+        cv2.rectangle(frame, (cX*3, 0), (cX*4, cY), color=(255, 0, 0), thickness=5) #ace1
+        cv2.rectangle(frame, (cX * 4, 0), (cX * 5, cY), color=(255, 0, 0), thickness=5)  # ace2
+        cv2.rectangle(frame, (cX * 5, 0), (cX * 6, cY), color=(255, 0, 0), thickness=5)  # ace3
+        cv2.rectangle(frame, (cX * 6, 0), (cX * 7, cY), color=(255, 0, 0), thickness=5)  # ace4
 
         cv2.imshow("Field1", Field1)
         cv2.imshow("Field2", Field2)
@@ -60,7 +66,10 @@ while rval:
         cv2.imshow("Field6", Field6)
         cv2.imshow("Field7", Field7)
         cv2.imshow("Draw", DrawField)
-        cv2.imshow("AceStacks", AceStacks)
+        cv2.imshow("AceStacks", AceStack1)
+        cv2.imshow("AceStacks", AceStack2)
+        cv2.imshow("AceStacks", AceStack3)
+        cv2.imshow("AceStacks", AceStack4)
 
         #cardCorner.GetCardCorner(AceStacks)
 
