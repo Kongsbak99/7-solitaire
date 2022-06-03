@@ -1,4 +1,5 @@
 from Algorithm.cards import Cards
+from Algorithm.move_types import turnStockpile
 import json
 
 
@@ -168,11 +169,24 @@ class MoveManager:
         try:
         ############ Check if no moves, turn new waste pile ############
             if len(move) == 0:
-                board['deprecated-waste'].append(board['waste-pile'])
-                board['waste-pile'] = [-1, -1, -1]
-                board['stock-pile'].remove(0)
-                board['stock-pile'].remove(0)
-                board['stock-pile'].remove(0)
+                # If more than 3 cards in stock-pile, turn three cards no problem
+                if len(board["stock-pile"]) >= 3:
+                    # Put top stock-pile card in waste-pile
+                    board["waste-pile"].insert(0, board["stock-pile"].pop(0))
+                    board["waste-pile"].insert(0, board["stock-pile"].pop(0))
+                    board["waste-pile"].insert(0, board["stock-pile"].pop(0))
+                    hej = turnStockpile([1], [2])[0]
+
+
+                if len(board["stock-pile"]) < 3:
+                    print("Under 3 cards in stock pile")
+
+
+                #board['deprecated-waste'].append(board['waste-pile'])
+                #board['waste-pile'] = [-1, -1, -1]
+                #board['stock-pile'].remove(0)
+                #board['stock-pile'].remove(0)
+                #board['stock-pile'].remove(0)
                 
             else:
                 ############ First cleanup old location of card(s) ############

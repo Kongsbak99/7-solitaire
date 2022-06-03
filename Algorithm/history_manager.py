@@ -15,7 +15,6 @@ class HistoryManager():
         ## init board from initBoard.json (empty board only with unknowns) 
         self.init_stock = self.data['stock-pile']
         self.init_waste = self.data['waste-pile']
-        self.init_deprecated_waste = self.data['deprecated-waste']
         self.init_suit = self.data['suit-stack']
         self.init_rows = self.data['row-stack']
 
@@ -26,7 +25,6 @@ class HistoryManager():
         self.board = {
             "stock-pile": self.init_stock,
             "waste-pile": self.init_waste,
-            "deprecated-waste": self.init_deprecated_waste,
             "suit-stack": self.init_suit,
             "row-stack": self.init_rows
         }
