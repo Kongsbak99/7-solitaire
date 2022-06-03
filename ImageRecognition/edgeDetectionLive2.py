@@ -11,9 +11,8 @@ class GetCardCorner:
         global botDst
         font = cv2.FONT_HERSHEY_COMPLEX
 
-        img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #COLOR_BGR2GRAY
+        img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # COLOR_BGR2GRAY
         imgGray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
 
         # Converting image to a binary image
         # ( black and white only image).
@@ -33,13 +32,13 @@ class GetCardCorner:
 
         def botShortenY(y1, y2, height, width):
             y2 = y2 - y1
-            y2 = (y2 / height) * (width / 1.5) #2.2
+            y2 = (y2 / height) * (width / 1.5)  # 2.2
             y2 = y2 + y1
             return y2
 
         def botShortenX(x1, x2, height, width):
             x2 = x2 - x1
-            x2 = (x2 / width) * (width / 3.5) #5
+            x2 = (x2 / width) * (width / 3.5)  # 5
             x2 = x2 + x1
             return x2
 
@@ -47,20 +46,20 @@ class GetCardCorner:
             # OBS: Can still be oriented wrong even if first coordinates is top-left corner
             try:
                 ##corrected = [None] * 8  # empty array at fixed size
-                #corrected = np.array(n)
+                # corrected = np.array(n)
                 min_x = sys.maxsize
                 min_y = sys.maxsize
                 move_amount = 0
 
                 # Find corner with lowest number (lowest should be top left corner)
                 for u in range(0, len(n), 2):
-                    #print("==== is " + str(n[u]) + " less than " + str(min_x))
-                    print("--- " + str(u) + " to " + str(u+1))
-                    print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
-                    #if n[u] < min_x and n[u+1] < min_y:
-                    if n[u] + n[u+1] < min_x + min_y:
+                    # print("==== is " + str(n[u]) + " less than " + str(min_x))
+                    print("--- " + str(u) + " to " + str(u + 1))
+                    print("--- " + str(n[u]) + ", " + str(n[u + 1]) + " = " + str(n[u] + n[u + 1]) + "\n")
+                    # if n[u] < min_x and n[u+1] < min_y:
+                    if n[u] + n[u + 1] < min_x + min_y:
                         min_x = n[u]
-                        min_y = n[u+1]
+                        min_y = n[u + 1]
                 print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
 
                 # Figure out how many indexes to shift array so corner with the lowest value is top-left
@@ -75,7 +74,7 @@ class GetCardCorner:
                     print("finished rotating")
 
                     for q in range(0, len(n), 2):
-                        print(str(corrected[q]) + ", " + str(corrected[q+1]))
+                        print(str(corrected[q]) + ", " + str(corrected[q + 1]))
                     return corrected
                 return n
             except:
@@ -135,8 +134,8 @@ class GetCardCorner:
                         if 80 < deg < 100:
                             height = round(math.sqrt(((n[0] - n[2]) ** 2) + ((n[1] - n[3]) ** 2)), 2)
                             width = round(math.sqrt(((n[6] - n[0]) ** 2) + ((n[7] - n[1]) ** 2)), 2)
-                            #print(height)
-                            #print(width)
+                            # print(height)
+                            # print(width)
 
                             # print("is: " + str(height) + " 1.5 times bigger than: " + str(width) + " = " + str(
                             #   width * 1.5))
@@ -176,21 +175,22 @@ class GetCardCorner:
                                 [botShortenX(n[2], n[4], height, width), botShortenX(n[3], n[5], height, width)],
                                 [botShortenX(n[2], n[6], height, width), botShortenY(n[3], n[7], height, width)]])
 
-                            botCut = np.float32([[0, 0], [0, 240], [120, 240], [120, 0]])  # the coordinates/size of the new image
+                            botCut = np.float32(
+                                [[0, 0], [0, 240], [120, 240], [120, 0]])  # the coordinates/size of the new image
                             botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)
                             botDst = cv2.warpPerspective(imgGray, botM, (120, 240))
                             cv2.imshow("corner zoom", botDst)
 
                             # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
                             # Also works with a video stream: check out cv2.fastNlMeansDenoisingMulti()
-                            #_, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
-                            #denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
-                            #blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
+                            # _, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
+                            # denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
+                            # blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
 
-                            #cv2.imshow("Denoised", blurDenoised)
+                            # cv2.imshow("Denoised", blurDenoised)
 
-                            #inverted = cv2.bitwise_not(blurDenoised)
-                            #cv2.imshow("inverted", inverted)
+                            # inverted = cv2.bitwise_not(blurDenoised)
+                            # cv2.imshow("inverted", inverted)
 
                             # plt.subplot(121), plt.imshow(img), plt.title('Input')
                             # plt.subplot(122), plt.imshow(dst), plt.title('Output')
@@ -211,6 +211,7 @@ class GetCardCorner:
         # Showing the final image.
         cv2.imshow('image2', img)
         return botDst
+
     cv2.destroyAllWindows()
     pass
 

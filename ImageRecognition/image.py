@@ -1,12 +1,13 @@
 import cv2 as cv
 import numpy as np
 
+
 def bw_filter(frame):
     # Convert BGR to HSV
     hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
-    gray = cv.cvtColor(hsv, cv.COLOR_BGR2GRAY)
-    #cv.imshow("grayscale", gray)
-    #cv.imshow("HSV", hsv)
+    # gray = cv.cvtColor(hsv, cv.COLOR_BGR2GRAY)
+    # cv.imshow("grayscale", gray)
+    # cv.imshow("HSV", hsv)
 
     # define range of red color in HSV
     # Threshold the HSV image to get only blue colors
@@ -21,17 +22,17 @@ def bw_filter(frame):
     upper_red2 = np.array([180, 255, 255])
 
     mask = cv.inRange(hsv, lower_red, upper_red)
-    res = cv.bitwise_and(frame, frame, mask=mask)
+    # res = cv.bitwise_and(frame, frame, mask=mask)
 
     mask2 = cv.inRange(hsv, lower_red2, upper_red2)
-    res2 = cv.bitwise_and(frame, frame, mask=mask2)
+    # res2 = cv.bitwise_and(frame, frame, mask=mask2)
 
     # Black mask
     lower_black = np.array([0, 0, 0])
     upper_black = np.array([179, 255, 155])
 
     mask3 = cv.inRange(hsv, lower_black, upper_black)
-    res3 = cv.bitwise_and(frame, frame, mask=mask3)
+    # res3 = cv.bitwise_and(frame, frame, mask=mask3)
 
     img4 = cv.add(mask, mask2)
     img5 = cv.add(img4, mask3)
@@ -41,9 +42,6 @@ def bw_filter(frame):
     cv.imshow("combined", img5)
     # cv.imshow('red',img4)
     return img5
-
-
-
 
 # Template matching har ikke scale variance - men kan til dels selv lave det
 # Multitemplate matching (Needs pip install opencv-contrib-python )
