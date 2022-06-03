@@ -1,35 +1,41 @@
-from ImageRecognition.edgeDetectionLive2 import GetCardCorner
+from edgeDetectionLive2 import GetCardCorner
 import cv2
-import keyboard
 
-cap = cv2.VideoCapture(0)
-count = 0
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 while (1):
     _, frame = cap.read()
     cardCorner = GetCardCorner()
     CardCornerPicture = cardCorner.GetCardCorner(frame)
 
-    key = cv2.waitKey(33) & 0b11111111
+    count = 0
+    key = cv2.waitKey(33) & 0b11111111  # Wait for q key to capture a frame.
+    k = cv2.waitKey(5) & 0xFF  # Wait for key ESC to break
+
     if key == ord('q'):
 
         cv2.imwrite("TrainingImages/frame%d.jpg" % count, CardCornerPicture)  # save frame as JPEG file
+        cv2.imshow('CardCornerPicture', CardCornerPicture)  # Display the resulting frame
         count += 1
-        # Display the resulting frame
-        cv2.imshow('CardCornerPicture', CardCornerPicture)
-
         continue
 
-    k = cv2.waitKey(5) & 0xFF
-    if k == 27:
+    elif k == 27:
         break
 
-# import numpy as np
-# first_array = [1, 2, 3, 4, 5, 6]
-# my_array = np.array(first_array)
+# import cv2
+# video_capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 #
-# new_array = np.roll(my_array, 2)  # rotate right
-# print(new_array)
+# cv2.namedWindow("Window")
 #
-# new_array = np.roll(my_array, -2)  # rotate left
-# print(new_array)
+# while True:
+#     ret, frame = video_capture.read()
+#     cv2.imshow("Window", frame)
+#
+#     #This breaks on 'q' key
+#     if cv2.waitKey(1) & 0xFF == ord('q'):
+#         break
+#
+# video_capture.release()
+# cv2.destroyAllWindows()
