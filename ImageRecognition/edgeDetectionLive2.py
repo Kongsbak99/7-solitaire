@@ -8,6 +8,7 @@ import numpy.linalg as la
 
 class GetCardCorner:
     def GetCardCorner(self, frame):
+        global botDst
         font = cv2.FONT_HERSHEY_COMPLEX
 
         img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -208,6 +209,7 @@ class GetCardCorner:
 
         # Showing the final image.
         cv2.imshow('image2', img)
+        return botDst
     cv2.destroyAllWindows()
     pass
 
