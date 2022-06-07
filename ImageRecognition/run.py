@@ -1,12 +1,15 @@
 from ImageRecognition.edgeDetectionLive2 import GetCardCorner
 import cv2
+from ImageRecognition.imageSplit import navn
 
 cap = cv2.VideoCapture(0)
 
 while(1):
     _, frame = cap.read()
+    navn(cap)
     cardCorner = GetCardCorner()
     cardCorner.GetCardCorner(frame)
+
 
 
 
