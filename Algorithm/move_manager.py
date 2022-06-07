@@ -24,13 +24,13 @@ class MoveManager:
     def canOverlay(self, card_id_1, card_id_2):
         card_1_value = Cards.getCardValue(card_id_1)
         card_1_suit = Cards.getCardSuit(card_id_1)
-        print("card 1 value: " + card_1_value)
-        print("card 1 suit: " + card_1_suit)
+        print("card 1 value: " + str(card_1_value))
+        print("card 1 suit: " + str(card_1_suit))
 
         card_2_value = Cards.getCardValue(card_id_2)
         card_2_suit = Cards.getCardSuit(card_id_2)
-        print("card 2 value: " + card_2_value)
-        print("card 2 suit: " + card_2_suit)
+        print("card 2 value: " + str(card_2_value))
+        print("card 2 suit: " + str(card_2_suit))
 
         # Card has to be 1 lower...
         # Verify a row's top card isn't ID: 0
