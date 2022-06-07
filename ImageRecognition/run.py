@@ -18,12 +18,14 @@ while 1:
     cv2.imshow('preview', frame)
 
     if cv2.waitKey(1) & 0xFF == ord('r'):
-        box1 = GetCardCorner(listOfFrames[8])
-        box2 = GetCardCorner(listOfFrames[9])
-        box3 = GetCardCorner(listOfFrames[10])
-        cv2.imshow("num0", box1)
-        cv2.imshow("num1", box2)
-        cv2.imshow("num2", box3)
+        box0 = GetCardCorner(listOfFrames[0])
+        box1 = GetCardCorner(listOfFrames[1])
+        box2 = GetCardCorner(listOfFrames[2])
+        box3 = GetCardCorner(listOfFrames[3])
+        cv2.imshow("num0", box0)
+        cv2.imshow("num1", box1)
+        cv2.imshow("num2", box2)
+        cv2.imshow("num3", box3)
 
         try:
             # cardCornerPicture = GetCardCorner(frame)

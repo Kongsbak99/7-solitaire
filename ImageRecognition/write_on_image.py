@@ -23,6 +23,6 @@ def write_on_image(frame, cam_num, text):
     elif cam_num == 11: org = (1040, 20)
     else: org = (10, 20)
 
-    frame = cv2.putText(frame, str(text), org, font,
+    frame = cv2.putText(frame, str(cam_num), org, font,
                         fontScale, color, thickness, cv2.LINE_AA)
     return frame
