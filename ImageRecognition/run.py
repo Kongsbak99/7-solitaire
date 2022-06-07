@@ -1,8 +1,8 @@
-from ImageRecognition.image import bw_filter
+from ImageRecognition.old.image import bw_filter
 from edgeDetectionLive2 import GetCardCorner
 import cv2
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 count = 0

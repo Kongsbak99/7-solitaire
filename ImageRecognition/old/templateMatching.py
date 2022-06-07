@@ -1,9 +1,6 @@
 import cv2 as cv
-import numpy as np
 
-from ImageRecognition.cannyEdgeDetection import edge_detection
-from ImageRecognition.image import bw_filter
-from ImageRecognition.multiscale import multiscale
+from ImageRecognition.old.cannyEdgeDetection import edge_detection
 
 
 def template_matching(method, img, template):
@@ -24,7 +21,7 @@ def template_matching(method, img, template):
 
 
 class templateMatchingRun():
-    template = cv.imread('Images/5diamonds.png', 0)
+    template = cv.imread('../Images/5diamonds.png', 0)
 
     cap = cv.VideoCapture(0)
 

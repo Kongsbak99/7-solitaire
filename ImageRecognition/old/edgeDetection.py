@@ -14,10 +14,10 @@ import numpy.linalg as la
 
 # Reading image
 font = cv2.FONT_HERSHEY_COMPLEX
-img = cv2.imread('Images/heightTest.jpg', cv2.IMREAD_COLOR)  # edgedetectionRaw2.jpg
+img = cv2.imread('../Images/heightTest.jpg', cv2.IMREAD_COLOR)  # edgedetectionRaw2.jpg
 
 # Reading same image in gray
-imgGray = cv2.imread('Images/heightTest.jpg', cv2.IMREAD_GRAYSCALE)
+imgGray = cv2.imread('../Images/heightTest.jpg', cv2.IMREAD_GRAYSCALE)
 
 # Converting image to a binary image
 # ( black and white only image).

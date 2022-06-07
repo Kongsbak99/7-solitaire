@@ -26,7 +26,7 @@ while (1):
     _, frame = cap.read()
 
     image = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-    templateGray = cv2.imread('Images/Diamonds.jpg', 0)
+    templateGray = cv2.imread('../Images/Diamonds.jpg', 0)
     (tH, tW) = templateGray.shape[:2]
     # display the  image and template to our screen
     cv2.imshow("Image", image)
