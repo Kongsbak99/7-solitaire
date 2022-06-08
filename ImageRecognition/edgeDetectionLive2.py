@@ -13,11 +13,11 @@ def GetCardCorner(frame):
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     imgGray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    minLineSize = 80
+    minLineSize = 70
 
     # Converting image to a binary image
     # ( black and white only image).
-    _, threshold = cv2.threshold(imgGray, 160, 255, cv2.THRESH_BINARY)
+    _, threshold = cv2.threshold(imgGray, 130, 255, cv2.THRESH_BINARY)
 
     # Detecting contours in image.
     contours, _ = cv2.findContours(threshold, cv2.RETR_TREE,
