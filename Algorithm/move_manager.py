@@ -27,13 +27,13 @@ class MoveManager:
     def canOverlay(self, card_id_1, card_id_2):
         card_1_value = Cards.getCardValue(card_id_1)
         card_1_suit = Cards.getCardSuit(card_id_1)
-        print("card 1 value: " + str(card_1_value))
-        print("card 1 suit: " + str(card_1_suit))
+        # print("card 1 value: " + str(card_1_value))
+        # print("card 1 suit: " + str(card_1_suit))
 
         card_2_value = Cards.getCardValue(card_id_2)
         card_2_suit = Cards.getCardSuit(card_id_2)
-        print("card 2 value: " + str(card_2_value))
-        print("card 2 suit: " + str(card_2_suit))
+        # print("card 2 value: " + str(card_2_value))
+        # print("card 2 suit: " + str(card_2_suit))
 
         # Card has to be 1 lower...
         # Verify a row's top card isn't ID: 0
@@ -41,13 +41,13 @@ class MoveManager:
             if card_1_value == card_2_value - 1:
                 # ...and of opposite color
                 if (card_1_suit == 1 or card_1_suit == 2) and (card_2_suit == 3 or card_2_suit == 4):
-                    print("card 1 = black and card 2 = red")
+                    # print("card 1 = black and card 2 = red")
                     return True
                 elif (card_1_suit == 3 or card_1_suit == 4) and (card_2_suit == 1 or card_2_suit == 2):
-                    print("card 1 = red and card 2 = black")
+                    # print("card 1 = red and card 2 = black")
                     return True
             else:
-                print("same card color - no move possible")
+                # print("same card color - no move possible")
                 return False
 
     # Return which suit stack a card is in
@@ -94,7 +94,7 @@ class MoveManager:
             elif card_id == 14 and len(stack2) <= 1:
                 self.createMoveObject([card_id], "suit-2", moveType)
 
-        if not stack2 and card_id == 27:
+        if not stack3 and card_id == 27:
             self.createMoveObject([card_id], "suit-3", moveType)
         elif stack3:
             if ((card_id == stack3[len(stack3) - 1] + 1) and (card_id >= 27) and (card_id <= 39)):
@@ -105,7 +105,7 @@ class MoveManager:
         if not stack4 and card_id == 40:
             self.createMoveObject([card_id], "suit-4", moveType)
         elif stack4:
-            if ((card_id == stack4[len(stack2) - 1] + 1) and (card_id >= 40) and (card_id <= 52)):
+            if ((card_id == stack4[len(stack4) - 1] + 1) and (card_id >= 40) and (card_id <= 52)):
                 self.createMoveObject([card_id], "suit-4", moveType)
             elif card_id == 40 and len(stack4) <= 1:
                 self.createMoveObject([card_id], "suit-4", moveType)

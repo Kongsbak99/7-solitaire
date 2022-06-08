@@ -25,10 +25,12 @@ def main():
         mm = MoveManager()
         ##After init of board, check for moves
         mm.movables()
-        print(f"Possible moves: {mm.legal_moves}")
+        print(f"Possible moves in Main: {mm.legal_moves}")
 
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(mm.legal_moves)
+        sm.best_move()
+        # print(f"Best move in Main: {sm.moves}")
 
         ##Make move
         board_after_move = mm.make_move(sm.best_move(), board) ##complete board
