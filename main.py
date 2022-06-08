@@ -48,7 +48,6 @@ def main():
 
         # Check for victory
         game_end = hm.check_for_victory()
-
     print("Game ended")
 
 
