@@ -31,7 +31,9 @@ def rowToSuitstack(move, board):
     board["row-stack"][original_row].remove(card)
 
     # Make top leftover card visible if not
-    if board["row-stack"][original_row][0] == 0:
-        board["row-stack"][original_row][0] = -1
+    # But only if there are cards left
+    if board["row-stack"][original_row]:
+        if board["row-stack"][original_row][0] == 0:
+            board["row-stack"][original_row][0] = -1
 
     return board

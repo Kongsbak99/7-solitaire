@@ -13,7 +13,9 @@ def wastepileToRow(move, board):
     board["waste-pile"].remove(card)
 
     # Make new top card next_input if unknown
-    if board["waste-pile"][0] == 0:
-        board["waste-pile"][0] = -1
+    # But only if there are cards left
+    if board["waste-pile"]:
+        if board["waste-pile"][0] == 0:
+            board["waste-pile"][0] = -1
 
     return board

@@ -72,13 +72,11 @@ class Cards:
     def getCardSuit(card_id):
         for card in Cards.card_array:
             if card.card_id == card_id:
-                print("card suit: " + str(card.suit))
                 return card.suit
 
     def getCardValue(card_id):
         for card in Cards.card_array:
             if card.card_id == card_id:
-                print("card value: " + str(card.value))
                 return card.value
 
     # Small method to get name of a card by id
