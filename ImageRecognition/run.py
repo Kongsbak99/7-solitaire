@@ -1,17 +1,29 @@
+import numpy as np
+from cv2 import absdiff
+
 from edgeDetectionLive2 import GetCardCorner
 import cv2
+import Images
 from ImageRecognition.imageSplit import navn
+knight = cv2.imread('knight3.jpg')
+knight2 = cv2.imread('knight4.jpg')
+heart10 = cv2.imread('10heart.jpg')
+gray = cv2.cvtColor(knight, cv2.COLOR_BGR2GRAY)
 
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+
+
+cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 count = 0
 while 1:
+
     _, frame = cap.read()
     listOfFrames = navn(frame)
 
     cv2.imshow('preview', frame)
+
     # cv2.imshow(1, listOfFrames[1])
     # for i in range(0, len(listOfFrames)):
     #     #cv2.imshow(str(i), listOfFrames[i])
@@ -26,6 +38,19 @@ while 1:
         cv2.imshow("num2", box2)
         cv2.imshow("num3", box3)
         cv2.imshow("num4", box4)
+        cv2.imshow("knight", knight)
+
+       # diff_img = cv2.absdiff(knight, gray)
+       # rank_diff = int(np.sum(diff_img))
+        diffTest1 = absdiff(knight, knight2)
+        diffTest2 = absdiff(knight, heart10)
+        valueCalc1 = int(np.sum(diffTest1)/255)
+        valueCalc2 = int(np.sum(diffTest2) / 255)
+        print(valueCalc1)
+        print(valueCalc2)
+
+
+       # print(int(knight))
 
         try:
             #cardCornerPicture = GetCardCorner(frame)

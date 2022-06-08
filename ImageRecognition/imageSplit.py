@@ -16,6 +16,7 @@ def navn(frame):
     # cv2.imshow("preview", frame)
     #   rval, frame = vc.read()
     #   key = cv2.waitKey(20)
+   # knight = cv2.imread("KnightSpade.jpg")
     (h, w) = frame.shape[:2]
 
     ## Coordinates for the rectangles of field1 - field7
@@ -52,7 +53,7 @@ def navn(frame):
 
     list_of_frames = [Field1, Field2, Field3, Field4, Field5, Field6,
                       Field7, DrawField, AceStack1, AceStack2, AceStack3, AceStack4]
-
+   # cv2.imshow("knight", knight)
     # cv2.imshow("Field1", Field1)
     # cv2.imshow("Field2", Field2)
     # cv2.imshow("Field3", Field3)
