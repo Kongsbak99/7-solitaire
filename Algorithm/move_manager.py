@@ -168,7 +168,6 @@ class MoveManager:
         try:
         ############ Check if no moves, turn new waste pile ############
             if len(move) == 0:
-                board['deprecated-waste'].append(board['waste-pile'])
                 board['waste-pile'] = [-1, -1, -1]
                 board['stock-pile'].remove(0)
                 board['stock-pile'].remove(0)
