@@ -1,13 +1,13 @@
 # New class to handle different types of moves as to not overpopulate move_manager
 
-### MoveType: 4 ###
+### MoveType: 5 ###
 
-def rowToSuitstack(move, board):
+def kingRowToEmptyRow(move, board):
+    row = board["row-stack"][move["to"]]
     card = move["cards"][0]
-    suit_stack = move["to"]
 
-    # Add the card to the suit stack
-    board["suit-stack"][suit_stack].append(card)
+    # Add the card to the empty row
+    row.append(card)
 
     # Find original row of card
     if card in board["row-stack"]["row-1"]:
@@ -29,9 +29,5 @@ def rowToSuitstack(move, board):
 
     # Remove the card from the row
     board["row-stack"][original_row].remove(card)
-
-    # Make top leftover card visible if not
-    if board["row-stack"][original_row][0] == 0:
-        board["row-stack"][original_row][0] = -1
 
     return board

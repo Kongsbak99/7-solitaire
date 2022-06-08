@@ -3,6 +3,9 @@ from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 from Algorithm.MoveTypes.wastepile_to_suitstack import wastepileToSuitStack
 from Algorithm.MoveTypes.wastepile_to_row import wastepileToRow
 from Algorithm.MoveTypes.row_to_row import rowToRow
+from Algorithm.MoveTypes.row_to_suitstack import rowToSuitstack
+from Algorithm.MoveTypes.king_row_to_empty_row import kingRowToEmptyRow
+from Algorithm.MoveTypes.king_wastepile_to_empty_row import kingWastepileToEmptyRow
 import json
 
 
@@ -112,34 +115,48 @@ class MoveManager:
 
     # Create JSON for all possible moves
     def movables(self):
-        with open('./board.json') as f:
-            board = json.load(f)
-
         movable_sets = []
+
+        # Empty rows to know where kings can be moved
+        empty_rows = []
 
         row_topcards = []
         rows = []
         if self.board["row-stack"]["row-1"]:
             rows.append(self.board["row-stack"]["row-1"])
             row_topcards.append(self.board["row-stack"]["row-1"][0])
+        elif not self.board["row-stack"]["row-1"]:
+            empty_rows.append(self.board["row-stack"]["row-1"])
         if self.board["row-stack"]["row-2"]:
             rows.append(self.board["row-stack"]["row-2"])
             row_topcards.append(self.board["row-stack"]["row-2"][0])
+        elif not self.board["row-stack"]["row-2"]:
+            empty_rows.append(self.board["row-stack"]["row-2"])
         if self.board["row-stack"]["row-3"]:
             rows.append(self.board["row-stack"]["row-3"])
             row_topcards.append(self.board["row-stack"]["row-3"][0])
+        elif not self.board["row-stack"]["row-3"]:
+            empty_rows.append(self.board["row-stack"]["row-3"])
         if self.board["row-stack"]["row-4"]:
             rows.append(self.board["row-stack"]["row-4"])
             row_topcards.append(self.board["row-stack"]["row-4"][0])
+        elif not self.board["row-stack"]["row-4"]:
+            empty_rows.append(self.board["row-stack"]["row-4"])
         if self.board["row-stack"]["row-5"]:
             rows.append(self.board["row-stack"]["row-5"])
             row_topcards.append(self.board["row-stack"]["row-5"][0])
+        elif not self.board["row-stack"]["row-5"]:
+            empty_rows.append(self.board["row-stack"]["row-5"])
         if self.board["row-stack"]["row-6"]:
             rows.append(self.board["row-stack"]["row-6"])
             row_topcards.append(self.board["row-stack"]["row-6"][0])
+        elif not self.board["row-stack"]["row-6"]:
+            empty_rows.append(self.board["row-stack"]["row-6"])
         if self.board["row-stack"]["row-7"]:
             rows.append(self.board["row-stack"]["row-7"])
             row_topcards.append(self.board["row-stack"]["row-7"][0])
+        elif not self.board["row-stack"]["row-7"]:
+            empty_rows.append(self.board["row-stack"]["row-7"])
 
         if self.board["waste-pile"]:
             wastepile_card1 = self.board["waste-pile"][0]
@@ -159,17 +176,26 @@ class MoveManager:
             for topcard in row_topcards:
                 if self.canOverlay(check_card, topcard):
                     self.createMoveObject(card_set, self.getRow(topcard), 3)
+            # Check if any of the sets are only kings, and if there's an empty row
+            if (card_set == [13] or card_set == [26] or card_set == [39] or card_set == [52]) and empty_rows:
+                for empty_row in empty_rows:
+                    self.createMoveObject(card_set, empty_row, 5)
+
 
         # Check whether the top waste-pile card can be moved to a row
-        # And if a row top-card can be moved to its suit stack
         for topcard in row_topcards:
             if self.canOverlay(wastepile_card1, topcard):
                 self.createMoveObject([wastepile_card1], self.getRow(topcard), 2)
+            # And if a row top-card can be moved to its suit stack
             self.canSuitStacked(topcard, 4)
 
-        for card in waste_pile_cards:
-            # Check movables of waste pile card to suit stack 
-            self.canSuitStacked(card, 1)
+        # Also check for king in wastepile and an available empty row
+        if (wastepile_card1 == 13 or wastepile_card1 == 26 or wastepile_card1 == 39 or wastepile_card1 == 52) \
+                and empty_rows:
+            self.createMoveObject([wastepile_card1], empty_rows[0], 2)
+
+        # Check movables of waste pile card to suit stack
+        self.canSuitStacked(wastepile_card1, 1)
 
     def doMove(self, move):  # TODO
         if move["moveType"] == 1:
@@ -179,8 +205,11 @@ class MoveManager:
         elif move["moveType"] == 3:
             rowToRow(move, self.board)
         elif move["moveType"] == 4:
-            # TODO
-            x = 1  # Disable error
+            rowToSuitstack(move, self.board)
+        elif move["moveType"] == 5:
+            kingRowToEmptyRow(move, self.board)
+        elif move["moveType"] == 6:
+            kingWastepileToEmptyRow(move, self.board)
         else:
             print("ERROR - Unknown moveType: " + str(move["moveType"]))
 
@@ -195,7 +224,6 @@ class MoveManager:
                     board["waste-pile"].insert(0, board["stock-pile"].pop(0))
                     board["waste-pile"].insert(0, board["stock-pile"].pop(0))
                     board["waste-pile"].insert(0, board["stock-pile"].pop(0))
-                    hej = turnStockpile([1], [2])[0]
 
                 if len(board["stock-pile"]) < 3:
                     print("Under 3 cards in stock pile")

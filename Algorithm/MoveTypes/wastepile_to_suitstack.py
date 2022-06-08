@@ -1,5 +1,7 @@
 # New class to handle different types of moves as to not overpopulate move_manager
 
+### MoveType: 1 ###
+
 def wastepileToSuitStack(move, board):
     card = move["cards"][0]
     stack = move["to"]
