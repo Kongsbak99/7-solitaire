@@ -55,13 +55,13 @@ def GetCardCorner(frame):
             # Find corner with lowest number (lowest should be top left corner)
             for u in range(0, len(n), 2):
                 #print("==== is " + str(n[u]) + " less than " + str(min_x))
-                print("--- " + str(u) + " to " + str(u+1))
-                print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
+                #print("--- " + str(u) + " to " + str(u+1))
+                #print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
                 #if n[u] < min_x and n[u+1] < min_y:
                 if n[u] + n[u+1] < min_x + min_y:
                     min_x = n[u]
                     min_y = n[u+1]
-            print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
+           # print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
 
             # Figure out how many indexes to shift array so corner with the lowest value is top-left
             if min_x in n:
@@ -72,14 +72,14 @@ def GetCardCorner(frame):
             # Finally shift array left
             if move_amount != 0:
                 corrected = np.roll(n, -move_amount)
-                print("finished rotating")
+                #print("finished rotating")
 
-                for q in range(0, len(n), 2):
-                    print(str(corrected[q]) + ", " + str(corrected[q+1]))
+                #for q in range(0, len(n), 2):
+                #    print(str(corrected[q]) + ", " + str(corrected[q+1]))
                 return corrected
             return n
         except:
-            print("Error in correctOrientation()")
+            #print("Error in correctOrientation()")
             return n
 
     # Going through every contours found in the image.
@@ -95,9 +95,9 @@ def GetCardCorner(frame):
                 linelength = round(math.sqrt(((n[i + 2] - n[i]) ** 2) + ((n[i + 3] - n[i + 1]) ** 2)), 2)
 
                 if linelength > minLineSize:
-                    cv2.drawContours(img, [approx], 0, (0, 0, 255), 2)
+                    cv2.drawContours(frame, [approx], 0, (0, 0, 255), 2)
                     # print("i: " + str(i))
-                    print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
+                    #print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
                 else:
                     break  # breaks a lot
             except:
@@ -157,7 +157,7 @@ def GetCardCorner(frame):
                             # print(str(shorten(n[0], n[2], height, width)) + ", " + str(shorten(n[1], n[3], height, width)))
                             # print(str(shorten(n[6], n[4], height, width)) + ", " + str(shorten(n[7], n[5], height, width)))
                             # print(str(n[6]) + ", " + str(n[7]))
-                        print(cardCoordinates)
+                        #print(cardCoordinates)
 
                         # [((n[2]) / height) * (width * 1.5), (n[3] / height) * (width * 1.5)],
                         # [(n[4] / height) * (width * 1.5), (n[5] / height) * (width * 1.5)],
@@ -191,15 +191,9 @@ def GetCardCorner(frame):
                         #_, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
                         #denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
                         #blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
-
                         #cv2.imshow("Denoised", blurDenoised)
-
                         #inverted = cv2.bitwise_not(blurDenoised)
                         #cv2.imshow("inverted", inverted)
-
-                        # plt.subplot(121), plt.imshow(img), plt.title('Input')
-                        # plt.subplot(122), plt.imshow(dst), plt.title('Output')
-                        # plt.show()
 
                         cv2.putText(img, string, (x, y),
                                     font, 0.6, (184, 22, 167))
@@ -215,7 +209,7 @@ def GetCardCorner(frame):
             i = i + 1
 
     # Showing the final image.
-    #cv2.imshow('preview', img)
+    #cv2.imshow('preview', frame)
     return frame
 cv2.destroyAllWindows()
 pass
