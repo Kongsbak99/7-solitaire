@@ -13,6 +13,8 @@ def GetCardCorner(frame):
     img = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     imgGray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+    minLineSize = 80
+
     # Converting image to a binary image
     # ( black and white only image).
     _, threshold = cv2.threshold(imgGray, 160, 255, cv2.THRESH_BINARY)
@@ -31,13 +33,13 @@ def GetCardCorner(frame):
 
     def botShortenY(y1, y2, height, width):
         y2 = y2 - y1
-        y2 = (y2 / height) * (width / 2.2)
+        y2 = (y2 / height) * (width / 1.4)
         y2 = y2 + y1
         return y2
 
     def botShortenX(x1, x2, height, width):
         x2 = x2 - x1
-        x2 = (x2 / width) * (width / 5)
+        x2 = (x2 / width) * (width / 3)
         x2 = x2 + x1
         return x2
 
@@ -85,7 +87,6 @@ def GetCardCorner(frame):
         approx = cv2.approxPolyDP(cnt, 0.009 * cv2.arcLength(cnt, True), True)
         n = approx.ravel()  # flattens array
         i = 0
-        minLineSize = 100
 
         for j in n:
             # if n[i] < 10:
@@ -139,7 +140,7 @@ def GetCardCorner(frame):
                         # print("is: " + str(height) + " 1.5 times bigger than: " + str(width) + " = " + str(
                         #   width * 1.5))
                         # If cards are stacked, do some math to find only the top card.
-                        if height > width * 1.5:
+                        if height > width * 1.4:
                             cardCoordinates = np.float32([
                                 [shorten(n[2], n[0], height, width), shorten(n[3], n[1], height, width)],
                                 [n[2], n[3]],
@@ -168,21 +169,27 @@ def GetCardCorner(frame):
                         dst = cv2.warpPerspective(imgGray, M, (300, 450))
 
                         # Get the bottom left corner
-                        CornerCutCoordinates = np.float32([
-                            [botShortenY(n[2], n[0], height, width), botShortenY(n[3], n[1], height, width)],
-                            [n[2], n[3]],
-                            [botShortenX(n[2], n[4], height, width), botShortenX(n[3], n[5], height, width)],
-                            [botShortenX(n[2], n[6], height, width), botShortenY(n[3], n[7], height, width)]])
+                        # CornerCutCoordinates = np.float32([
+                        #     [botShortenY(n[2], n[0], height, width), botShortenY(n[3], n[1], height, width)],
+                        #     [n[2], n[3]],
+                        #     [botShortenX(n[2], n[4], height, width), botShortenX(n[3], n[5], height, width)],
+                        #     [botShortenX(n[2], n[6], height, width), botShortenY(n[3], n[7], height, width)]])
 
-                        botCut = np.float32([[0, 0], [0, 240], [120, 240], [120, 0]])  # the coordinates/size of the new image
+                        CornerCutCoordinates = np.float32([
+                            [n[0], n[1]],
+                            [botShortenY(n[0], n[2], height, width), botShortenY(n[1], n[3], height, width)],
+                            [botShortenX(n[0], n[4], height, width), botShortenY(n[1], n[5], height, width)],
+                            [botShortenX(n[0], n[6], height, width), botShortenX(n[1], n[7], height, width)]])
+
+                        botCut = np.float32([[0, 0], [0, 257], [120, 257], [120, 0]])  # the coordinates/size of the new image
                         botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)
-                        botDst = cv2.warpPerspective(imgGray, botM, (120, 240))
+                        botDst = cv2.warpPerspective(imgGray, botM, (120, 257))
                         #cv2.imshow("card zoom", botDst)
 
                         # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
                         # Also works with a video stream: check out cv2.fastNlMeansDenoisingMulti()
                         #_, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
-                        denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
+                        #denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
                         #blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
 
                         #cv2.imshow("Denoised", blurDenoised)
@@ -201,7 +208,7 @@ def GetCardCorner(frame):
                         # _, thresholdblackwhite = cv2.threshold(dst, 190, 255, cv2.THRESH_BINARY)
                         # denoisedblackwhite = cv2.fastNlMeansDenoising(thresholdblackwhite, None, 7, 21)
                         # cv2.imshow("black white", denoisedblackwhite)
-                        return denoised
+                        return botDst
 
             except:
                 print("Something went wrong")
