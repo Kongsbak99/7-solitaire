@@ -26,16 +26,14 @@ def rowToRow(move, board):
     else:
         print("ERROR - Cannot find row for card with ID: " + str(cards[0]))
 
-    # Make top left over card visible if not
-    # 1) Check if there are any cards left at all
-    if len(cards) < len(board["row-stack"][original_row]):
-        # 2) If the next card is 0, then = -1
-        if board["row-stack"][original_row][len(cards)] == 0:
-            board["row-stack"][original_row][len(cards)] = -1
-
     # Remove the cards from the original row
     for card in cards_reversed:
         board["row-stack"][original_row].remove(card)
+
+    # Make top leftover card visible if not
+    if board["row-stack"][original_row][0] == 0:
+        board["row-stack"][original_row][0] = -1
+
 
     # Then add the cards one-by-one to the new row
     for card in cards_reversed:
