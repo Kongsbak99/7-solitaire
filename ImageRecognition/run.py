@@ -60,7 +60,7 @@ while 1:
             # cv2.imwrite("TrainingImages/6frame%d.jpg" % count, box6)  # save frame as JPEG file
             # cv2.imwrite("TrainingImages/7frame%d.jpg" % count, box7)  # save frame as JPEG file
             # cv2.imwrite("TrainingImages/8frame%d.jpg" % count, box8)  # save frame as JPEG file
-            # cv2.imwrite("TrainingImages/9frame%d.jpg" % count, box9)  # save frame as JPEG file
+            cv2.imwrite("ValidationImages/9frame%d.jpg" % count, box9)  # save frame as JPEG file
             # cv2.imwrite("TrainingImages/10frame%d.jpg" % count, box10)  # save frame as JPEG file
             # cv2.imwrite("TrainingImages/111frame%d.jpg" % count, box11)  # save frame as JPEG file
             #cv2.imshow('CardCornerPicture', box3)  # Display the resulting frame
