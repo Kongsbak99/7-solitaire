@@ -168,7 +168,7 @@ class MoveManager:
         try:
         ############ Check if no moves, turn new waste pile ############
             if len(move) == 0:
-                board['waste-pile'] = [-1, -1, -1]
+                board['waste-pile'] = [-1, 0, 0]
                 board['stock-pile'].remove(0)
                 board['stock-pile'].remove(0)
                 board['stock-pile'].remove(0)
@@ -180,6 +180,8 @@ class MoveManager:
                 for card in board['waste-pile']:
                     if card == bottom_card:
                         board['waste-pile'].remove(card)
+                        board['waste-pile'].insert(0, -1)
+                        
 
                 ##If moved from row stack, create new row with potential unknown card.
                 for row in board['row-stack']:

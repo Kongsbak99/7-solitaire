@@ -23,7 +23,7 @@ def main():
         ##TODO: Check for lost game
         
         mm = MoveManager()
-        ##After init of board, check for moves
+        ##After init of board, check for moves 
         mm.movables()
         print(f"Possible moves: {mm.legal_moves}")
 

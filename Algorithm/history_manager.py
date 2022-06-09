@@ -18,7 +18,7 @@ class HistoryManager():
         self.init_suit = self.data['suit-stack']
         self.init_rows = self.data['row-stack']
 
-        self.init_waste = self.new_waste ##init waste pile
+        self.init_waste[0] = self.new_waste[0] ##init waste pile
         for i in range(len(self.init_rows)): ##init rows
             self.init_rows[f'row-{i+1}'][0] = self.new_rows[f'row-{i+1}']
 
@@ -47,9 +47,9 @@ class HistoryManager():
             ##Search for unknown card and stop when found
             while unknown_found == False:
                 ##check if waste-pile has changed
-                if self.board['waste-pile'] != new_input['waste-pile']:
+                if new_input['waste-pile'][0] == -1:
                     #Update waste pile
-                    self.board['waste-pile'] = new_input['waste-pile']
+                    self.board['waste-pile'][0] = new_input['waste-pile'][0]
                     unknown_found = True
                 ## Else run through the row stack, untill the new card is found. 
                 else:
