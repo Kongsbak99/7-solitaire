@@ -57,7 +57,7 @@ def main():
         sm = StrategyManager(mm.legal_moves)
 
         ##Make move
-        board_after_move = mm.make_move(sm.best_move(), board)  ##complete board
+        board_after_move = mm.doMove(sm.best_move())  ##complete board
         board = hm.update_board(board_after_move)  ##updates the board
 
         # New input from image rec, then update unknown value in board.json
@@ -79,4 +79,4 @@ def main():
 
 
 if __name__ == '__main__':
-    tester()
+    main()
