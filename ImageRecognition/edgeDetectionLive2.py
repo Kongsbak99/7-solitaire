@@ -55,8 +55,8 @@ def GetCardCorner(frame):
             # Find corner with lowest number (lowest should be top left corner)
             for u in range(0, len(n), 2):
                 #print("==== is " + str(n[u]) + " less than " + str(min_x))
-                print("--- " + str(u) + " to " + str(u+1))
-                print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
+                # print("--- " + str(u) + " to " + str(u+1))
+                # print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
                 #if n[u] < min_x and n[u+1] < min_y:
                 if n[u] + n[u+1] < min_x + min_y:
                     min_x = n[u]
@@ -74,8 +74,8 @@ def GetCardCorner(frame):
                 corrected = np.roll(n, -move_amount)
                 print("finished rotating")
 
-                for q in range(0, len(n), 2):
-                    print(str(corrected[q]) + ", " + str(corrected[q+1]))
+                # for q in range(0, len(n), 2):
+                #    print(str(corrected[q]) + ", " + str(corrected[q+1]))
                 return corrected
             return n
         except:
@@ -116,7 +116,7 @@ def GetCardCorner(frame):
 
                     cardCoordinates = np.float32([[n[0], n[1]], [n[2], n[3]], [n[4], n[5]], [n[6], n[7]]])
                     # ptsCut = np.float32([[0, 0], [0, 450], [300, 450], [300, 0]])
-                    ptsCut = np.float32([[0, 0], [0, 450], [300, 450], [300, 0]])
+                    ptsCut = np.float32([[0, 0], [0, 420], [300, 420], [300, 0]])
 
                     # Find angle ([2,3] = 0-point)
                     a = np.array([n[0] - n[2], n[1] - n[3]])
@@ -146,9 +146,6 @@ def GetCardCorner(frame):
                         n[6] = shorten(n[4], n[6], height, width)
                         n[7] = shorten(n[5], n[7], height, width)
 
-                        print("after..")
-                        for q in range(0, len(n), 2):
-                            print(str(n[q]) + ", " + str(n[q + 1]))
                         if height > width * 1.5:
                             print("CARDS ARE STACKED")
                             cardCoordinates = np.float32([
@@ -177,7 +174,7 @@ def GetCardCorner(frame):
                         # ptsCut = Size of card we want after warp
                         M = cv2.getPerspectiveTransform(cardCoordinates, ptsCut)
                         # Applies the warp on the image
-                        dst = cv2.warpPerspective(imgGray, M, (300, 450))
+                        dst = cv2.warpPerspective(imgGray, M, (300, 420))
 
                         # Get the bottom left corner
                         # CornerCutCoordinates = np.float32([
@@ -190,14 +187,19 @@ def GetCardCorner(frame):
                         height = 8.8
                         width = 6.3
                         CornerCutCoordinates = np.float32([
-                            [n[0], n[1]],
-                            [botShortenY(n[0], n[2], height, width), botShortenY(n[1], n[3], height, width)],
-                            [botShortenX(n[0], n[4], height, width), botShortenY(n[1], n[5], height, width)],
-                            [botShortenX(n[0], n[6], height, width), botShortenX(n[1], n[7], height, width)]])
+                            [0, 0],
+                            [0, botShortenY(0, 420, height, width)],
+                            [botShortenX(0, 300, height, width), botShortenY(0, 420, height, width)],
+                            [botShortenX(0, 300, height, width), 0]])
+
+                            # [n[0], n[1]],
+                            # [botShortenY(n[0], n[2], height, width), botShortenY(n[1], n[3], height, width)],
+                            # [botShortenX(n[0], n[4], height, width), botShortenY(n[1], n[5], height, width)],
+                            # [botShortenX(n[0], n[6], height, width), botShortenX(n[1], n[7], height, width)]])
 
                         botCut = np.float32([[0, 0], [0, 257], [120, 257], [120, 0]])  # the coordinates/size of the new image
                         botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)
-                        botDst = cv2.warpPerspective(imgGray, botM, (120, 257))
+                        botDst = cv2.warpPerspective(dst, botM, (120, 257)) #imgGray
                         #cv2.imshow("card zoom", botDst)
 
                         # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
@@ -222,7 +224,7 @@ def GetCardCorner(frame):
                         # _, thresholdblackwhite = cv2.threshold(dst, 190, 255, cv2.THRESH_BINARY)
                         # denoisedblackwhite = cv2.fastNlMeansDenoising(thresholdblackwhite, None, 7, 21)
                         # cv2.imshow("black white", denoisedblackwhite)
-                        return dst
+                        return botDst
 
             except:
                 print("Something went wrong")
