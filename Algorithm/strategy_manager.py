@@ -1,7 +1,14 @@
+import json
+
+
+
 class StrategyManager:
 
     def __init__(self, moves):
         self.moves = moves
+
+        with open('board.json') as f:
+            self.board = json.load(f)
 
     # Next to do
     # Need moveTypes specified correctly
@@ -13,42 +20,39 @@ class StrategyManager:
 
     # main method for general flow of strategy manager
     def best_move(self):
+        moves = []
+        ## Check for suit move
         for i in range(len(self.moves)):
-            if self.moves[i]['moveType'] == 4:
-                print(f"SuitStack MoveType: {self.moves[i]['moveType']}")
-                best_moves = self.moves[i]
-                print(f"SuitStack Best Moves: {best_moves}")
-                return best_moves
+            if self.moves[i]['moveType'] == 4 or self.moves[i]['moveType'] == 1:
+                moves.append(self.moves[i])
+        if len(moves) > 0:
+            best_move = self.suit_stack_move(moves)
+            return best_move
+        ## Check for king move
         for i in range(len(self.moves)):
-            if self.moves[i]['moveType'] == 2:
-                print(f"KingStack MoveType: {self.moves[i]['moveType']}")
-                best_moves = self.moves[i]
-                print(f"KingStack Best Moves: {best_moves}")
-                return best_moves
+            if self.moves[i]['moveType'] == 5 or self.moves[i]['moveType'] == 6:
+                moves.append(self.moves[i])
+        if len(moves) > 0:
+            best_move = self.king_move(moves)
+            return best_move
+        ## Check for row move
         for i in range(len(self.moves)):
-            if self.moves[i]['moveType'] == 3:
-                print(f"RowStack MoveType: {self.moves[i]['moveType']}")
-                best_moves = self.moves[i]
-                print(f"RowStack Best Moves: {best_moves}")
-                return best_moves
-        for i in range(len(self.moves)):
-            if self.moves[i]['moveType'] == 1:
-                print(f"NoStack MoveType: {self.moves[i]['moveType']}")
-                best_moves = self.moves[i]
-                print(f"NoStack Best Moves: {best_moves}")
-                return best_moves
-        # if len(self.moves) > 0:
-            # best_move = self.row_stack_move()  # overwrite best_move
-            # best_move = self.king_move()  # overwrite best_move
-            # best_move = self.suit_stack_move()  # overwrite best_move
-            # print(f"Best move in Strategy Manager If: {best_move}")
-        # else:
-            # best_move = self.no_moves()  # if moves is empty = no moves
-            # print(f"Best move in Strategy Manager Else: {best_move}")
-        # return best_moves
+            if self.moves[i]['moveType'] == 3 or self.moves[i]['moveType'] == 2:
+                moves.append(self.moves[i])
+        if len(moves) > 0:
+            best_move = self.row_stack_move(moves)
+            return best_move
+
+        ##no moves doesny have a move type yet 
+        for i in range(len(self.moves)): 
+            if self.moves[i]['moveType'] == 100:
+                moves.append(self.moves[i])
+        if len(moves) > 0:
+            best_move = self.no_moves(moves)
+            return best_move
 
     # This function can probably be ignored
-    def suit_stack_move(self):
+    def suit_stack_move(self, moves):
         # Basic Strategy
         # Suit stack move = The highest value
         # Is suit stack available?
@@ -59,10 +63,10 @@ class StrategyManager:
         # If yes -> move to suit stack
         # If no -> ignore move
         # If no and no other moves available -> return this move
-        return self.moves[0]
+        return moves[0]
 
     # This function can probably be ignored
-    def king_move(self):
+    def king_move(self, moves):
         # King move = The second-highest value
         # Is king present on table?
         # If no -> Begin clearing the largest row
@@ -95,16 +99,39 @@ class StrategyManager:
         # Check Twos
         # If multiple suit Twos available
         # Pick lowest ID 2
-        return self.moves
+        return moves[0]
 
     # This function can probably be ignored
-    def row_stack_move(self):
+    def row_stack_move(self, moves):
         # Row move = The third-highest value
         # If more than one move available -> The largest card takes precedence
-        return self.moves
+        if len(moves) > 1:
+            rows = [] ## Rows moves is moved from
+            for row in self.board['row-stack']:
+                for move in moves:
+                    if self.board['row-stack'][row][0] == move['cards'][0]:
+                        unknown_size = 0
+                        for card in self.board['row-stack'][row]:
+                            if card == 0:
+                                unknown_size = unknown_size + 1
+                        rows.append({'row': row, 'moveId': move['moveId'], 'unknown_size': unknown_size})
+                        
+            ## Check which row has the most 0's
+            biggest_pile = rows[0]
+            for row in rows:
+                if row['unknown_size'] > biggest_pile['unknown_size']:
+                    biggest_pile = row
+
+            ## Find the best move and return
+            for move in moves:
+                if move['moveId'] == biggest_pile['moveId']:
+                    return move
+            
+        else:
+            return moves[0]
 
     # This function can probably be ignored
-    def no_moves(self):
+    def no_moves(self, moves):
         # No moves = The lowest value
         # If no moves available on rows -> Turn stockpile
         # If stockpile has not yet played a card -> Only play 1 card
@@ -114,4 +141,4 @@ class StrategyManager:
         # Do not move, unless
         # King available
         # No other moves available
-        return self.moves
+        return moves[0]
