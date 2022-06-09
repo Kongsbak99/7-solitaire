@@ -201,6 +201,14 @@ class MoveManager:
             # Check movables of waste pile card to suit stack
             self.canSuitStacked(wastepile_card1, 1)
 
+
+        # Force turnover as only move if stockpile + wastepile = 3 cards and they're not in wastepile
+        if (len(self.board["stock-pile"]) + len(self.board["waste-pile"]) == 3) and len(self.board["waste-pile"]) < 3:
+            self.legal_moves.clear()
+        # Add turnover of stockpile as a move, but not if stockpile is empty and wastepile <= 3 cards
+        if not (not bool(self.board["stock-pile"]) and len(self.board["waste-pile"]) <= 3):
+            self.legal_moves.append({'moveId': int((len(self.legal_moves))), 'moveType': 7})
+
     def doMove(self, move):  # TODO
         if move["moveType"] == 1:
             board = wastepileToSuitStack(move, self.board)
@@ -214,6 +222,8 @@ class MoveManager:
             board = kingRowToEmptyRow(move, self.board)
         elif move["moveType"] == 6:
             board = kingWastepileToEmptyRow(move, self.board)
+        elif move["moveType"] == 7:
+            board = turnStockpile(self.board)
         else:
             print("ERROR - Unknown moveType: " + str(move["moveType"]))
         return board
