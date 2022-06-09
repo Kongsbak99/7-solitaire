@@ -27,7 +27,7 @@ def GetCardCorner(frame):
     # The math executed if more cards are stacked which makes the card seem higher.
     def shorten(x1, x2, height, width):
         x2 = x2 - x1
-        x2 = (x2 / height) * (width * 1.6)
+        x2 = (x2 / height) * (width * 1.4)
         x2 = x2 + x1
         return x2
 
@@ -121,7 +121,6 @@ def GetCardCorner(frame):
                     # Find angle ([2,3] = 0-point)
                     a = np.array([n[0] - n[2], n[1] - n[3]])
                     b = np.array([n[4] - n[2], n[5] - n[3]])
-
                     inner = np.inner(a, b)
                     norms = la.norm(a) * la.norm(b)
                     cos = inner / norms
@@ -129,6 +128,7 @@ def GetCardCorner(frame):
                     deg = np.rad2deg(rad)
 
                     n = correctOrientation(n)
+                    cardCoordinates = np.float32([[n[0], n[1]], [n[2], n[3]], [n[4], n[5]], [n[6], n[7]]])
 
                     # only if degrees are reasonable, create and show warp & place text on original image
                     if 80 < deg < 100:
@@ -140,24 +140,35 @@ def GetCardCorner(frame):
                         # print("is: " + str(height) + " 1.5 times bigger than: " + str(width) + " = " + str(
                         #   width * 1.5))
                         # If cards are stacked, do some math to find only the top card.
-                        if height > width * 1.4:
-                            cardCoordinates = np.float32([
-                                [shorten(n[2], n[0], height, width), shorten(n[3], n[1], height, width)],
-                                [n[2], n[3]],
-                                # [shorten(n[0], n[2], height, width), shorten(n[1], n[3], height, width)],
-                                # [shorten(n[6], n[4], height, width), shorten(n[7], n[5], height, width)],
-                                [n[4], n[5]],
-                                [shorten(n[4], n[6], height, width), shorten(n[5], n[7], height, width)]
+                        n[0] = shorten(n[2], n[0], height, width)
+                        n[1] = shorten(n[3], n[1], height, width)
 
-                            ])
+                        n[6] = shorten(n[4], n[6], height, width)
+                        n[7] = shorten(n[5], n[7], height, width)
+
+                        print("after..")
+                        for q in range(0, len(n), 2):
+                            print(str(n[q]) + ", " + str(n[q + 1]))
+                        if height > width * 1.5:
                             print("CARDS ARE STACKED")
+                            cardCoordinates = np.float32([
+                                [n[0], n[1]],
+                                [n[2], n[3]],
+                                [n[4], n[5]],
+                                [n[6], n[7]]
+
+                                # [shorten(n[2], n[0], height, width), shorten(n[3], n[1], height, width)],
+                                # [n[2], n[3]],
+                                # [n[4], n[5]],
+                                # [shorten(n[4], n[6], height, width), shorten(n[5], n[7], height, width)]
+                            ])
                             # print(str(((n[2]) / height) * (width * 1.5)) + ", " + str(((n[3]) / height) * (width * 1.5)))
                             # print(str(((n[4]) / height) * (width * 1.5)) + ", " + str(((n[5]) / height) * (width * 1.5)))
                             # print(str(n[0]) + ", " + str(n[1]))
                             # print(str(shorten(n[0], n[2], height, width)) + ", " + str(shorten(n[1], n[3], height, width)))
                             # print(str(shorten(n[6], n[4], height, width)) + ", " + str(shorten(n[7], n[5], height, width)))
                             # print(str(n[6]) + ", " + str(n[7]))
-                        print(cardCoordinates)
+                            print(cardCoordinates)
 
                         # [((n[2]) / height) * (width * 1.5), (n[3] / height) * (width * 1.5)],
                         # [(n[4] / height) * (width * 1.5), (n[5] / height) * (width * 1.5)],
@@ -175,6 +186,9 @@ def GetCardCorner(frame):
                         #     [botShortenX(n[2], n[4], height, width), botShortenX(n[3], n[5], height, width)],
                         #     [botShortenX(n[2], n[6], height, width), botShortenY(n[3], n[7], height, width)]])
 
+                        #Height and width of our cards
+                        height = 8.8
+                        width = 6.3
                         CornerCutCoordinates = np.float32([
                             [n[0], n[1]],
                             [botShortenY(n[0], n[2], height, width), botShortenY(n[1], n[3], height, width)],
@@ -208,7 +222,7 @@ def GetCardCorner(frame):
                         # _, thresholdblackwhite = cv2.threshold(dst, 190, 255, cv2.THRESH_BINARY)
                         # denoisedblackwhite = cv2.fastNlMeansDenoising(thresholdblackwhite, None, 7, 21)
                         # cv2.imshow("black white", denoisedblackwhite)
-                        return botDst
+                        return dst
 
             except:
                 print("Something went wrong")
