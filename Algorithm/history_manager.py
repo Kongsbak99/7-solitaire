@@ -53,11 +53,10 @@ class HistoryManager():
                         self.board['waste-pile'][0] = new_input['waste-pile'][0]
                         unknown_found = True
                 ## Else run through the row stack, untill the new card is found. 
-                else:
-                    for row in self.board['row-stack']:
-                        if self.board['row-stack'][row][0] == -1:
-                            self.board['row-stack'][row][0] = new_input['row-stack'][row]
-                            unknown_found = True
+                for row in self.board['row-stack']:
+                    if self.board['row-stack'][row][0] == -1:
+                        self.board['row-stack'][row][0] = new_input['row-stack'][row]
+                        unknown_found = True
 
         with open('board.json', 'w') as h:
             json.dump(self.board, h)

@@ -63,7 +63,7 @@ def main():
         # New input from image rec, then update unknown value in board.json
         print("Waiting for user input:")
         try:
-            unknown_card = list(map(int, input().split()))  ##Input from user
+            unknown_card = int(input())##Input from user
             new_input = mock_image_rec(board_after_move,
                                        unknown_card)  ##What it should look like from image rec (we can reformat to look like this if necessary)
         except Exception as e:

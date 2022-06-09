@@ -8,13 +8,13 @@ def init_mock_input():
     mock_input = {
     "waste-pile": [38],
     "row-stack": {
-        "row-1": 2,
-        "row-2": 2,
-        "row-3": 2,
+        "row-1": 12,
+        "row-2": 18,
+        "row-3": 14,
         "row-4": 26,
-        "row-5": 2,
+        "row-5": 3,
         "row-6": 2,
-        "row-7": 2
+        "row-7": 11
       }
     }
     
@@ -26,12 +26,12 @@ def mock_image_rec(board, unknown):
     "waste-pile": board['waste-pile'],
     "row-stack": board['row-stack']
   }
-
-  if mock_input['waste-pile'][0] == -1:
-    mock_input['waste-pile'][0] = unknown[0]
+  if mock_input['waste-pile']:
+    if mock_input['waste-pile'][0] == -1:
+      mock_input['waste-pile'] = [unknown]
   for row in mock_input['row-stack']:
     if mock_input['row-stack'][row][0] == -1:
-      mock_input['row-stack'][row][0] = unknown[0]
+      mock_input['row-stack'][row][0] = unknown
   
   return {
     "waste-pile": mock_input['waste-pile'],
