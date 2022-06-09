@@ -47,10 +47,11 @@ class HistoryManager():
             ##Search for unknown card and stop when found
             while unknown_found == False:
                 ##check if waste-pile has changed
-                if new_input['waste-pile'][0] == -1:
-                    #Update waste pile
-                    self.board['waste-pile'][0] = new_input['waste-pile'][0]
-                    unknown_found = True
+                if new_input['waste-pile']:
+                    if new_input['waste-pile'][0] == -1:
+                        #Update waste pile
+                        self.board['waste-pile'][0] = new_input['waste-pile'][0]
+                        unknown_found = True
                 ## Else run through the row stack, untill the new card is found. 
                 else:
                     for row in self.board['row-stack']:

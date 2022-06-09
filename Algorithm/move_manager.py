@@ -224,13 +224,6 @@ class MoveManager:
         try:
             ############ Check if no moves, turn new waste pile ############
             if len(move) == 0:
-<<<<<<< HEAD
-                board['waste-pile'] = [-1, 0, 0]
-                board['stock-pile'].remove(0)
-                board['stock-pile'].remove(0)
-                board['stock-pile'].remove(0)
-                
-=======
                 # If more than 3 cards in stock-pile, turn three cards no problem
                 if len(board["stock-pile"]) >= 3:
                     # Put top stock-pile card in waste-pile
@@ -247,7 +240,6 @@ class MoveManager:
                 # board['stock-pile'].remove(0)
                 # board['stock-pile'].remove(0)
 
->>>>>>> 2952d5a87860eb0b8a8ce963aa5e51f499c23339
             else:
                 ############ First cleanup old location of card(s) ############
                 bottom_card = move['cards'][0]
