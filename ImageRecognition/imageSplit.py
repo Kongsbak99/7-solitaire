@@ -67,4 +67,17 @@ def navn(frame):
     # cv2.imshow("AceStacks", AceStack3)
     # cv2.imshow("AceStacks", AceStack4)
 
+    # cv2.imshow("0", Field1)
+    # cv2.imshow("1", Field2)
+    # cv2.imshow("2", Field3)
+    # cv2.imshow("3", Field4)
+    # cv2.imshow("4", Field5)
+    # cv2.imshow("5", Field6)
+    # cv2.imshow("6", Field7)
+    # cv2.imshow("7", DrawField)
+    # cv2.imshow("8", AceStack1)
+    # cv2.imshow("9", AceStack2)
+    # cv2.imshow("10", AceStack3)
+    # cv2.imshow("11", AceStack4)
+
     return list_of_frames
