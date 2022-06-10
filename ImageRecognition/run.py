@@ -2,13 +2,17 @@ import os
 
 from matplotlib import pyplot as plt
 
+from ImageRecognition.absoluteImageDifference import bestCardMatch
 from ImageRecognition.featureMatching2 import Person, matchcard
 from ImageRecognition.write_on_image import write_on_image
 from edgeDetectionLive2 import GetCardCorner
 import cv2
 from ImageRecognition.imageSplit import navn
 
-cap = cv2.VideoCapture(1, cv2.CAP_DSHOW)
+path = os.path.dirname(os.path.abspath(__file__))
+pathname= path + '/ValidationImages/'
+
+cap = cv2.VideoCapture(0)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
@@ -47,20 +51,32 @@ def run():
     cv2.imshow("num9", box9)
     cv2.imshow("num10", box10)
     cv2.imshow("num11", box11)
+    i=0
+    boxboxbox = [box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11]
+    for boxes in boxboxbox:
+        if len(boxes)==257:
+            bestCardMatch(boxes)
+            print(i)
+        i=i+1
 
-    p1 = Person(-1, "null", box0)
 
-    for filename in os.listdir("./ValidationImages"):
-        if filename.endswith(".jpg"):
-            p2 = matchcard("./ValidationImages/" + str(filename), box8)
-            if p2.name > p1.name:
-                p1 = p2
+        #print(len(box3),"box3")
 
-            continue
-        else:
-            continue
-    plt.imshow(p1.img, 'gray'), plt.show(),
-    print(p1.name, p1.age)
+            #bestCardMatch(boxes)
+
+    #p1 = Person(-1, "null", box0)
+
+    # for filename in os.listdir("./ValidationImages"):
+    #     if filename.endswith(".jpg"):
+    #         p2 = matchcard("./ValidationImages/" + str(filename), box8)
+    #         if p2.name > p1.name:
+    #             p1 = p2
+    #
+    #         continue
+    #     else:
+    #         continue
+    # plt.imshow(p1.img, 'gray'), plt.show(),
+    # print(p1.name, p1.age)
 
     try:
         # cardCornerPicture = GetCardCorner(frame)
