@@ -1,12 +1,10 @@
 import math
 import sys
-
 import numpy as np
 import cv2
 import numpy.linalg as la
 
 
-#class GetCardCorner:
 def GetCardCorner(frame):
     font = cv2.FONT_HERSHEY_COMPLEX
 
@@ -17,17 +15,21 @@ def GetCardCorner(frame):
 
     # Converting image to a binary image
     # ( black and white only image).
-    _, threshold = cv2.threshold(imgGray, 130, 255, cv2.THRESH_BINARY)
-
+    # blur = cv2.GaussianBlur(imgGray, (5, 5), cv2.BORDER_DEFAULT)
+    blur = cv2.blur(imgGray, (5, 5))
+    _, threshold = cv2.threshold(blur, 130, 255, cv2.THRESH_BINARY)
     # Detecting contours in image.
-    contours, _ = cv2.findContours(threshold, cv2.RETR_TREE,
-                                   cv2.CHAIN_APPROX_SIMPLE)
+    contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     print("Number of Contours found = " + str(len(contours)))
+
+    # cv2.drawContours(img, contours, 3, (0, 255, 0), 3)
+
+    # cv2.imshow("contours", img)
 
     # The math executed if more cards are stacked which makes the card seem higher.
     def shorten(x1, x2, height, width):
         x2 = x2 - x1
-        x2 = (x2 / height) * (width * 1.6)
+        x2 = (x2 / height) * (width * 1.4)
         x2 = x2 + x1
         return x2
 
@@ -46,21 +48,19 @@ def GetCardCorner(frame):
     def correctOrientation(n):  # Sets first coordinates to be top-left corner.
         # OBS: Can still be oriented wrong even if first coordinates is top-left corner
         try:
-            ##corrected = [None] * 8  # empty array at fixed size
-            #corrected = np.array(n)
             min_x = sys.maxsize
             min_y = sys.maxsize
             move_amount = 0
 
             # Find corner with lowest number (lowest should be top left corner)
             for u in range(0, len(n), 2):
-                #print("==== is " + str(n[u]) + " less than " + str(min_x))
-                print("--- " + str(u) + " to " + str(u+1))
-                print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
-                #if n[u] < min_x and n[u+1] < min_y:
-                if n[u] + n[u+1] < min_x + min_y:
+                # print("==== is " + str(n[u]) + " less than " + str(min_x))
+                # print("--- " + str(u) + " to " + str(u+1))
+                # print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
+                # if n[u] < min_x and n[u+1] < min_y:
+                if n[u] + n[u + 1] < min_x + min_y:
                     min_x = n[u]
-                    min_y = n[u+1]
+                    min_y = n[u + 1]
             print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
 
             # Figure out how many indexes to shift array so corner with the lowest value is top-left
@@ -74,13 +74,85 @@ def GetCardCorner(frame):
                 corrected = np.roll(n, -move_amount)
                 print("finished rotating")
 
-                for q in range(0, len(n), 2):
-                    print(str(corrected[q]) + ", " + str(corrected[q+1]))
+                # for q in range(0, len(n), 2):
+                #    print(str(corrected[q]) + ", " + str(corrected[q+1]))
                 return corrected
             return n
         except:
             print("Error in correctOrientation()")
             return n
+
+    # removes vectors with odd angles if there's 5 or 6 vectors.
+    def get4vectors(n):
+        v1 = [n[0], n[1]]
+        v2 = [n[2], n[3]]
+        v3 = [n[4], n[5]]
+        v4 = [n[6], n[7]]
+        v5 = [n[8], n[9]]
+        v6 = None
+        if len(n) > 11:
+            v6 = [n[10], n[11]]
+
+        # origin 0,0
+        a = np.array([v5[0] - v1[0], v5[1] - v1[1]])
+        b = np.array([v2[0] - v1[0], v2[1] - v1[1]])
+        deg1 = calcAngle(a, b)
+
+        # origin 2,3
+        a = np.array([v1[0] - v2[0], v1[1] - v2[1]])
+        b = np.array([v3[0] - v2[0], v3[1] - v2[1]])
+        deg2 = calcAngle(a, b)
+
+        # origin 4,5
+        a = np.array([v2[0] - v3[0], v2[1] - v3[1]])
+        b = np.array([v4[0] - v3[0], v4[1] - v3[1]])
+        deg3 = calcAngle(a, b)
+
+        # origin 6,7
+        a = np.array([v3[0] - v4[0], v3[1] - v4[1]])
+        b = np.array([v5[0] - v4[0], v5[1] - v4[1]])
+        deg4 = calcAngle(a, b)
+
+        if v6 is not None:
+            # origin 8,9
+            a = np.array([v4[0] - v5[0], v4[1] - v5[1]])
+            b = np.array([v6[0] - v5[0], v6[1] - v5[1]])
+            deg5 = calcAngle(a, b)
+
+            # origin 10,11
+            a = np.array([v5[0] - v6[0], v5[1] - v6[1]])
+            b = np.array([v1[0] - v6[0], v1[1] - v6[1]])
+            deg6 = calcAngle(a, b)
+
+            if deg6 > 100:
+                n = np.delete(n, [10, 11])
+        else:
+            # origin 8,9
+            a = np.array([v4[0] - v5[0], v4[1] - v5[1]])
+            b = np.array([v1[0] - v5[0], v1[1] - v5[1]])
+            deg5 = calcAngle(a, b)
+
+        if deg1 > 100:
+            n = np.delete(n, [0, 1])
+        elif deg2 > 100:
+            n = np.delete(n, [2, 3])
+        elif deg3 > 100:
+            n = np.delete(n, [4, 5])
+        elif deg4 > 100:
+            n = np.delete(n, [6, 7])
+        elif deg5 > 100:
+            n = np.delete(n, [8, 9])
+
+        print("finished")
+        return n
+
+    def calcAngle(a, b):
+        inner = np.inner(a, b)
+        norms = la.norm(a) * la.norm(b)
+        cos = inner / norms
+        rad = np.arccos(np.clip(cos, -1.0, 1.0))
+        deg = np.rad2deg(rad)
+        return deg
 
     # Going through every contours found in the image.
     for cnt in contours:
@@ -89,14 +161,12 @@ def GetCardCorner(frame):
         i = 0
 
         for j in n:
-            # if n[i] < 10:
-            #   break
             try:
                 linelength = round(math.sqrt(((n[i + 2] - n[i]) ** 2) + ((n[i + 3] - n[i + 1]) ** 2)), 2)
 
                 if linelength > minLineSize:
-                    cv2.drawContours(img, [approx], 0, (0, 0, 255), 2)
-                    # print("i: " + str(i))
+                    cv2.drawContours(img, [approx], -1, (0, 0, 255), 3)
+                    cv2.imshow("contours", img)
                     print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
                 else:
                     break  # breaks a lot
@@ -114,100 +184,77 @@ def GetCardCorner(frame):
                     except:
                         string = str(x) + " " + str(y)
 
-                    cardCoordinates = np.float32([[n[0], n[1]], [n[2], n[3]], [n[4], n[5]], [n[6], n[7]]])
-                    # ptsCut = np.float32([[0, 0], [0, 450], [300, 450], [300, 0]])
-                    ptsCut = np.float32([[0, 0], [0, 450], [300, 450], [300, 0]])
+                    # if 5 vectors, remove the one with an odd angle
+                    if 13 > len(n) > 8:
+                        n = get4vectors(n)
 
                     # Find angle ([2,3] = 0-point)
                     a = np.array([n[0] - n[2], n[1] - n[3]])
                     b = np.array([n[4] - n[2], n[5] - n[3]])
-
-                    inner = np.inner(a, b)
-                    norms = la.norm(a) * la.norm(b)
-                    cos = inner / norms
-                    rad = np.arccos(np.clip(cos, -1.0, 1.0))
-                    deg = np.rad2deg(rad)
+                    deg = calcAngle(a, b)
 
                     n = correctOrientation(n)
+                    cardCoordinates = np.float32([[n[0], n[1]], [n[2], n[3]], [n[4], n[5]], [n[6], n[7]]])
 
                     # only if degrees are reasonable, create and show warp & place text on original image
                     if 80 < deg < 100:
                         height = round(math.sqrt(((n[0] - n[2]) ** 2) + ((n[1] - n[3]) ** 2)), 2)
                         width = round(math.sqrt(((n[6] - n[0]) ** 2) + ((n[7] - n[1]) ** 2)), 2)
-                        #print(height)
-                        #print(width)
 
-                        # print("is: " + str(height) + " 1.5 times bigger than: " + str(width) + " = " + str(
-                        #   width * 1.5))
                         # If cards are stacked, do some math to find only the top card.
-                        if height > width * 1.4:
-                            cardCoordinates = np.float32([
-                                [shorten(n[2], n[0], height, width), shorten(n[3], n[1], height, width)],
-                                [n[2], n[3]],
-                                # [shorten(n[0], n[2], height, width), shorten(n[1], n[3], height, width)],
-                                # [shorten(n[6], n[4], height, width), shorten(n[7], n[5], height, width)],
-                                [n[4], n[5]],
-                                [shorten(n[4], n[6], height, width), shorten(n[5], n[7], height, width)]
+                        n[0] = shorten(n[2], n[0], height, width)
+                        n[1] = shorten(n[3], n[1], height, width)
 
-                            ])
+                        n[6] = shorten(n[4], n[6], height, width)
+                        n[7] = shorten(n[5], n[7], height, width)
+
+                        if height > width * 1.5:
                             print("CARDS ARE STACKED")
-                            # print(str(((n[2]) / height) * (width * 1.5)) + ", " + str(((n[3]) / height) * (width * 1.5)))
-                            # print(str(((n[4]) / height) * (width * 1.5)) + ", " + str(((n[5]) / height) * (width * 1.5)))
-                            # print(str(n[0]) + ", " + str(n[1]))
-                            # print(str(shorten(n[0], n[2], height, width)) + ", " + str(shorten(n[1], n[3], height, width)))
-                            # print(str(shorten(n[6], n[4], height, width)) + ", " + str(shorten(n[7], n[5], height, width)))
-                            # print(str(n[6]) + ", " + str(n[7]))
-                        print(cardCoordinates)
-
-                        # [((n[2]) / height) * (width * 1.5), (n[3] / height) * (width * 1.5)],
-                        # [(n[4] / height) * (width * 1.5), (n[5] / height) * (width * 1.5)],
+                            cardCoordinates = np.float32([
+                                [n[0], n[1]],
+                                [n[2], n[3]],
+                                [n[4], n[5]],
+                                [n[6], n[7]]
+                            ])
+                            print(cardCoordinates)
 
                         # cardCoordinates = coordinates of the cards corners in image
                         # ptsCut = Size of card we want after warp
+                        ptsCut = np.float32([[0, 0], [0, 420], [300, 420], [300, 0]])
                         M = cv2.getPerspectiveTransform(cardCoordinates, ptsCut)
                         # Applies the warp on the image
-                        dst = cv2.warpPerspective(imgGray, M, (300, 450))
+                        dst = cv2.warpPerspective(imgGray, M, (300, 420))
 
-                        # Get the bottom left corner
-                        # CornerCutCoordinates = np.float32([
-                        #     [botShortenY(n[2], n[0], height, width), botShortenY(n[3], n[1], height, width)],
-                        #     [n[2], n[3]],
-                        #     [botShortenX(n[2], n[4], height, width), botShortenX(n[3], n[5], height, width)],
-                        #     [botShortenX(n[2], n[6], height, width), botShortenY(n[3], n[7], height, width)]])
-
+                        # Height and width of our cards
+                        height = 8.8
+                        width = 6.3
                         CornerCutCoordinates = np.float32([
-                            [n[0], n[1]],
-                            [botShortenY(n[0], n[2], height, width), botShortenY(n[1], n[3], height, width)],
-                            [botShortenX(n[0], n[4], height, width), botShortenY(n[1], n[5], height, width)],
-                            [botShortenX(n[0], n[6], height, width), botShortenX(n[1], n[7], height, width)]])
+                            [0, 0],
+                            [0, botShortenY(0, 420, height, width)],
+                            [botShortenX(0, 300, height, width), botShortenY(0, 420, height, width)],
+                            [botShortenX(0, 300, height, width), 0]])
 
-                        botCut = np.float32([[0, 0], [0, 257], [120, 257], [120, 0]])  # the coordinates/size of the new image
+                        botCut = np.float32(
+                            [[0, 0], [0, 257], [120, 257], [120, 0]])  # the coordinates/size of the new image
                         botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)
-                        botDst = cv2.warpPerspective(imgGray, botM, (120, 257))
-                        #cv2.imshow("card zoom", botDst)
+                        botDst = cv2.warpPerspective(dst, botM, (120, 257))  # imgGray
 
                         # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
                         # Also works with a video stream: check out cv2.fastNlMeansDenoisingMulti()
-                        #_, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
-                        #denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
-                        #blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
-
-                        #cv2.imshow("Denoised", blurDenoised)
-
-                        #inverted = cv2.bitwise_not(blurDenoised)
-                        #cv2.imshow("inverted", inverted)
-
-                        # plt.subplot(121), plt.imshow(img), plt.title('Input')
-                        # plt.subplot(122), plt.imshow(dst), plt.title('Output')
-                        # plt.show()
-
-                        cv2.putText(img, string, (x, y),
-                                    font, 0.6, (184, 22, 167))
-                        #cv2.imshow("full card", dst)
-
+                        # _, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
+                        # denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
+                        # blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
+                        # cv2.imshow("Denoised", blurDenoised)
+                        # inverted = cv2.bitwise_not(blurDenoised)
+                        # cv2.imshow("inverted", inverted)
                         # _, thresholdblackwhite = cv2.threshold(dst, 190, 255, cv2.THRESH_BINARY)
                         # denoisedblackwhite = cv2.fastNlMeansDenoising(thresholdblackwhite, None, 7, 21)
                         # cv2.imshow("black white", denoisedblackwhite)
+
+                        cv2.putText(img, string, (x, y),
+                                    font, 0.6, (184, 22, 167))
+                        # cv2.imshow("full card", dst)
+
                         return botDst
 
             except:
@@ -215,8 +262,9 @@ def GetCardCorner(frame):
             i = i + 1
 
     # Showing the final image.
-    #cv2.imshow('preview', img)
     return frame
+
+
 cv2.destroyAllWindows()
 pass
 

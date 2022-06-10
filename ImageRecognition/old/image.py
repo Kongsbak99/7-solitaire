@@ -4,7 +4,8 @@ import numpy as np
 
 def bw_filter(frame):
     # Convert BGR to HSV
-    hsv = cv.cvtColor(frame, cv.COLOR_BGR2HSV)
+    hsv = cv.cvtColor(frame, cv.COLOR_GRAY2BGR)
+    hsv = cv.cvtColor(hsv, cv.COLOR_BGR2HSV)
     # gray = cv.cvtColor(hsv, cv.COLOR_BGR2GRAY)
     # cv.imshow("grayscale", gray)
     # cv.imshow("HSV", hsv)
