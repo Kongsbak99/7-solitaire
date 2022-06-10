@@ -39,25 +39,25 @@ def run():
     box9 = GetCardCorner(listOfFrames[9])
     box10 = GetCardCorner(listOfFrames[10])
     box11 = GetCardCorner(listOfFrames[11])
-    cv2.imshow("num0", box0)
-    cv2.imshow("num1", box1)
-    cv2.imshow("num2", box2)
+    # cv2.imshow("num0", box0)
+    # cv2.imshow("num1", box1)
+    # cv2.imshow("num2", box2)
     cv2.imshow("num3", box3)
-    cv2.imshow("num4", box4)
-    cv2.imshow("num5", box5)
-    cv2.imshow("num6", box6)
-    cv2.imshow("num7", box7)
-    cv2.imshow("num8", box8)
-    cv2.imshow("num9", box9)
-    cv2.imshow("num10", box10)
-    cv2.imshow("num11", box11)
-    i=0
-    boxboxbox = [box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11]
-    for boxes in boxboxbox:
-        if len(boxes)==257:
-            bestCardMatch(boxes)
-            print(i)
-        i=i+1
+    # cv2.imshow("num4", box4)
+    # cv2.imshow("num5", box5)
+    # cv2.imshow("num6", box6)
+    # cv2.imshow("num7", box7)
+    # cv2.imshow("num8", box8)
+    # cv2.imshow("num9", box9)
+    # cv2.imshow("num10", box10)
+    # cv2.imshow("num11", box11)
+   # i=0
+    #boxboxbox = [box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11]
+    #for boxes in boxboxbox:
+    if len(box3)==257:
+        bestCardMatch(box3)
+        #print("box:",i)
+       # i=i+1
 
 
         #print(len(box3),"box3")

@@ -44,7 +44,7 @@ def loadTrainingCards():
 
 def bestCardMatch(image):
 
-    baseDiff = 3000
+    baseDiff = 5000
     bestDiff = None
     bestCardName = "placeholder"
     for Cards in loadTrainingCards():
@@ -53,7 +53,9 @@ def bestCardMatch(image):
 
         if rank_diff < baseDiff:
             bestDiff = rank_diff
+            baseDiff = rank_diff
             bestCardName = Cards.name
+            print(rank_diff,bestCardName)
     if bestDiff != None:
         print("Best matching card is", bestCardName, "& the value is:",bestDiff)
 
