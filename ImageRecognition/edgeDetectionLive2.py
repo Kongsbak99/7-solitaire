@@ -20,7 +20,7 @@ def GetCardCorner(frame):
     _, threshold = cv2.threshold(blur, 130, 255, cv2.THRESH_BINARY)
     # Detecting contours in image.
     contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    print("Number of Contours found = " + str(len(contours)))
+    #print("Number of Contours found = " + str(len(contours)))
 
     # cv2.drawContours(img, contours, 3, (0, 255, 0), 3)
 
@@ -61,25 +61,25 @@ def GetCardCorner(frame):
                 if n[u] + n[u + 1] < min_x + min_y:
                     min_x = n[u]
                     min_y = n[u + 1]
-            print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
+            #print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
 
             # Figure out how many indexes to shift array so corner with the lowest value is top-left
             if min_x in n:
                 move_amount = np.where(n == min_x)
                 move_amount = int(move_amount[0])
-                print("indexes to move: " + str(move_amount))
+                #print("indexes to move: " + str(move_amount))
 
             # Finally shift array left
             if move_amount != 0:
                 corrected = np.roll(n, -move_amount)
-                print("finished rotating")
+                #print("finished rotating")
 
                 # for q in range(0, len(n), 2):
                 #    print(str(corrected[q]) + ", " + str(corrected[q+1]))
                 return corrected
             return n
         except:
-            print("Error in correctOrientation()")
+            #print("Error in correctOrientation()")
             return n
 
     # removes vectors with odd angles if there's 5 or 6 vectors.
@@ -143,7 +143,7 @@ def GetCardCorner(frame):
         elif deg5 > 100:
             n = np.delete(n, [8, 9])
 
-        print("finished")
+        #print("finished")
         return n
 
     def calcAngle(a, b):
@@ -167,7 +167,7 @@ def GetCardCorner(frame):
                 if linelength > minLineSize:
                     cv2.drawContours(img, [approx], -1, (0, 0, 255), 3)
                     cv2.imshow("contours", img)
-                    print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
+                    #print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
                 else:
                     break  # breaks a lot
             except:
@@ -209,14 +209,14 @@ def GetCardCorner(frame):
                         n[7] = shorten(n[5], n[7], height, width)
 
                         if height > width * 1.5:
-                            print("CARDS ARE STACKED")
+                            #print("CARDS ARE STACKED")
                             cardCoordinates = np.float32([
                                 [n[0], n[1]],
                                 [n[2], n[3]],
                                 [n[4], n[5]],
                                 [n[6], n[7]]
                             ])
-                            print(cardCoordinates)
+                            #print(cardCoordinates)
 
                         # cardCoordinates = coordinates of the cards corners in image
                         # ptsCut = Size of card we want after warp
@@ -255,7 +255,7 @@ def GetCardCorner(frame):
                                     font, 0.6, (184, 22, 167))
                         # cv2.imshow("full card", dst)
 
-                        return botDst
+                        return dst
 
             except:
                 print("Something went wrong")
