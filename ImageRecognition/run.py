@@ -12,7 +12,7 @@ heart10 = cv2.imread('10heart.jpg')
 gray = cv2.cvtColor(knight, cv2.COLOR_BGR2GRAY)
 
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap = cv2.VideoCapture(0)
 
 
 
