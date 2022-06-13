@@ -1,9 +1,13 @@
 import os
 import random
 
+import numpy as np
 from matplotlib import pyplot as plt
+from numpy import e
 
+from ImageRecognition.BFMatching import BFMatcher, bfmatch
 from ImageRecognition.featureMatching2 import Person, matchcard
+from ImageRecognition.old.image import bw_filter
 from ImageRecognition.write_on_image import write_on_image
 from edgeDetectionLive2 import GetCardCorner
 import cv2
@@ -32,9 +36,9 @@ def run():
     # box5 = GetCardCorner(listOfFrames[5])
     # box6 = GetCardCorner(listOfFrames[6])
     # box7 = GetCardCorner(listOfFrames[7])
-    box8 = GetCardCorner(listOfFrames[8])
+    # box8 = GetCardCorner(listOfFrames[8])
     # box9 = GetCardCorner(listOfFrames[9])
-    # box10 = GetCardCorner(listOfFrames[10])
+    box10 = GetCardCorner(listOfFrames[10])
     # box11 = GetCardCorner(listOfFrames[11])
     # cv2.imshow("num0", box0)
     # cv2.imshow("num1", box1)
@@ -44,26 +48,65 @@ def run():
     # cv2.imshow("num5", box5)
     # cv2.imshow("num6", box6)
     # cv2.imshow("num7", box7)
-    cv2.imshow("num8", box8)
+    cv2.imshow("num8", box10)
     #cv2.imshow("num9", box9)
     #cv2.imshow("num10", box10)
     #cv2.imshow("num11", box11)
 
-    p1 = Person(-1, "null", box8)
+    max_type = bfmatch(-1, "null", "")
+    max_num = bfmatch(-1, "null", "")
+    max_t_list = []
+    try:
+        box10 = bw_filter(box10)
+        num_crop = box10[0:120, 0:400]
+        type_crop = box10[110:260, 0:400]
 
-    for filename in os.listdir("./cardCutouts"):
-        if len(filename) > 7:
-            p2 = matchcard("./cardCutouts/" + str(filename), box8)
-            if p2.name > p1.name:
-                p1 = p2
+        for i in range(1):
+            for filename in os.listdir("./cardCutouts"): #cardCutouts
+                if len(filename) > 7:
+                    p = BFMatcher("./cardCutouts/" + str(filename), type_crop, 0.9)
+                    if p.num > max_type.num:
+                        max_type = p
+                    max_t_list.append(max_type)
+                if len(filename) < 7: #<
+                    p = BFMatcher("./cardCutouts/" + str(filename), num_crop, 0.5)
+                    if p.num > max_num.num:
+                        max_num = p
+    except:
+        print("match failed")
 
-            continue
-        else:
-            continue
-    #plt.imshow(p1.img, 'gray'), plt.show(),
-    cv2.imshow("p1", p1.img)
-    print(p1.name, p1.age)
-    int = random.randint(0, 1000)
+    try:
+        counter = 0
+        for i in max_t_list:
+            curr_frequency = max_t_list.count(i)
+            if curr_frequency > counter:
+                counter = curr_frequency
+                max_type = i
+
+        cv2.imshow("type", max_type.frame)
+        cv2.imshow("num", max_num.frame)
+        print(str(max_type.name) + " = " + str(max_type.num))
+        print(str(max_num.name) + " = " + str(max_num.num))
+        print(" ")
+    except:
+        print("get/print max failed")
+
+
+    # p1 = Person(-1, "null", box8)
+    #
+    # for filename in os.listdir("./ValidationImages"): #cardCutouts
+    #     if len(filename) is not None:
+    #         p2 = matchcard("./ValidationImages/" + str(filename), box8)
+    #         if p2.name > p1.name:
+    #             p1 = p2
+    #
+    #         continue
+    #     else:
+    #         continue
+    # #plt.imshow(p1.img, 'gray'), plt.show(),
+    # cv2.imshow("result", p1.img)
+    # print(p1.name, p1.age)
+    #int = random.randint(0, 1000)
 
     try:
         # cardCornerPicture = GetCardCorner(frame)

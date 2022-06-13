@@ -40,7 +40,7 @@ def bw_filter(frame):
 
     # cv.imshow('Original',frame)
     # cv.imshow("black", mask3)
-    cv.imshow("combined", img5)
+    #cv.imshow("combined", img5)
     # cv.imshow('red',img4)
     return img5
 

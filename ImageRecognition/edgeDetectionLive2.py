@@ -255,7 +255,7 @@ def GetCardCorner(frame):
                                     font, 0.6, (184, 22, 167))
                         # cv2.imshow("full card", dst)
 
-                        return dst
+                        return botDst
 
             except:
                 print("Something went wrong")
