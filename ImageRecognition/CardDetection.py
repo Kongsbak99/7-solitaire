@@ -26,8 +26,12 @@ class ObjectDetection:
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
+        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-        return cv2.VideoCapture(self.capture_index)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+
+        return cap
 
     def load_model(self, model_name):
         """
@@ -98,6 +102,7 @@ class ObjectDetection:
 
             results = self.score_frame(frame)
             frame = self.plot_boxes(results, frame)
+
 
             end_time = time()
             fps = 1/np.round(end_time - start_time, 2)
