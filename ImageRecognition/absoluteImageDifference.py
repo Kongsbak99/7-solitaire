@@ -2,19 +2,68 @@ import os
 
 import numpy as np
 import cv2
-from cv2 import absdiff
 
+from ImageRecognition.old.image import bw_filter
 
-path = os.path.dirname(os.path.abspath(__file__))
-pathname= path + '/ValidationImages/'
-imageformat = ".jpg"
-knight = cv2.imread(pathname+'d2.jpg',cv2.COLOR_BGR2GRAY)
-knight.shape
 
 class PlaceholderCards:
     def __init__(self):
         self.image = []
         self.name = ""
+
+
+
+class PlaceholderNumbers:
+    def __init__(self):
+        self.image = []
+        self.name = ""
+
+
+
+class PlaceholderSuits:
+    def __init__(self):
+        self.image = []
+        self.name = ""
+
+
+
+def loadTrainingSuits():
+    path = os.path.dirname(os.path.abspath(__file__))
+    pathname = path + '/cardCutouts/'
+    imageformat = ".jpg"
+    i = 0
+    validation_suits = []
+
+    for Suits in ["spades", "clubs", "hearts", "diamonds"]:
+        validation_suits.append(PlaceholderSuits())
+        validation_suits[i].name = Suits
+        imagename = validation_suits[i].name + imageformat
+        validation_suits[i].image = cv2.imread(pathname + imagename)
+        # print(imagename, Numbers, validation_numbers[i].image)
+        i = i + 1
+
+    return validation_suits
+
+
+
+def loadTrainingNumbers():
+    path = os.path.dirname(os.path.abspath(__file__))
+    pathname = path + '/cardCutouts/'
+    imageformat = ".jpg"
+    i = 0
+    validation_numbers = []
+
+    for Numbers in ["2", "3", "4", "5", "6", "7", "8", "9", "10", "j", "q", "k", "a"]:
+        validation_numbers.append(PlaceholderNumbers())
+        validation_numbers[i].name = Numbers
+        imagename = validation_numbers[i].name + imageformat
+        validation_numbers[i].image = cv2.imread(pathname + imagename)
+        #print(imagename, Numbers, validation_numbers[i].image)
+        i = i + 1
+
+    return validation_numbers
+
+
 
 def loadTrainingCards():
     path = os.path.dirname(os.path.abspath(__file__))
@@ -30,23 +79,18 @@ def loadTrainingCards():
         validation_cards.append(PlaceholderCards())
         validation_cards[i].name = Cards
         imagename = validation_cards[i].name + imageformat
-        validation_cards[i].image = cv2.imread(pathname + imagename,cv2.COLOR_BGR2GRAY)
-        i=i+1
-
+        validation_cards[i].image = cv2.imread(pathname + imagename)
+        i = i + 1
 
     return validation_cards
 
-
-
-
-
-#    image1 = cv2.imread(validation_cards[1].image,cv2.imread(imageFileLocation))
 
 def bestCardMatch(image):
 
     baseDiff = 5000
     bestDiff = None
-    bestCardName = "placeholder"
+    bestCardName = None
+
     for Cards in loadTrainingCards():
         diff_img = cv2.absdiff(image, Cards.image)
         rank_diff = int(np.sum(diff_img) / 300)
@@ -54,31 +98,13 @@ def bestCardMatch(image):
         if rank_diff < baseDiff:
             bestDiff = rank_diff
             baseDiff = rank_diff
+
+            #baseDiff = rank_diff
             bestCardName = Cards.name
+
             print(rank_diff,bestCardName)
     if bestDiff != None:
-        print("Best matching card is", bestCardName, "& the value is:",bestDiff)
 
+       print("Best matching card is", bestCardName, "& the value is:",bestDiff)
 
-
-
-
-
-
-
-
-
-
-# def showCardsDiff():
-#     knight = cv2.imread('knight3.jpg')
-#     knight2 = cv2.imread('knight4.jpg')
-#     heart10 = cv2.imread('10heart.jpg')
-#     diffTest1 = absdiff(knight, knight2)
-#     diffTest2 = absdiff(knight, heart10)
-#     valueCalc1 = int(np.sum(diffTest1) / 255)
-#     valueCalc2 = int(np.sum(diffTest2) / 255)
-#     print("Difference between knight & knight2 is:", valueCalc1)
-#     print("Difference between knight & heart10 is:", valueCalc2)
-
-
-
+    #return bestCardName, bestDiff

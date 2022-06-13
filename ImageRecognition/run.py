@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 
 from ImageRecognition.absoluteImageDifference import bestCardMatch
 from ImageRecognition.featureMatching2 import Person, matchcard
+from ImageRecognition.old.image import bw_filter
 from ImageRecognition.write_on_image import write_on_image
 from edgeDetectionLive2 import GetCardCorner
 import cv2
@@ -54,8 +55,10 @@ def run():
    # i=0
     #boxboxbox = [box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11]
     #for boxes in boxboxbox:
+
     if len(box3)==257:
         bestCardMatch(box3)
+
         #print("box:",i)
        # i=i+1
 
