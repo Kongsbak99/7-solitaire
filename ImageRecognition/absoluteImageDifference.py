@@ -79,7 +79,7 @@ def loadTrainingCards():
         validation_cards.append(PlaceholderCards())
         validation_cards[i].name = Cards
         imagename = validation_cards[i].name + imageformat
-        validation_cards[i].image = cv2.imread(pathname + imagename)
+        validation_cards[i].image = cv2.imread(pathname + imagename, cv2.COLOR_BGR2GRAY)
         i = i + 1
 
     return validation_cards

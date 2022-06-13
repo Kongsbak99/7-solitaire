@@ -1,5 +1,7 @@
 import os
 
+
+
 from matplotlib import pyplot as plt
 
 from ImageRecognition.absoluteImageDifference import bestCardMatch
@@ -28,6 +30,7 @@ def run():
     box3 = GetCardCorner(listOfFrames[3])
     cv2.imshow("num3", box3)
 
+
     box0 = GetCardCorner(listOfFrames[0])
     box1 = GetCardCorner(listOfFrames[1])
     box2 = GetCardCorner(listOfFrames[2])
@@ -52,9 +55,10 @@ def run():
     # cv2.imshow("num9", box9)
     # cv2.imshow("num10", box10)
     # cv2.imshow("num11", box11)
-   # i=0
-    #boxboxbox = [box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,box10,box11]
-    #for boxes in boxboxbox:
+
+
+    #num_crop = box3[0: 120, 0:400]
+    #type_crop = box3[110: 260, 0:400]
 
     if len(box3)==257:
         bestCardMatch(box3)
