@@ -107,5 +107,4 @@ class Cards:
             card_value_string = "King"
 
         card_name = card_value_string + " of " + card_suit_string
-        print("card name: " + str(card_name))
         return card_name
