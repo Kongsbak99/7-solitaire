@@ -99,7 +99,7 @@ class MoveManager:
             elif card_id == 14 and len(stack2) <= 1:
                 self.createMoveObject([card_id], "suit-2", moveType)
 
-        if not stack2 and card_id == 27:
+        if not stack3 and card_id == 27:
             self.createMoveObject([card_id], "suit-3", moveType)
         elif stack3:
             if ((card_id == stack3[len(stack3) - 1] + 1) and (card_id >= 27) and (card_id <= 39)):
