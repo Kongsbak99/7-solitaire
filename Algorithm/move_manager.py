@@ -13,8 +13,10 @@ class MoveManager:
     def __init__(self):
         self.legal_moves = []
 
-        with open('./board.json') as f:
+        with open('board.json') as f:
             self.board = json.load(f)
+            f.close()
+        f.close()
 
     # Function to create JSON object of moves and add them to the list
     def createMoveObject(self, card_ids, move_location, moveType):
@@ -226,7 +228,15 @@ class MoveManager:
             board = turnStockpile(self.board)
         else:
             print("ERROR - Unknown moveType: " + str(move["moveType"]))
-        return board
+        fil = open('board.json', 'w')
+        json.dump(board, fil)
+        print("MM1: " + str(board))
+        fil.close()
+        print("MM2: " + str(board))
+
+       # with open('board.json', 'w') as h:
+        #    json.dump(board, h)
+
 
 
     def make_move(self, move, board):
