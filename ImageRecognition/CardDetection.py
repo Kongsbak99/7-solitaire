@@ -85,7 +85,7 @@ class ObjectDetection:
         labels, cord = results
 
 
-        #for i in range(n):
+        # TODO: Get max frem for den første
         row = cord[0]
         if row[4] >= 0.5:
             #max(row)
@@ -94,3 +94,4 @@ class ObjectDetection:
             return self.class_to_label(labels[0])
         else:
             return "null"
+
