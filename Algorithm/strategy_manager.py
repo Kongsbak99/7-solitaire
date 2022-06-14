@@ -88,48 +88,11 @@ class StrategyManager:
             ## Best move = the move with the most unknowns underneath. 
             best_move = rows[0]
             for row in rows:
-                if row['unknown_size'] > best_move['unknown_size']:
+                if row['unknown_size'] < best_move['unknown_size']:
                     best_move = row
             return best_move
-        else: return moves[0]
         
-        
-        
-        
-        # King move = The second-highest value
-        # Is king present on table?
-        # If no -> Begin clearing the largest row
-        # If yes
-        # Is empty row on table?
-        # If yes -> move king to empty row
-        # If no -> clear smallest row to make room for King
-
-        # King move = The second-highest value
-        # If multiple suit Kings and empty row available
-        # Check Queens
-        # If multiple suit Queens available
-        # Check Jacks
-        # If multiple suit Jacks available
-        # Check Tens
-        # If multiple suit Tens available
-        # Check Nines
-        # If multiple suit Nines available
-        # Check Eights
-        # If multiple suit Eights available
-        # Check Sevens
-        # If multiple suit Sevens available
-        # Check Sixes
-        # If multiple suit Sixes available
-        # Check Fives
-        # If multiple suit Fives available
-        # Check Fours
-        # If multiple suit Fours available
-        # Check Threes
-        # If multiple suit Threes available
-        # Check Twos
-        # If multiple suit Twos available
-        # Pick lowest ID 2
-        return moves[0]
+        else: return moves[0] ##If only one move, return that
 
     # This function can probably be ignored
     def row_stack_move(self, moves):
