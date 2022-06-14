@@ -3,8 +3,8 @@ from operator import contains
 import re
 from unittest import mock
 
-from image_rec_confirmer import confirmCard
-from mock_input import mockImageRec
+from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
+from Algorithm.PlayLoopFunctions.mock_input import mockImageRec
 
 def init_mock_input():
     

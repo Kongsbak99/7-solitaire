@@ -1,5 +1,5 @@
-from image_rec_confirmer import confirmCard
-from mock_input import mockImageRec
+from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
+from Algorithm.PlayLoopFunctions.mock_input import mockImageRec
 
 
 

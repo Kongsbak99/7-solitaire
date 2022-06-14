@@ -1,15 +1,15 @@
 #from Algorithm.MainPlayFunctions.image_rec_confirmer import confirmCard
-from look_for_unkown_cards import unknownCards
+from Algorithm.OldMainPlayFunctions.new_look_for_unkown_cards import unknownCards
 #from Algorithm.MainPlayFunctions.mock_input import mockImageRec
 #from Algorithm.MainPlayFunctions.play_loop import playLoop
 from Algorithm.cards import Cards
 from Algorithm.history_manager import HistoryManager
-from Algorithm.mock_input import init_mock_input
+from Algorithm.OldMainPlayFunctions.old_mock_input import init_mock_input
 from Algorithm.move_manager import MoveManager
 from Algorithm.strategy_manager import StrategyManager
 
-from image_rec_confirmer import confirmCard
-from mock_input import mockImageRec
+from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
+from Algorithm.PlayLoopFunctions.mock_input import mockImageRec
 
 from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 
