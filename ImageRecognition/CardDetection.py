@@ -16,6 +16,7 @@ class ObjectDetection:
         :param out_file: A valid output file name.
         """
         self.capture_index = capture_index
+        self.frame = capture_index
         self.model = self.load_model(model_name)
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -26,12 +27,12 @@ class ObjectDetection:
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
-        cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+        #cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+        #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
+        #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
-        return cap
+        return 1 #cap
 
     def load_model(self, model_name):
         """
@@ -39,7 +40,7 @@ class ObjectDetection:
         :return: Trained Pytorch model.
         """
         if model_name:
-            model = torch.hub.load('C:/Users/KrzyS/yolov5', 'custom', path='C:/Users/KrzyS/PycharmProjects/7-solitaire/ImageRecognition/bestt.pt', source='local')
+            model = torch.hub.load('C:/Users/marcu/Yolov5/yolov5-master', 'custom', path='C:/Users/marcu/OneDrive/dtu/4.semester/CDIO-62410/7-solitaire/ImageRecognition/bestt.pt', source='local')
         else:
             model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
         return model
@@ -90,34 +91,40 @@ class ObjectDetection:
         and write the output into a new file.
         :return: void
         """
-        cap = self.get_video_capture()
-        assert cap.isOpened()
+        #cap = self.capture_index
+        frame = self.capture_index
+        #assert cap.isOpened()
 
-        while True:
+        #while True:
 
-            start_time = time()
+        start_time = time()
+        #ret, frame = cap.read()
+        #assert ret
 
-            ret, frame = cap.read()
-            assert ret
+        results = self.score_frame(frame)
+        frame = self.plot_boxes(results, frame)
 
-            results = self.score_frame(frame)
-            frame = self.plot_boxes(results, frame)
+        labels, cord = results
 
 
-            end_time = time()
-            fps = 1/np.round(end_time - start_time, 2)
-            #print(f"Frames Per Second : {fps}")
-
-            cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
-
+        #for i in range(n):
+        row = cord[0]
+        if row[4] >= 0.5:
+            #max(row)
+            print(row)
             cv2.imshow('YOLOv5 Detection', frame)
-
-            if cv2.waitKey(1) & 0xFF == 27:
-                break
-
-        cap.release()
+            return self.class_to_label(labels[0])
+        else:
+            return "null"
 
 
-# Create a new object and execute.
-detector = ObjectDetection(capture_index=0, model_name=True)
-detector()
+        #end_time = time()
+        #fps = 1/np.round(end_time - start_time, 2)
+        #print(f"Frames Per Second : {fps}")
+
+        #cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+
+
+
+        #cap.release()
+
