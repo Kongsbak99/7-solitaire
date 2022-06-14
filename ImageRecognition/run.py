@@ -14,7 +14,7 @@ from ImageRecognition.imageSplit import navn
 
 
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(1)
 
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
