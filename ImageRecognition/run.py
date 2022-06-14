@@ -45,7 +45,7 @@ def run():
     # cv2.imshow("num0", box0)
     # cv2.imshow("num1", box1)
     # cv2.imshow("num2", box2)
-
+    cv2.imshow("box3",box3)
     # cv2.imshow("num4", box4)
     # cv2.imshow("num5", box5)
     # cv2.imshow("num6", box6)
@@ -54,29 +54,31 @@ def run():
     # cv2.imshow("num9", box9)
     # cv2.imshow("num10", box10)
     # cv2.imshow("num11", box11)
-    bwbox3 = bw_filter(box3)
-    cv2.imshow("num3", bwbox3)
-    num_crop = bwbox3[0: 110, 0:90]
-    suit_crop = bwbox3[115:230, 0:90]
-    cv2.imshow("numcrop", num_crop)
-    cv2.imshow("suitcrop", suit_crop)
 
 
 
 
-    if len(bwbox3)==257:
-       bestCardMatch(num_crop, suit_crop)
+
+
+
+    if len(box3)==257:
+        bwbox3 = bw_filter(box3)
+        num_crop = bwbox3[0: 110, 0:90]
+        suit_crop = bwbox3[115:230, 0:90]
+        cv2.imshow("numcrop", num_crop)
+        cv2.imshow("suitcrop", suit_crop)
+        bestCardMatch(num_crop, suit_crop)
         #corners = np.float32([[0, 0], [0, 420], [300, 420], [300, 0]])
 
-        # print("SIZE IS:", type_crop.shape)
-        # cv2.imshow("numC", bw_filter(num_crop))
-        # cv2.imshow("typeC", bw_filter(type_crop))
-        #
-        # cv2.imwrite("frame%d.jpg" % count, bw_filter(num_crop))
-        # cv2.imwrite("frame%d+1.jpg" % count, bw_filter(type_crop))# save frame as JPEG file
-        # success, image = cap.read()
-        # print('Read a new frame: ', success)
-        # count += 1
+        print("SIZE IS:", suit_crop.shape)
+        cv2.imshow("numC", bw_filter(num_crop))
+        cv2.imshow("typeC", bw_filter(suit_crop))
+
+        cv2.imwrite("frame%d.jpg" % count, num_crop)
+        cv2.imwrite("frame%d+1.jpg" % count, suit_crop)# save frame as JPEG file
+        success, image = cap.read()
+        print('Read a new frame: ', success)
+        count += 1
         # print("box:",i)
         # i=i+1
 
