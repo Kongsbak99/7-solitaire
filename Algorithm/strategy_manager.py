@@ -63,17 +63,20 @@ class StrategyManager:
     # This function can probably be ignored
     def king_move(self, moves):
         
-        
+        ## If stock pile % 3 == 0, we choose the waste pile move, to make sure the stock pile doesnt get locked. 
         for move in moves: 
             if move['moveType'] == 6:
-                test = 3 % 20
-                print("")
-
+                stock_pile = self.board['stock-pile']
+                if len(stock_pile) % 3 == 0:
+                    return move
+        ## Else we consider the rest of the possible king moves
+        ## If more than one king move, we choose the one moving from a pile with more unknown cards. 
         if len(moves) > 1:
             rows = [] ## Rows moves are moved from
             for row in self.board['row-stack']:
                 for move in moves:
                     if self.board['row-stack'][row]:
+                        ## Check that it is a row (not waste pile)
                         if self.board['row-stack'][row][0] == move['cards'][0]:
                             total_length = len(self.board['row-stack'][row])
                             move_type = self.board['row-stack'][row]
@@ -89,7 +92,17 @@ class StrategyManager:
                     best_move = row
             return best_move
         else: return moves[0]
-        print("")
+        
+        
+        
+        
+        # King move = The second-highest value
+        # Is king present on table?
+        # If no -> Begin clearing the largest row
+        # If yes
+        # Is empty row on table?
+        # If yes -> move king to empty row
+        # If no -> clear smallest row to make room for King
 
         # King move = The second-highest value
         # If multiple suit Kings and empty row available
