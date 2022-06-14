@@ -22,18 +22,6 @@ class ObjectDetection:
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("Using Device: ", self.device)
 
-    def get_video_capture(self):
-        """
-        Creates a new video streaming object to extract video frame by frame to make prediction on.
-        :return: opencv2 video capture object, with lowest quality frame available for video.
-        """
-        #cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-
-        #cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
-        #cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
-        return 1 #cap
-
     def load_model(self, model_name):
         """
         Loads Yolo5 model from pytorch hub.
@@ -91,18 +79,8 @@ class ObjectDetection:
         and write the output into a new file.
         :return: void
         """
-        #cap = self.capture_index
-        frame = self.capture_index
-        #assert cap.isOpened()
-
-        #while True:
-
-        start_time = time()
-        #ret, frame = cap.read()
-        #assert ret
-
-        results = self.score_frame(frame)
-        frame = self.plot_boxes(results, frame)
+        results = self.score_frame(self.capture_index)
+        frame = self.plot_boxes(results, self.capture_index)
 
         labels, cord = results
 
@@ -116,15 +94,3 @@ class ObjectDetection:
             return self.class_to_label(labels[0])
         else:
             return "null"
-
-
-        #end_time = time()
-        #fps = 1/np.round(end_time - start_time, 2)
-        #print(f"Frames Per Second : {fps}")
-
-        #cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
-
-
-
-        #cap.release()
-
