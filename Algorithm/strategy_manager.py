@@ -45,7 +45,7 @@ class StrategyManager:
 
         ##no moves doesny have a move type yet 
         for i in range(len(self.moves)): 
-            if self.moves[i]['moveType'] == 100:
+            if self.moves[i]['moveType'] == 7:
                 moves.append(self.moves[i])
         if len(moves) > 0:
             best_move = self.no_moves(moves)
@@ -67,6 +67,40 @@ class StrategyManager:
 
     # This function can probably be ignored
     def king_move(self, moves):
+        
+        ## If stock pile % 3 == 0, we choose the waste pile move, to make sure the stock pile doesnt get locked. 
+        for move in moves: 
+            if move['moveType'] == 6:
+                stock_pile = self.board['stock-pile']
+                if len(stock_pile) % 3 == 0:
+                    return move
+        ## Else we consider the rest of the possible king moves
+        ## If more than one king move, we choose the one moving from a pile with more unknown cards. 
+        if len(moves) > 1:
+            rows = [] ## Rows moves are moved from
+            for row in self.board['row-stack']:
+                for move in moves:
+                    if self.board['row-stack'][row]:
+                        ## Check that it is a row (not waste pile)
+                        if self.board['row-stack'][row][0] == move['cards'][0]:
+                            total_length = len(self.board['row-stack'][row])
+                            move_type = self.board['row-stack'][row]
+                            unknown_size = 0
+                            for card in self.board['row-stack'][row]:
+                                if card == 0:
+                                    unknown_size = unknown_size + 1
+                            rows.append({'moved_from': row, 'moveId': move['moveId'], 'move_type': move_type, 'unknown_size': unknown_size, 'total_length': total_length})
+            ## Best move = the move with the most unknowns underneath. 
+            best_move = rows[0]
+            for row in rows:
+                if row['unknown_size'] > best_move['unknown_size']:
+                    best_move = row
+            return best_move
+        else: return moves[0]
+        
+        
+        
+        
         # King move = The second-highest value
         # Is king present on table?
         # If no -> Begin clearing the largest row
@@ -103,28 +137,43 @@ class StrategyManager:
 
     # This function can probably be ignored
     def row_stack_move(self, moves):
-        # Row move = The third-highest value
-        # If more than one move available -> The largest card takes precedence
+        # Check if a King is available
+        king_available = False
+        for row in self.board['row-stack']:
+            if self.board['row-stack'][row]:
+                card = self.board['row-stack'][row][0]
+                if card == 13 or card == 26 or card == 39 or card == 52 and len(self.board['row-stack'][row]) > 1:
+                    king_available = True
+        if self.board['waste-pile'][0] == 13 or self.board['waste-pile'][0] == 26 or self.board['waste-pile'][0] == 39 or self.board['waste-pile'][0] == 52:
+            king_available = True
+        
         if len(moves) > 1:
-            rows = [] ## Rows moves is moved from
+            rows = [] ## Rows moves are moved from
             for row in self.board['row-stack']:
                 for move in moves:
                     if self.board['row-stack'][row][0] == move['cards'][0]:
+                        total_length = len(self.board['row-stack'][row])
                         unknown_size = 0
                         for card in self.board['row-stack'][row]:
                             if card == 0:
                                 unknown_size = unknown_size + 1
-                        rows.append({'row': row, 'moveId': move['moveId'], 'unknown_size': unknown_size})
-                        
-            ## Check which row has the most 0's
-            biggest_pile = rows[0]
-            for row in rows:
-                if row['unknown_size'] > biggest_pile['unknown_size']:
-                    biggest_pile = row
+                        rows.append({'moved_from': row, 'moveId': move['moveId'], 'unknown_size': unknown_size, 'total_length': total_length})
+            
+            best_move = rows[0]
+            if king_available == True:
+                ## Check which row is the smallest
+                for row in rows:
+                    if row['total_length'] < best_move['total_length']:
+                        best_move = row
+            else:       
+                ## Check which row has the most 0'
+                for row in rows:
+                    if row['unknown_size'] > best_move['unknown_size']:
+                        best_move = row
 
             ## Find the best move and return
             for move in moves:
-                if move['moveId'] == biggest_pile['moveId']:
+                if move['moveId'] == best_move['moveId']:
                     return move
             
         else:
