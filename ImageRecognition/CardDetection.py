@@ -25,10 +25,11 @@ class ObjectDetection:
     def load_model(self, model_name):
         """
         Loads Yolo5 model from pytorch hub.
+        pip3 install torch torchvision torchaudio
         :return: Trained Pytorch model.
         """
         if model_name:
-            model = torch.hub.load('C:/Users/marcu/Yolov5/yolov5-master', 'custom', path='C:/Users/marcu/OneDrive/dtu/4.semester/CDIO-62410/7-solitaire/ImageRecognition/bestt.pt', source='local')
+            model = torch.hub.load('Utils/yolov5-master', 'custom', path='bestt.pt', source='local')
         else:
             model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
         return model
