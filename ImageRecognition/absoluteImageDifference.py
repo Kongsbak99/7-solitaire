@@ -41,7 +41,7 @@ def loadTrainingSuits():
     i = 0
     validation_suits = []
 
-    for Suits in ["Spades", "Spades1", "Hearts", "Diamonds","Diamonds_1", "Clubs", "Clubs1"]:
+    for Suits in ["Spades", "Spades1","Spades_2", "Hearts", "Diamonds","Diamonds_1","Diamonds_2", "Clubs", "Clubs1","Clubs_2"]:
         validation_suits.append(PlaceholderSuits())
         validation_suits[i].name = Suits
         image_name = validation_suits[i].name + imageformat
@@ -60,7 +60,7 @@ def loadTrainingNumbers():
     i = 0
     validation_numbers = []
 
-    for Numbers in ["2","2_1", "3","3_1", "4", "5","5_1", "6","6_1","6_2", "7", "8","8_1","8_2", "9","9_1", "10","10_1", "j", "q","q_1", "k","k_1", "a"]:
+    for Numbers in ["2","2_1", "3","3_1","3_2", "4", "5","5_1", "6","6_1","6_2", "7", "8","8_1","8_2", "9","9_1","9_2", "10","10_1", "j", "q","q_1", "k","k_1", "a"]:
         validation_numbers.append(PlaceholderNumbers())
         validation_numbers[i].name = Numbers
         image_name = validation_numbers[i].name + imageformat
