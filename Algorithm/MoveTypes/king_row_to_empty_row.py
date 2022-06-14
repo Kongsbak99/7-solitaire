@@ -6,9 +6,6 @@ def kingRowToEmptyRow(move, board):
     row = board["row-stack"][move["to"]]
     card = move["cards"][0]
 
-    # Add the card to the empty row
-    row.append(card)
-
     # Find original row of card
     if card in board["row-stack"]["row-1"]:
         original_row = "row-1"
@@ -29,6 +26,9 @@ def kingRowToEmptyRow(move, board):
 
     # Remove the card from the row
     board["row-stack"][original_row].remove(card)
+
+    # Add the card to the empty row
+    row.append(card)
 
     # Make top leftover card visible if not
     # But only if there are cards left
