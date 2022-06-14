@@ -2,6 +2,9 @@ import json
 from operator import contains
 import re
 
+from image_rec_confirmer import confirmCard
+from mock_input import mockImageRec
+
 
 class HistoryManager():
     def __init__(self, input):
@@ -17,10 +20,14 @@ class HistoryManager():
         self.init_waste = self.data['waste-pile']
         self.init_suit = self.data['suit-stack']
         self.init_rows = self.data['row-stack']
-
-        self.init_waste[0] = self.new_waste[0] ##init waste pile
+        
+        rec_card = self.new_waste[0]
+        actual_waste = confirmCard(rec_card)
+        self.init_waste[0] = actual_waste ##init waste pile
         for i in range(len(self.init_rows)): ##init rows
-            self.init_rows[f'row-{i+1}'][0] = self.new_rows[f'row-{i+1}']
+            rec_card = self.new_rows[f'row-{i+1}']
+            actual_card = confirmCard(rec_card)
+            self.init_rows[f'row-{i+1}'][0] = actual_card
 
         self.board = {
             "stock-pile": self.init_stock,
@@ -35,29 +42,19 @@ class HistoryManager():
 
     ##Find where unknown card is.
     ##Change to new input
-    def update_board(self, new_input):
-        with open('./board.json') as f:
-           self.board = json.load(f)
-        ##Check if new input is from strategy manager, or from image rec
-        if 'suit-stack' in new_input:
-            self.board = new_input
-        ##If suit stack is not in new input, new input is from image rec. 
-        else: 
-            unknown_found = False
-            ##Search for unknown card and stop when found
-            while unknown_found == False:
-                ##check if waste-pile has changed
-                if self.board['waste-pile']:
-                    if self.board['waste-pile'][0] == -1:
-                        #Update waste pile
-                        self.board['waste-pile'][0] = new_input['waste-pile'][0]
-                        unknown_found = True
-                ## Else run through the row stack, untill the new card is found. 
-                for row in self.board['row-stack']:
-                    if self.board['row-stack'][row][0] == -1:
-                        self.board['row-stack'][row][0] = new_input['row-stack'][row]
-                        unknown_found = True
-
+    def update_board(self, board):
+        if board['waste-pile']:
+            if board['waste-pile'][0] == -1:
+                rec_card = mockImageRec()
+                actual_card = confirmCard(rec_card)
+                board['waste-pile'] = actual_card
+        for row in board['row-stack']:
+            if board['row-stack'][row][0] == -1:
+                rec_card = mockImageRec()
+                actual_card = confirmCard(rec_card)
+                board['row-stack'][row][0] = actual_card
+        
+        self.board = board
         with open('board.json', 'w') as h:
             json.dump(self.board, h)
         

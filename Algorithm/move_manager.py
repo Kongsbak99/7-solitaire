@@ -228,12 +228,12 @@ class MoveManager:
             board = turnStockpile(self.board)
         else:
             print("ERROR - Unknown moveType: " + str(move["moveType"]))
-        fil = open('board.json', 'w')
-        json.dump(board, fil)
-        print("MM1: " + str(board))
-        fil.close()
-        print("MM2: " + str(board))
-
+        #fil = open('board.json', 'w')
+        #json.dump(board, fil)
+        #print("MM1: " + str(board))
+        #fil.close()
+        #print("MM2: " + str(board))
+        return board
        # with open('board.json', 'w') as h:
         #    json.dump(board, h)
 

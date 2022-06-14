@@ -3,6 +3,9 @@ from operator import contains
 import re
 from unittest import mock
 
+from image_rec_confirmer import confirmCard
+from mock_input import mockImageRec
+
 def init_mock_input():
     
     mock_input = {
@@ -20,7 +23,7 @@ def init_mock_input():
     
     return mock_input
 
-def mock_image_rec(board, unknown):
+def mock_image_rec(board):
 
   mock_input = {
     "waste-pile": board['waste-pile'],
@@ -28,10 +31,14 @@ def mock_image_rec(board, unknown):
   }
   if mock_input['waste-pile']:
     if mock_input['waste-pile'][0] == -1:
-      mock_input['waste-pile'] = [unknown]
+      rec_card = mockImageRec()
+      actual_card = confirmCard(rec_card)
+      mock_input['waste-pile'] = actual_card
   for row in mock_input['row-stack']:
     if mock_input['row-stack'][row][0] == -1:
-      mock_input['row-stack'][row][0] = unknown
+      rec_card = mockImageRec()
+      actual_card = confirmCard(rec_card)
+      mock_input['row-stack'][row][0] = actual_card
   
   return {
     "waste-pile": mock_input['waste-pile'],
