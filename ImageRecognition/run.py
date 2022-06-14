@@ -12,8 +12,7 @@ from edgeDetectionLive2 import GetCardCorner
 import cv2
 from ImageRecognition.imageSplit import navn
 
-path = os.path.dirname(os.path.abspath(__file__))
-pathname= path + '/ValidationImages/'
+
 
 cap = cv2.VideoCapture(0)
 
@@ -27,8 +26,8 @@ def run():
     for i in range(0, 12):
         write_on_image(frame, i, count)
 
-    box3 = GetCardCorner(listOfFrames[3])
-    cv2.imshow("num3", box3)
+    #box3 = GetCardCorner(listOfFrames[3])
+    #cv2.imshow("num3", box3)
 
 
     box0 = GetCardCorner(listOfFrames[0])
@@ -46,7 +45,7 @@ def run():
     # cv2.imshow("num0", box0)
     # cv2.imshow("num1", box1)
     # cv2.imshow("num2", box2)
-    cv2.imshow("num3", box3)
+
     # cv2.imshow("num4", box4)
     # cv2.imshow("num5", box5)
     # cv2.imshow("num6", box6)
@@ -55,16 +54,31 @@ def run():
     # cv2.imshow("num9", box9)
     # cv2.imshow("num10", box10)
     # cv2.imshow("num11", box11)
+    bwbox3 = bw_filter(box3)
+    cv2.imshow("num3", bwbox3)
+    num_crop = bwbox3[0: 110, 0:90]
+    suit_crop = bwbox3[115:230, 0:90]
+    cv2.imshow("numcrop", num_crop)
+    cv2.imshow("suitcrop", suit_crop)
 
 
-    #num_crop = box3[0: 120, 0:400]
-    #type_crop = box3[110: 260, 0:400]
 
-    if len(box3)==257:
-        bestCardMatch(box3)
 
-        #print("box:",i)
-       # i=i+1
+    if len(bwbox3)==257:
+       bestCardMatch(num_crop, suit_crop)
+        #corners = np.float32([[0, 0], [0, 420], [300, 420], [300, 0]])
+
+        # print("SIZE IS:", type_crop.shape)
+        # cv2.imshow("numC", bw_filter(num_crop))
+        # cv2.imshow("typeC", bw_filter(type_crop))
+        #
+        # cv2.imwrite("frame%d.jpg" % count, bw_filter(num_crop))
+        # cv2.imwrite("frame%d+1.jpg" % count, bw_filter(type_crop))# save frame as JPEG file
+        # success, image = cap.read()
+        # print('Read a new frame: ', success)
+        # count += 1
+        # print("box:",i)
+        # i=i+1
 
 
         #print(len(box3),"box3")
@@ -115,6 +129,9 @@ while 1:
     _, frame = cap.read()
     listOfFrames = navn(frame)
     cv2.imshow('preview', frame)
+    count = 0
+
+
 
     if cv2.waitKey(1) & 0xFF == ord('r'):
         cv2.imshow('preview', frame)
