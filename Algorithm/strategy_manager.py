@@ -11,11 +11,6 @@ class StrategyManager:
             self.board = json.load(f)
 
     # Next to do
-    # Need moveTypes specified correctly
-    # From waste to Suit, row to Suit = moveType 4
-    # From Waste King to Row, Row King to Row = moveType 3
-    # From Row to Row = moveType 2
-    # From Stockpile to Waste-pile = moveType 1
     # Sort out main calling this function properly instead
 
     # main method for general flow of strategy manager
@@ -95,18 +90,8 @@ class StrategyManager:
             return best_move
         else: return moves[0]
         print("")
-        
-        
-        
-        
-        # King move = The second-highest value
-        # Is king present on table?
-        # If no -> Begin clearing the largest row
-        # If yes
-        # Is empty row on table?
-        # If yes -> move king to empty row
-        # If no -> clear smallest row to make room for King
 
+        # King move = The second-highest value
         # If multiple suit Kings and empty row available
         # Check Queens
         # If multiple suit Queens available
@@ -142,8 +127,9 @@ class StrategyManager:
                 card = self.board['row-stack'][row][0]
                 if card == 13 or card == 26 or card == 39 or card == 52 and len(self.board['row-stack'][row]) > 1:
                     king_available = True
-        if self.board['waste-pile'][0] == 13 or self.board['waste-pile'][0] == 26 or self.board['waste-pile'][0] == 39 or self.board['waste-pile'][0] == 52:
-            king_available = True
+        if self.board["waste-pile"]:
+            if self.board['waste-pile'][0] == 13 or self.board['waste-pile'][0] == 26 or self.board['waste-pile'][0] == 39 or self.board['waste-pile'][0] == 52:
+                king_available = True
         
         if len(moves) > 1:
             rows = [] ## Rows moves are moved from
