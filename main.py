@@ -1,4 +1,3 @@
-from Algorithm import cards
 from Algorithm.MainPlayFunctions.image_rec_confirmer import confirmCard
 from Algorithm.MainPlayFunctions.look_for_unkown_cards import unknownCards
 from Algorithm.MainPlayFunctions.mock_input import mockImageRec
