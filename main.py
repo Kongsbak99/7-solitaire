@@ -12,6 +12,8 @@ from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
 from Algorithm.PlayLoopFunctions.mock_input import mockImageRec
 
 from Algorithm.MoveTypes.turn_stockpile import turnStockpile
+from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockImageRec
+
 
 import json
 
@@ -21,9 +23,13 @@ from ImageRecognition import image
 def main():
     ##initiate start game
     game_end = False
-    ##TODO: init_input should come from image rec
-    ##If necessary we should reformat input to be same format as mock_init_input()
-    init_input = init_mock_input()
+
+    #TODO fjern init_input her: 
+    init_input = init_mock_input() 
+
+    #TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
+    #imgrec_input = imgrec_metode() # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    #init_input = imgrec_service(imgrec_input)
     hm = HistoryManager(init_input)  ##init game
     with open('board.json') as f:
         board = json.load(f)

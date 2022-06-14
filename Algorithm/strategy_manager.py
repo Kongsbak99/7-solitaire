@@ -48,6 +48,8 @@ class StrategyManager:
 
     # This function can probably be ignored
     def suit_stack_move(self, moves):
+
+        print("")
         # Basic Strategy
         # Suit stack move = The highest value
         # Is suit stack available?

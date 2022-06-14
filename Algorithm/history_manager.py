@@ -3,7 +3,9 @@ from operator import contains
 import re
 
 from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
-from Algorithm.PlayLoopFunctions.mock_input import mockImageRec
+from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockImageRec
+
+from Algorithm.cards import Cards
 
 
 class HistoryManager():
@@ -40,17 +42,30 @@ class HistoryManager():
         with open('board.json', 'w') as h:
             json.dump(self.board, h)            
 
+    
+
     ##Find where unknown card is.
     ##Change to new input
     def update_board(self, board):
         if board['waste-pile']:
             if board['waste-pile'][0] == -1:
-                rec_card = mockImageRec()
+                imgrec_input = mock() # TODO i stedet for mock(), deres metode
+                imgrec_to_json = imgrec_service(imgrec_input)
+                #TODO Fjern linje:
+                rec_card = mockImageRec() 
+                #TODO fjern hashtag: 
+                #rec_card = imgrec_to_json['row-stack'][row]
+                rec_card = mockImageRec() 
                 actual_card = confirmCard(rec_card)
                 board['waste-pile'] = actual_card
         for row in board['row-stack']:
             if board['row-stack'][row][0] == -1:
-                rec_card = mockImageRec()
+                imgrec_input = mock() # TODO i stedet for mock(), deres metode
+                imgrec_to_json = imgrec_service(imgrec_input)
+                #TODO Fjern:
+                rec_card = mockImageRec() 
+                #TODO fjern hashtag: 
+                #rec_card = imgrec_to_json['row-stack'][row]
                 actual_card = confirmCard(rec_card)
                 board['row-stack'][row][0] = actual_card
         
