@@ -24,31 +24,49 @@ class Cards:
 
 listofResults = []
 
+def getCard(i, listOfCorners):
+    try:
+        detector = ObjectDetection(capture_index=listOfCorners[i], model_name=True)
+        card = detector()
+        return card
+
+    except:
+        print("error")
+        return "null"
 
 def run():
     listOfCorners = []
+    listofResults.clear()
 
-    for i in range(len(listOfFrames)):
-        listOfCorners.append(GetCardCorner(listOfFrames[i]))
+    try:
+        for i in range(len(listOfFrames)):
+            listOfCorners.append(GetCardCorner(listOfFrames[i]))
+    except:
+        print("could not find card corner")
 
     # Create a new object and execute.
-    for i in range(len(listOfCorners)):
-        try:
-            detector = ObjectDetection(capture_index=listOfCorners[i], model_name=True)
-            card = detector()
+    try:
+        for i in range(len(listOfCorners)):
+            for y in range(5):
+                card = getCard(i, listOfCorners)
+                if "null" != card:
+                    break
+                print("trying again")
+
             listofResults.append(Cards(i, card))
-        except:
-            print("Detector error")
+    except:
+        print("could not append to list")
 
     print("Printing list of cards")
     for obj in listofResults:
         print(str(obj.row) + " " + obj.card)
 
+
 while 1:
     _, frame = cap.read()
     listOfFrames = navn(frame)
     for i in range(len(listofResults)):
-       write_on_image(frame, listofResults[i].row, listofResults[i].card)
+        write_on_image(frame, listofResults[i].row, listofResults[i].card)
     cv2.imshow('preview', frame)
 
     if cv2.waitKey(1) & 0xFF == ord('r'):
@@ -58,3 +76,5 @@ while 1:
         cv2.destroyAllWindows()
         cap.release()
         break
+
+
