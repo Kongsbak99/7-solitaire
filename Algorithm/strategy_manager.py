@@ -1,5 +1,7 @@
 import json
 
+from Algorithm.cards import Cards
+
 
 
 class StrategyManager:
@@ -22,7 +24,9 @@ class StrategyManager:
                 moves.append(self.moves[i])
         if len(moves) > 0:
             best_move = self.suit_stack_move(moves)
-            return best_move
+            if best_move == 'skip':
+                moves = []
+            else: return best_move
         ## Check for king move
         for i in range(len(self.moves)):
             if self.moves[i]['moveType'] == 5 or self.moves[i]['moveType'] == 6:
@@ -48,7 +52,40 @@ class StrategyManager:
 
     # This function can probably be ignored
     def suit_stack_move(self, moves):
+        
+        for move in moves:
+            card = move['cards'][0]
+            move_card = Cards.getCardValue(card)
 
+            if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
+                return move
+            else:
+                #TODO if suit move is not A or 2, handle case
+                board = self.board
+                count = 0
+                for row in board['row-stack']: 
+                    row_card = Cards.getCardValue(board['row-stack'][row][0]) #TODO loop thu each card in each row
+                    for card in board['row-stack'][row]:
+                        if card != 0:
+                            row_card = Cards.getCardValue(card) #TODO loop thu each card in each row
+                            if row_card == move_card-2:
+                                count = count + 1
+                for stack in board['suit-stack']:
+                    if len(board['suit-stack'][stack]) > 1:
+                        suit_card = Cards.getCardValue(board['suit-stack'][stack][1])
+
+                        if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
+                            count = count + 1
+
+                if count == 3:
+                    return move
+                else:
+                    return 'skip'
+                
+            ##TODO Handle what happens if all 3 cardvalue-2 card are not in play
+                
+                print("")
+        
         print("")
         # Basic Strategy
         # Suit stack move = The highest value

@@ -13,11 +13,11 @@ def init_mock_input():
     "waste-pile": [52],
     "row-stack": {
         "row-1": 12,
-        "row-2": 18,
-        "row-3": 16,
+        "row-2": 16,
+        "row-3": 15,
         "row-4": 26,
-        "row-5": 1,
-        "row-6": 14,
+        "row-5": 14,
+        "row-6": 44,
         "row-7": 37
       }
     }
