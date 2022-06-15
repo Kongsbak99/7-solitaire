@@ -57,17 +57,18 @@ class HistoryManager():
                 #rec_card = imgrec_to_json['row-stack'][row]
                 rec_card = mockImageRec() 
                 actual_card = confirmCard(rec_card)
-                board['waste-pile'] = actual_card
+                board['waste-pile'][0] = actual_card
         for row in board['row-stack']:
-            if board['row-stack'][row][0] == -1:
-                imgrec_input = mock() # TODO i stedet for mock(), deres metode
-                imgrec_to_json = imgrec_service(imgrec_input)
-                #TODO Fjern:
-                rec_card = mockImageRec() 
-                #TODO fjern hashtag: 
-                #rec_card = imgrec_to_json['row-stack'][row]
-                actual_card = confirmCard(rec_card)
-                board['row-stack'][row][0] = actual_card
+            if board["row-stack"][row]:
+                if board['row-stack'][row][0] == -1:
+                    imgrec_input = mock() # TODO i stedet for mock(), deres metode
+                    imgrec_to_json = imgrec_service(imgrec_input)
+                    #TODO Fjern:
+                    rec_card = mockImageRec()
+                    #TODO fjern hashtag:
+                    #rec_card = imgrec_to_json['row-stack'][row]
+                    actual_card = confirmCard(rec_card)
+                    board['row-stack'][row][0] = actual_card
         
         self.board = board
         with open('board.json', 'w') as h:

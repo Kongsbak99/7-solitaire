@@ -49,18 +49,30 @@ def main():
 
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(mm.legal_moves)
-        best_move = sm.best_move()
-        print(f"Best move: {best_move}")
+        # Check the best move
+        if sm.best_move()["moveType"] == 7:
+            print("Best move is turning the stockpile ONCE")
+        else:
+            cards = sm.best_move()["cards"]
+            cards_name = []
+            for card in cards:
+                cards_name.append(Cards.getCardName(card))
+            location = sm.best_move()["to"]
+            print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
 
+        print("Confirm that move is performed with ENTER")
+        input_confirmer = input()
         ##Make move
         board_after_move = mm.doMove(sm.best_move())  ##complete board
+        print("Board after move")
         ##Finally update board to new state
         new_input = hm.update_board(board_after_move)
+        print("Board after update")
 
         # Check for victory
         game_end = hm.check_for_victory()
 
-
+        print("###################################")
     print("Game ended")
 
 

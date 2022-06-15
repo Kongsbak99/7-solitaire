@@ -133,7 +133,6 @@ class StrategyManager:
         
         else: return moves[0] ##If only one move, return that
 
-    # This function can probably be ignored
     def row_stack_move(self, moves):
         # Check if a King is available
         king_available = False
@@ -150,14 +149,16 @@ class StrategyManager:
             rows = [] ## Rows moves are moved from
             for row in self.board['row-stack']:
                 for move in moves:
-                    if self.board['row-stack'][row][0] == move['cards'][0]:
-                        total_length = len(self.board['row-stack'][row])
-                        unknown_size = 0
-                        for card in self.board['row-stack'][row]:
-                            if card == 0:
-                                unknown_size = unknown_size + 1
-                        rows.append({'moved_from': row, 'moveId': move['moveId'], 'unknown_size': unknown_size, 'total_length': total_length})
-            
+                    if self.board["row-stack"][row]:
+                        if self.board['row-stack'][row][0] == move['cards'][0]:
+                            total_length = len(self.board['row-stack'][row])
+                            unknown_size = 0
+                            for card in self.board['row-stack'][row]:
+                                if card == 0:
+                                    unknown_size = unknown_size + 1
+                            rows.append({'moved_from': row, 'moveId': move['moveId'], 'unknown_size': unknown_size, 'total_length': total_length})
+
+            # TODO: best_move[] er nogen gange tom?? = Indekseringsfejl (list index out of range)
             best_move = rows[0]
             if king_available == True:
                 ## Check which row is the smallest
