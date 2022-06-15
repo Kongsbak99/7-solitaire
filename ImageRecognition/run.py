@@ -22,20 +22,19 @@ class Cards:
         self.card = card
 
 
-listofResults = []
 
 def getCard(i, listOfCorners):
     try:
         detector = ObjectDetection(capture_index=listOfCorners[i], model_name=True)
         card = detector()
         return card
-
     except:
         print("error")
         return "null"
 
-def run():
+def run(listOfFrames):
     listOfCorners = []
+    listofResults = []
     listofResults.clear()
 
     try:
@@ -60,21 +59,24 @@ def run():
     print("Printing list of cards")
     for obj in listofResults:
         print(str(obj.row) + " " + obj.card)
+    return listofResults
 
-
-while 1:
+def runAllCards():
     _, frame = cap.read()
     listOfFrames = navn(frame)
+    listofResults = run(listOfFrames)
     for i in range(len(listofResults)):
         write_on_image(frame, listofResults[i].row, listofResults[i].card)
     cv2.imshow('preview', frame)
+    return listofResults
 
-    if cv2.waitKey(1) & 0xFF == ord('r'):
-        cv2.imshow('preview', frame)
-        run()
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
-        cap.release()
-        break
+    # if cv2.waitKey(1) & 0xFF == ord('r'):
+    #     cv2.imshow('preview', frame)
+    #     run()
+    # if cv2.waitKey(1) & 0xFF == ord('q'):
+    #     cv2.destroyAllWindows()
+    #     cap.release()
+    #     break
 
 
+runAllCards()
