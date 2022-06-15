@@ -6,6 +6,7 @@ from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
 from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockImageRec
 
 from Algorithm.cards import Cards
+from ImageRecognition.run import runAllCards
 
 
 class HistoryManager():
@@ -49,7 +50,7 @@ class HistoryManager():
     def update_board(self, board):
         if board['waste-pile']:
             if board['waste-pile'][0] == -1:
-                imgrec_input = mock() # TODO i stedet for mock(), deres metode
+                imgrec_input = runAllCards() # TODO i stedet for mock(), deres metode
                 imgrec_to_json = imgrec_service(imgrec_input)
                 #TODO Fjern linje:
                 rec_card = mockImageRec() 
@@ -61,7 +62,7 @@ class HistoryManager():
         for row in board['row-stack']:
             if board["row-stack"][row]:
                 if board['row-stack'][row][0] == -1:
-                    imgrec_input = mock() # TODO i stedet for mock(), deres metode
+                    imgrec_input = runAllCards() # TODO i stedet for mock(), deres metode
                     imgrec_to_json = imgrec_service(imgrec_input)
                     #TODO Fjern:
                     rec_card = mockImageRec()

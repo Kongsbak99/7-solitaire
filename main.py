@@ -17,7 +17,7 @@ from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockIma
 
 import json
 
-from ImageRecognition import image
+from ImageRecognition.run import runAllCards
 
 
 def main():
@@ -25,11 +25,11 @@ def main():
     game_end = False
 
     #TODO fjern init_input her: 
-    init_input = init_mock_input() 
+    # init_input = init_mock_input()
 
     #TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
-    #imgrec_input = imgrec_metode() # TODO i stedet for imgrec_metode(), deres imgrec metode metode
-    #init_input = imgrec_service(imgrec_input)
+    imgrec_input = runAllCards() # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    init_input = imgrec_service(imgrec_input)
     hm = HistoryManager(init_input)  ##init game
     with open('board.json') as f:
         board = json.load(f)
