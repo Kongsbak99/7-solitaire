@@ -4,7 +4,7 @@ import cv2
 def write_on_image(frame, cam_num, text):
     # text
     font = cv2.FONT_HERSHEY_SIMPLEX
-    fontScale = 1.3
+    fontScale = 0.8 #1.3
     color = (255, 131, 0)
     thickness = 2
 
@@ -24,6 +24,8 @@ def write_on_image(frame, cam_num, text):
     elif cam_num == 9: org = (525, var2)
     elif cam_num == 10: org = (775, var2)
     elif cam_num == 11: org = (1040, var2)
+
+    elif cam_num == -1: org = (10, 700)
     else: org = (10, 20)
 
     frame = cv2.putText(frame, str(text), org, font,

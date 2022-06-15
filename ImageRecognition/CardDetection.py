@@ -20,7 +20,7 @@ class ObjectDetection:
         self.model = self.load_model(model_name)
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        print("Using Device: ", self.device)
+        #print("Using Device: ", self.device)
 
     def load_model(self, model_name):
         """
@@ -87,15 +87,15 @@ class ObjectDetection:
         bestMatchIndex = -1
         labels, cord = results
         n = len(labels)
-        print("amount: " + str(n))
+        # print("amount: " + str(n))
         for i in range(n):
             row = cord[i]
             if row[4] >= 0.1:
-                print("found: " + str(row[4]))
+                # print("found: " + str(row[4]))
                 if row[4] > bestMatch:
-                    print("Before " + str(bestMatch))
+                    # print("Before " + str(bestMatch))
                     bestMatch = row[4]
-                    print("After " + str(bestMatch))
+                    # print("After " + str(bestMatch))
                     bestMatchIndex = i
             else:
                 return "S5"

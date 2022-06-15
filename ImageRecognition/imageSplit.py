@@ -1,7 +1,7 @@
 import cv2
 
 
-def navn(frame):
+def draw_boxes(frame):
     # cv2.namedWindow("preview")
     # vc = cv2.VideoCapture(0)
 

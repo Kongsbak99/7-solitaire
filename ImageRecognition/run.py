@@ -1,8 +1,4 @@
 import json
-import os
-import random
-
-from matplotlib import pyplot as plt
 
 from Algorithm.PlayLoopFunctions.mock_input import imgrec_service
 from Algorithm.history_manager import HistoryManager
@@ -12,20 +8,18 @@ from ImageRecognition.CardDetection import ObjectDetection
 from ImageRecognition.edgeDetectionLive2 import GetCardCorner
 from ImageRecognition.write_on_image import write_on_image
 import cv2
-from ImageRecognition.imageSplit import navn
+from ImageRecognition.imageSplit import draw_boxes
 from Algorithm.cardss import Cardss as Cardss
 
-# cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-#
-# cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
-# cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 
 class Cards:
     def __init__(self, row, card):
         self.row = row
         self.card = card
-
 
 
 def getCard(i, listOfCorners):
@@ -36,6 +30,7 @@ def getCard(i, listOfCorners):
     except:
         print("error")
         return "H6"
+
 
 def run(listOfFrames):
     listOfCorners = []
@@ -66,59 +61,63 @@ def run(listOfFrames):
         print(str(obj.row) + " " + obj.card)
     return listofResults
 
-def runAllCards(cap):
 
-    _, frame = cap.read()
-    listOfFrames = navn(frame)
-    cv2.imshow('preview', frame)
+def runAllCards(frame):
+    # _, frame = cap.read()
+    listOfFrames = draw_boxes(frame)  # separates frames
+    # cv2.imshow('preview', frame)
+
+    listofResults = run(listOfFrames)
+    # for i in range(len(listofResults)):
+    #     write_on_image(frame, listofResults[i].row, listofResults[i].card)
+    # cv2.imshow('preview', frame)
+
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         cap.release()
-
-    listofResults = run(listOfFrames)
-    for i in range(len(listofResults)):
-        write_on_image(frame, listofResults[i].row, listofResults[i].card)
-    cv2.imshow('preview', frame)
     return listofResults
 
-    # if cv2.waitKey(1) & 0xFF == ord('r'):
-    #     cv2.imshow('preview', frame)
-    #     run()
+
+def showImage(frame, listofResults):
+    if len(listofResults) > 1:
+        # print("length is > 1... Showing found cards on image")
+        for i in range(len(listofResults)):
+            write_on_image(frame, listofResults[i].row, listofResults[i].card)
+    draw_boxes(frame)  # draws boxes
+    cv2.imshow('preview', frame)
+
 
 def setup():
     while 1:
         _, frame = cap.read()
-        listOfFrames = navn(frame)
+        draw_boxes(frame)
         cv2.imshow('preview', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             cap.release()
 
 
-cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
-
 def main():
-
-
-    print("IVE BEEN RUN")
     ##initiate start game
     game_end = False
+    listofResults = []
 
-    #TODO fjern init_input her:
+    # TODO fjern init_input her:
     # init_input = init_mock_input()
 
-    #TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
-    imgrec_input = runAllCards(cap) # TODO i stedet for imgrec_metode(), deres imgrec metode metode
-    #time.sleep(1)
+    # TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
+    _, frame = cap.read()
+    showImage(frame, listofResults)
+    imgrec_input = runAllCards(frame)  # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    listofResults = imgrec_input
+    showImage(frame, listofResults)
+    # time.sleep(1)
     init_input = imgrec_service(imgrec_input)
     hm = HistoryManager(init_input)  ##init game
     with open('board.json') as f:
         board = json.load(f)
         f.close()
     f.close()
-
 
     #### General flow of game
     while game_end == False:  ##Keep while loop active, until game is finished.
@@ -133,6 +132,7 @@ def main():
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(mm.legal_moves)
         # Check the best move
+        next_move_string = "Best move is turning the stockpile ONCE"
         if sm.best_move()["moveType"] == 7:
             print("Best move is turning the stockpile ONCE")
         else:
@@ -141,20 +141,40 @@ def main():
             for card in cards:
                 cards_name.append(Cardss.getCardName(card))
             location = sm.best_move()["to"]
-            print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
+            next_move_string = "Best move is moving card(s): " + str(cards_name) + ", to " + str(location)
+            print(next_move_string)
 
+        write_on_image(frame, -1, next_move_string)
+        showImage(frame, listofResults)
+        _, frame = cap.read()
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            cap.release()
         print("Confirm that move is performed with ENTER")
         input_confirmer = input()
 
-        print("ppp")
         # Nyt billede
+        listofResults.clear()
+        write_on_image(frame, 7, "")
+        showImage(frame, listofResults)
         _, frame = cap.read()
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            cap.release()
 
         ##Make move
         board_after_move = mm.doMove(sm.best_move())  ##complete board
         print("Board after move")
         ##Finally update board to new state
-        new_input = hm.update_board(board_after_move, runAllCards(cap))
+        listofResults = runAllCards(frame)
+        new_input = hm.update_board(board_after_move, listofResults)
+
+        showImage(frame, listofResults)  # SHOULD show found cards on image
+        _, frame = cap.read()
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            cap.release()
+
         print("Board after update")
 
         # Check for victory
@@ -163,9 +183,9 @@ def main():
         print("###################################")
     print("Game ended")
 
-if __name__ == '__main__':
-    #setup()
-    main()
-    #runmycards(cap)
-    #time.sleep(25)
 
+if __name__ == '__main__':
+    # setup()
+    main()
+    # runmycards(cap)
+    # time.sleep(25)

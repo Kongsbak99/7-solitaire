@@ -161,19 +161,20 @@ def GetCardCorner(frame):
         i = 0
 
         for j in n:
+            # try:
+            #     linelength = round(math.sqrt(((n[i + 2] - n[i]) ** 2) + ((n[i + 3] - n[i + 1]) ** 2)), 2)
+            #
+            #     if linelength > minLineSize:
+            #         cv2.drawContours(img, [approx], -1, (0, 0, 255), 3)
+            #         #cv2.imshow("contours", img)
+            #         #print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
+            #     else:
+            #         break  # breaks a lot
+            # except:
+            #     i = i  # Cannot be empty..
+
             try:
                 linelength = round(math.sqrt(((n[i + 2] - n[i]) ** 2) + ((n[i + 3] - n[i + 1]) ** 2)), 2)
-
-                if linelength > minLineSize:
-                    cv2.drawContours(img, [approx], -1, (0, 0, 255), 3)
-                    cv2.imshow("contours", img)
-                    #print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
-                else:
-                    break  # breaks a lot
-            except:
-                i = i  # Cannot be empty..
-
-            try:
                 if linelength > minLineSize:
                     x = n[i]
                     y = n[i + 1]
@@ -258,7 +259,7 @@ def GetCardCorner(frame):
                         return botDst
 
             except:
-                print("Something went wrong")
+                print("Something went wrong finding card in box")
             i = i + 1
 
     # Showing the final image.
