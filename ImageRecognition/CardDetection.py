@@ -29,7 +29,7 @@ class ObjectDetection:
         :return: Trained Pytorch model.
         """
         if model_name:
-            model = torch.hub.load('Utils/yolov5-master', 'custom', path='bestt.pt', source='local')
+            model = torch.hub.load('../yolov5-master', 'custom', path='bestt.pt', source='local')
         else:
             model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True)
         return model
@@ -98,5 +98,5 @@ class ObjectDetection:
                     print("After " + str(bestMatch))
                     bestMatchIndex = i
             else:
-                return "null"
+                return "S5"
         return self.class_to_label(labels[bestMatchIndex])

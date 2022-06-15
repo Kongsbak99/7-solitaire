@@ -5,13 +5,13 @@ import re
 from Algorithm.PlayLoopFunctions.image_rec_confirmer import confirmCard
 from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockImageRec
 
-from Algorithm.cards import Cards
-from ImageRecognition.run import runAllCards
+from Algorithm.cardss import Cardss
+#from ImageRecognition.run import runAllCards
 
 
 class HistoryManager():
     def __init__(self, input):
-        with open('./initBoard.json') as f:
+        with open('../initBoard.json') as f:
            self.data = json.load(f)
 
         ## init input from image rec
@@ -47,27 +47,27 @@ class HistoryManager():
 
     ##Find where unknown card is.
     ##Change to new input
-    def update_board(self, board):
+    def update_board(self, board, runAllCards):
         if board['waste-pile']:
             if board['waste-pile'][0] == -1:
-                imgrec_input = runAllCards() # TODO i stedet for mock(), deres metode
+                imgrec_input = runAllCards # TODO i stedet for mock(), deres metode
                 imgrec_to_json = imgrec_service(imgrec_input)
                 #TODO Fjern linje:
-                rec_card = mockImageRec() 
+                #rec_card = mockImageRec()
                 #TODO fjern hashtag: 
-                #rec_card = imgrec_to_json['row-stack'][row]
-                rec_card = mockImageRec() 
+                rec_card = imgrec_to_json['waste-pile'][0]
+                #rec_card = mockImageRec()
                 actual_card = confirmCard(rec_card)
                 board['waste-pile'][0] = actual_card
         for row in board['row-stack']:
             if board["row-stack"][row]:
                 if board['row-stack'][row][0] == -1:
-                    imgrec_input = runAllCards() # TODO i stedet for mock(), deres metode
+                    imgrec_input = runAllCards # TODO i stedet for mock(), deres metode
                     imgrec_to_json = imgrec_service(imgrec_input)
                     #TODO Fjern:
-                    rec_card = mockImageRec()
+                    #rec_card = mockImageRec()
                     #TODO fjern hashtag:
-                    #rec_card = imgrec_to_json['row-stack'][row]
+                    rec_card = imgrec_to_json['row-stack'][row]
                     actual_card = confirmCard(rec_card)
                     board['row-stack'][row][0] = actual_card
         

@@ -1,6 +1,6 @@
 from threading import Timer
 
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss as Cardss
 
 
 def confirmCard(card):
@@ -8,14 +8,14 @@ def confirmCard(card):
     t = Timer(timeout, print, ['\nCard NOT confirmed\nEnter actual cardID'])
     t.start()
     print("---------------------------------------------")
-    prompt = "Card read as " + str(Cards.getCardName(card)) + "\nPress ENTER to confirm [%d seconds timeout]" % timeout
+    prompt = "Card read as " + str(Cardss.getCardName(card)) + "\nPress ENTER to confirm [%d seconds timeout]" % timeout
     answer = input(prompt)
     t.cancel()
 
     if answer == "":
-        print(str(Cards.getCardName(card)) + " confirmed")
+        print(str(Cardss.getCardName(card)) + " confirmed")
     else:
         card = int(answer)
-        print("Actual cardID set as " + str(Cards.getCardName(card)))
+        print("Actual cardID set as " + str(Cardss.getCardName(card)))
 
     return card

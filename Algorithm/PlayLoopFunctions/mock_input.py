@@ -1,6 +1,6 @@
 import random
 
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss
 
 
 def mockImageRec():
@@ -29,15 +29,15 @@ def imgrec_service(input):
   #test= input[7]
   #waste_id = Cards.getCardId(input[7].card)
   final_input = {
-    "waste-pile": [Cards.getCardId(input[7].card)],
+    "waste-pile": [Cardss.getCardId(input[7].card)],
     "row-stack": {
-        "row-1": Cards.getCardId(input[0].card),
-        "row-2": Cards.getCardId(input[1].card),
-        "row-3": Cards.getCardId(input[2].card),
-        "row-4": Cards.getCardId(input[3].card),
-        "row-5": Cards.getCardId(input[4].card),
-        "row-6": Cards.getCardId(input[5].card),
-        "row-7": Cards.getCardId(input[6].card)
+        "row-1": Cardss.getCardId(input[0].card),
+        "row-2": Cardss.getCardId(input[1].card),
+        "row-3": Cardss.getCardId(input[2].card),
+        "row-4": Cardss.getCardId(input[3].card),
+        "row-5": Cardss.getCardId(input[4].card),
+        "row-6": Cardss.getCardId(input[5].card),
+        "row-7": Cardss.getCardId(input[6].card)
       }
     }
     

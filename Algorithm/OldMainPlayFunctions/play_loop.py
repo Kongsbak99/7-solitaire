@@ -2,7 +2,7 @@ import json
 
 from Algorithm.MainPlayFunctions.look_for_unkown_cards import unknownCards
 from Algorithm.MainPlayFunctions.start_rows import startRows
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss
 from Algorithm.move_manager import MoveManager
 from Algorithm.strategy_manager import StrategyManager
 
@@ -51,7 +51,7 @@ def playLoop():
             cards = sm.best_move()["cards"]
             cards_name = []
             for card in cards:
-                cards_name.append(Cards.getCardName(card))
+                cards_name.append(Cardss.getCardName(card))
             location = sm.best_move()["to"]
             print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
 

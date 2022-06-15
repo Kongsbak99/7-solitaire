@@ -13,7 +13,7 @@ class CardsEnum(Enum):
     S3 = 3
 
 
-class Cards:
+class Cardss:
     sa = Card(1, 1, 1, 'SA')
     s2 = Card(2, 1, 2, 'S2')
     s3 = Card(3, 1, 3, 'S3')
@@ -78,24 +78,24 @@ class Cards:
     ]
 
     def getCardSuit(card_id):
-        for card in Cards.card_array:
+        for card in Cardss.card_array:
             if card.card_id == card_id:
                 return card.suit
 
     def getCardValue(card_id):
-        for card in Cards.card_array:
+        for card in Cardss.card_array:
             if card.card_id == card_id:
                 return card.value
 
     def getCardId(card_name):
-        for card in Cards.card_array:
+        for card in Cardss.card_array:
             if card.name == card_name:
-                return card.card_id
+                return int(card.card_id)
 
     # Small method to get name of a card by id
     def getCardName(card_id):
-        card_value = Cards.getCardValue(card_id)
-        card_suit = Cards.getCardSuit(card_id)
+        card_value = Cardss.getCardValue(card_id)
+        card_suit = Cardss.getCardSuit(card_id)
         card_value_string = ""
         card_suit_string = ""
 
@@ -108,16 +108,17 @@ class Cards:
         if card_suit == 4:
             card_suit_string = "Diamonds"
 
-        if (card_value >= 2) and (card_value <= 10):
-            card_value_string = str(card_value)
-        if card_value == 1:
-            card_value_string = "Ace"
-        if card_value == 11:
-            card_value_string = "Jack"
-        if card_value == 12:
-            card_value_string = "Queen"
-        if card_value == 13:
-            card_value_string = "King"
+        if isinstance(card_value, int):
+            if (card_value >= 2) and (card_value <= 10):
+                card_value_string = str(card_value)
+            if card_value == 1:
+                card_value_string = "Ace"
+            if card_value == 11:
+                card_value_string = "Jack"
+            if card_value == 12:
+                card_value_string = "Queen"
+            if card_value == 13:
+                card_value_string = "King"
 
         card_name = card_value_string + " of " + card_suit_string
         return card_name
