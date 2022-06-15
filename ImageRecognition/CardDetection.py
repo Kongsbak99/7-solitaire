@@ -96,3 +96,10 @@ class ObjectDetection:
         else:
             return "null"
 
+
+#         labels, cord = results
+#         n = len(labels)
+#         for i in range(n):
+#             row = cord[i]
+#             if row[4] >= 0.1:
+#                 cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
