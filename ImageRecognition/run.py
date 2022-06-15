@@ -47,7 +47,7 @@ def run():
     # Create a new object and execute.
     try:
         for i in range(len(listOfCorners)):
-            for y in range(5):
+            for y in range(2):
                 card = getCard(i, listOfCorners)
                 if "null" != card:
                     break

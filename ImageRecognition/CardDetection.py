@@ -81,25 +81,22 @@ class ObjectDetection:
         :return: void
         """
         results = self.score_frame(self.capture_index)
-        frame = self.plot_boxes(results, self.capture_index)
+        #frame = self.plot_boxes(results, self.capture_index)
 
+        bestMatch = 0
+        bestMatchIndex = -1
         labels, cord = results
-
-
-        # TODO: Get max frem for den første
-        row = cord[0]
-        if row[4] >= 0.5:
-            #max(row)
-            print(row)
-            cv2.imshow('YOLOv5 Detection', frame)
-            return self.class_to_label(labels[0])
-        else:
-            return "null"
-
-
-#         labels, cord = results
-#         n = len(labels)
-#         for i in range(n):
-#             row = cord[i]
-#             if row[4] >= 0.1:
-#                 cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
+        n = len(labels)
+        print("amount: " + str(n))
+        for i in range(n):
+            row = cord[i]
+            if row[4] >= 0.1:
+                print("found: " + str(row[4]))
+                if row[4] > bestMatch:
+                    print("Before " + str(bestMatch))
+                    bestMatch = row[4]
+                    print("After " + str(bestMatch))
+                    bestMatchIndex = i
+            else:
+                return "null"
+        return self.class_to_label(labels[bestMatchIndex])
