@@ -35,13 +35,13 @@ def GetCardCorner(frame):
 
     def botShortenY(y1, y2, height, width):
         y2 = y2 - y1
-        y2 = (y2 / height) * (width / 1.4)
+        y2 = (y2 / height) * (width / 0.9)  #1.4
         y2 = y2 + y1
         return y2
 
     def botShortenX(x1, x2, height, width):
         x2 = x2 - x1
-        x2 = (x2 / width) * (width / 3)
+        x2 = (x2 / width) * (width / 1.5)     #3
         x2 = x2 + x1
         return x2
 
@@ -235,9 +235,9 @@ def GetCardCorner(frame):
                             [botShortenX(0, 300, height, width), 0]])
 
                         botCut = np.float32(
-                            [[0, 0], [0, 257], [120, 257], [120, 0]])  # the coordinates/size of the new image
-                        botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)
-                        botDst = cv2.warpPerspective(dst, botM, (120, 257))  # imgGray
+                            [[0, 0], [0, 250], [150, 250], [150, 0]])  # the coordinates/size of the new image
+                        botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut) #120, 257
+                        botDst = cv2.warpPerspective(dst, botM, (150, 250))  # imgGray
 
                         # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
                         # Also works with a video stream: check out cv2.fastNlMeansDenoisingMulti()
