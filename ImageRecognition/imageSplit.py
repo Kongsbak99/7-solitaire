@@ -32,10 +32,10 @@ def draw_boxes(frame):
     Field6 = frame[fieldY:h, fieldX * 5:fieldX * 6]
     Field7 = frame[fieldY:h, fieldX * 6:fieldX * 7]
     DrawField = frame[0:fieldY, 2:topX]
-    AceStack1 = frame[0:fieldY, topX:topX * 2]
-    AceStack2 = frame[0:fieldY, topX * 2:topX * 3]
-    AceStack3 = frame[0:fieldY, topX * 3:topX * 4]
-    AceStack4 = frame[0:fieldY, topX * 4:topX * 5]
+    #AceStack1 = frame[0:fieldY, topX:topX * 2]
+    #AceStack2 = frame[0:fieldY, topX * 2:topX * 3]
+    #AceStack3 = frame[0:fieldY, topX * 3:topX * 4]
+    #AceStack4 = frame[0:fieldY, topX * 4:topX * 5]
 
     cv2.rectangle(frame, (0, fieldY), (fieldX, h), color=(0, 0, 0), thickness=2)  # field1
     cv2.rectangle(frame, (fieldX, fieldY), (fieldX * 2, h), color=(0, 0, 0), thickness=2)  # field2
@@ -51,7 +51,7 @@ def draw_boxes(frame):
     cv2.rectangle(frame, (topX * 4, 0), (topX * 5, fieldY), color=(0, 0, 0), thickness=2)  # ace4
 
     list_of_frames = [Field1, Field2, Field3, Field4, Field5, Field6,
-                      Field7, DrawField, AceStack1, AceStack2, AceStack3, AceStack4]
+                      Field7, DrawField]
 
     # cv2.imshow("Field1", Field1)
     # cv2.imshow("Field2", Field2)
