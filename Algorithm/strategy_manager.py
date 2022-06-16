@@ -64,12 +64,13 @@ class StrategyManager:
                 board = self.board
                 count = 0
                 for row in board['row-stack']: 
-                    row_card = Cards.getCardValue(board['row-stack'][row][0]) #TODO loop thu each card in each row
-                    for card in board['row-stack'][row]:
-                        if card != 0:
-                            row_card = Cards.getCardValue(card) #TODO loop thu each card in each row
-                            if row_card == move_card-2:
-                                count = count + 1
+                    if len(board['row-stack'][row]) > 0:
+                        row_card = Cards.getCardValue(board['row-stack'][row][0]) 
+                        for card in board['row-stack'][row]:
+                            if card != 0:
+                                row_card = Cards.getCardValue(card) 
+                                if row_card == move_card-2:
+                                    count = count + 1
                 for stack in board['suit-stack']:
                     if len(board['suit-stack'][stack]) > 1:
                         suit_card = Cards.getCardValue(board['suit-stack'][stack][1])

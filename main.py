@@ -36,8 +36,7 @@ def main():
         f.close()
     f.close()
 
-    prev_move_1 = None
-    prev_move_2 = None
+    prev_moves = []
     #### General flow of game
     while game_end == False:  ##Keep while loop active, until game is finished.
         ##TODO: Check for lost game
@@ -49,6 +48,19 @@ def main():
         print(f"Possible moves in Main: {legal_moves}")
         print("")
 
+        if len(prev_moves) > 0:
+            removed = []
+            for legal_move in legal_moves:
+                count = 0
+                if 'cards' in legal_move:
+                    for move in prev_moves:
+                        if legal_move['to'] == move['to'] and legal_move['cards'] == move['cards']:
+                            count = count + 1  
+                if count > 1:
+                    removed.append(legal_move)
+            for move in removed:
+                legal_moves.remove(move)
+
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(legal_moves)
         # Check the best move
@@ -56,11 +68,6 @@ def main():
             print("Best move is turning the stockpile ONCE")
         else:
             best_move = sm.best_move()
-            if prev_move_2 != None:
-                if best_move['to'] == prev_move_2['to'] and best_move['cards'] == prev_move_2['cards']:
-                    legal_moves.remove(best_move)
-                    sm = StrategyManager(legal_moves)
-                    best_move = sm.best_move()
             cards = best_move["cards"]
             cards_name = []
             for card in cards:
@@ -80,8 +87,7 @@ def main():
         # Check for victory
         game_end = hm.check_for_victory()
 
-        prev_move_2 = prev_move_1
-        prev_move_1 = best_move
+        prev_moves.append(best_move)
 
 
         print("###################################")

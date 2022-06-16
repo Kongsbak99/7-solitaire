@@ -14,7 +14,7 @@ def init_mock_input():
     "row-stack": {
         "row-1": 13,
         "row-2": 34,
-        "row-3": 19,
+        "row-3": 32,
         "row-4": 42,
         "row-5": 50,
         "row-6": 49, 
