@@ -123,6 +123,9 @@ def main():
         f.close()
     f.close()
 
+    print("Best move is turning the stockpile ONCE")
+    confirmer = input()
+
     prev_moves = []
     #### General flow of game
     while game_end == False:  ##Keep while loop active, until game is finished.
@@ -150,7 +153,7 @@ def main():
 
 
         ##Init Strategy Manager and pass legal moves from Move Manager
-        sm = StrategyManager(mm.legal_moves)
+        sm = StrategyManager(legal_moves)
         # Check the best move
         next_move_string = "Best move is turning the stockpile ONCE"
         if sm.best_move()["moveType"] == 7:
@@ -188,14 +191,23 @@ def main():
         board_after_move = mm.doMove(sm.best_move())  ##complete board
         print("Board after move")
         ##Finally update board to new state
-        listofResults = runAllCards(frame)
-        new_input = hm.update_board(board_after_move, listofResults)
+        # But only if there's a new unrec'ed card
+        unknown_found = False
+        if -1 in board_after_move["waste-pile"]:
+            unknown_found = True
+        for row in board_after_move['row-stack']:
+            if -1 in board_after_move['row-stack'][row]:
+                unknown_found = True
+        if unknown_found:
+            listofResults = runAllCards(frame)
 
-        showImage(frame, listofResults)  # SHOULD show found cards on image
-        _, frame = cap.read()
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
-            cap.release()
+            showImage(frame, listofResults)  # SHOULD show found cards on image
+            _, frame = cap.read()
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                cap.release()
+
+        new_input = hm.update_board(board_after_move, listofResults)
 
         print("Board after update")
 

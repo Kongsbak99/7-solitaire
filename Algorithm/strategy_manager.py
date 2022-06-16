@@ -1,6 +1,6 @@
 import json
 
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss
 
 
 
@@ -55,7 +55,7 @@ class StrategyManager:
         
         for move in moves:
             card = move['cards'][0]
-            move_card = Cards.getCardValue(card)
+            move_card = Cardss.getCardValue(card)
 
             if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
                 return move
@@ -65,15 +65,15 @@ class StrategyManager:
                 count = 0
                 for row in board['row-stack']: 
                     if len(board['row-stack'][row]) > 0:
-                        row_card = Cards.getCardValue(board['row-stack'][row][0]) 
+                        row_card = Cardss.getCardValue(board['row-stack'][row][0])
                         for card in board['row-stack'][row]:
                             if card != 0:
-                                row_card = Cards.getCardValue(card) 
+                                row_card = Cardss.getCardValue(card)
                                 if row_card == move_card-2:
                                     count = count + 1
                 for stack in board['suit-stack']:
                     if len(board['suit-stack'][stack]) > 1:
-                        suit_card = Cards.getCardValue(board['suit-stack'][stack][1])
+                        suit_card = Cardss.getCardValue(board['suit-stack'][stack][1])
 
                         if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
                             count = count + 1
