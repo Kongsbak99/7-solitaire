@@ -82,11 +82,8 @@ class StrategyManager:
                 else:
                     return 'skip'
                 
-            ##TODO Handle what happens if all 3 cardvalue-2 card are not in play
                 
-                print("")
         
-        print("")
         # Basic Strategy
         # Suit stack move = The highest value
         # Is suit stack available?
@@ -97,7 +94,6 @@ class StrategyManager:
         # If yes -> move to suit stack
         # If no -> ignore move
         # If no and no other moves available -> return this move
-        return moves[0]
 
     # This function can probably be ignored
     def king_move(self, moves):
