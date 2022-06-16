@@ -38,7 +38,7 @@ class Cardss:
     c8 = Card(21, 2, 8, 'C8')
     c9 = Card(22, 2, 9, 'C9')
     c10 = Card(23, 2, 10, 'C10')
-    cj = Card(24, 2, 11, 'Cj')
+    cj = Card(24, 2, 11, 'CJ')
     cq = Card(25, 2, 12, 'CQ')
     ck = Card(26, 2, 13, 'CK')
 

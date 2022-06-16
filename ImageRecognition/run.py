@@ -22,6 +22,9 @@ class Cards:
         self.card = card
 
 
+# Finds card in specific box.
+# i = 0..11 (location of the card frame)
+# listOfCorers = array of all card frames
 def getCard(i, listOfCorners):
     try:
         detector = ObjectDetection(capture_index=listOfCorners[i], model_name=True)
@@ -46,13 +49,13 @@ def run(listOfFrames):
     # Create a new object and execute.
     try:
         for i in range(len(listOfCorners)):
-            for y in range(2):
-                card = getCard(i, listOfCorners)
+            for y in range(2):  # int is amount of times it tries again, if no card is found
+                card = getCard(i, listOfCorners)  # Finds the card in the box
                 if "null" != card:
                     break
                 print("trying again")
 
-            listofResults.append(Cards(i, card))
+            listofResults.append(Cards(i, card))  # Adds the found card to the list
     except:
         print("could not append to list")
 
@@ -62,6 +65,7 @@ def run(listOfFrames):
     return listofResults
 
 
+# function to run image recognition and returns list of all cards on board
 def runAllCards(frame):
     # _, frame = cap.read()
     listOfFrames = draw_boxes(frame)  # separates frames
@@ -162,6 +166,8 @@ def main():
             cv2.destroyAllWindows()
             cap.release()
 
+        _, frame = cap.read()
+
         ##Make move
         board_after_move = mm.doMove(sm.best_move())  ##complete board
         print("Board after move")
@@ -185,7 +191,7 @@ def main():
 
 
 if __name__ == '__main__':
-    # setup()
+    #setup()
     main()
     # runmycards(cap)
     # time.sleep(25)
