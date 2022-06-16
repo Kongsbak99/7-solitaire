@@ -1,6 +1,6 @@
 import json
 
-from Algorithm.cardss import Cardss
+from Algorithm.cards import Cards
 
 
 
@@ -55,7 +55,7 @@ class StrategyManager:
         
         for move in moves:
             card = move['cards'][0]
-            move_card = Cardss.getCardValue(card)
+            move_card = Cards.getCardValue(card)
 
             if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
                 return move
@@ -64,15 +64,16 @@ class StrategyManager:
                 board = self.board
                 count = 0
                 for row in board['row-stack']: 
-                    row_card = Cardss.getCardValue(board['row-stack'][row][0]) #TODO loop thu each card in each row
-                    for card in board['row-stack'][row]:
-                        if card != 0:
-                            row_card = Cardss.getCardValue(card) #TODO loop thu each card in each row
-                            if row_card == move_card-2:
-                                count = count + 1
+                    if len(board['row-stack'][row]) > 0:
+                        row_card = Cards.getCardValue(board['row-stack'][row][0]) 
+                        for card in board['row-stack'][row]:
+                            if card != 0:
+                                row_card = Cards.getCardValue(card) 
+                                if row_card == move_card-2:
+                                    count = count + 1
                 for stack in board['suit-stack']:
                     if len(board['suit-stack'][stack]) > 1:
-                        suit_card = Cardss.getCardValue(board['suit-stack'][stack][1])
+                        suit_card = Cards.getCardValue(board['suit-stack'][stack][1])
 
                         if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
                             count = count + 1
@@ -82,11 +83,8 @@ class StrategyManager:
                 else:
                     return 'skip'
                 
-            ##TODO Handle what happens if all 3 cardvalue-2 card are not in play
                 
-                print("")
         
-        print("")
         # Basic Strategy
         # Suit stack move = The highest value
         # Is suit stack available?
@@ -97,7 +95,6 @@ class StrategyManager:
         # If yes -> move to suit stack
         # If no -> ignore move
         # If no and no other moves available -> return this move
-        return moves[0]
 
     # This function can probably be ignored
     def king_move(self, moves):
