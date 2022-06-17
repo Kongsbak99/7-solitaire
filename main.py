@@ -97,7 +97,7 @@ def main():
 
         if 'cards' in best_move:
             prev_moves.append(best_move)
-        if len(prev_moves) > 5:
+        if len(prev_moves) > 20:
             prev_moves.pop(0)
 
         print("###################################")
