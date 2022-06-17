@@ -1,7 +1,7 @@
 import json
 
 from Algorithm.PlayLoopFunctions.mock_input import imgrec_service
-from Algorithm.history_manager import HistoryManager
+from Algorithm.history_manager import HistoryManager, findUnknownCard
 from Algorithm.move_manager import MoveManager
 from Algorithm.strategy_manager import StrategyManager
 from ImageRecognition.CardDetection import ObjectDetection
@@ -200,8 +200,9 @@ def main():
             if -1 in board_after_move['row-stack'][row]:
                 unknown_found = True
         if unknown_found:
-            listofResults = runAllCards(frame)
+            unknown_card = findUnknownCard(board_after_move)
 
+            listofResults = runAllCards(frame, unknown_card, listofResults)
             showImage(frame, listofResults)  # SHOULD show found cards on image
             _, frame = cap.read()
             if cv2.waitKey(1) & 0xFF == ord('q'):
