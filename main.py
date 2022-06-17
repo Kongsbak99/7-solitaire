@@ -1,8 +1,11 @@
 #from Algorithm.MainPlayFunctions.image_rec_confirmer import confirmCard
+import time
+
+
 from Algorithm.OldMainPlayFunctions.new_look_for_unkown_cards import unknownCards
 #from Algorithm.MainPlayFunctions.mock_input import mockImageRec
 #from Algorithm.MainPlayFunctions.play_loop import playLoop
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss
 from Algorithm.history_manager import HistoryManager
 from Algorithm.OldMainPlayFunctions.old_mock_input import init_mock_input
 from Algorithm.move_manager import MoveManager
@@ -17,19 +20,29 @@ from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockIma
 
 import json
 
-from ImageRecognition import image
+from ImageRecognition.run import runAllCards
+
+
+#await runAllCards(cap)
+from ImageRecognition.runrun import getCap, runmycards
 
 
 def main():
+
+
+    print("IVE BEEN RUN")
     ##initiate start game
     game_end = False
 
-    #TODO fjern init_input her: 
-    init_input = init_mock_input() 
+    #TODO fjern init_input her:
+    # init_input = init_mock_input()
+    print("Best move is turning the stockpile ONCE")
+    confirmer = input()
 
     #TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
-    #imgrec_input = imgrec_metode() # TODO i stedet for imgrec_metode(), deres imgrec metode metode
-    #init_input = imgrec_service(imgrec_input)
+    imgrec_input = runAllCards(cap) # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    time.sleep(1)
+    init_input = imgrec_service(imgrec_input)
     hm = HistoryManager(init_input)  ##init game
     with open('board.json') as f:
         board = json.load(f)
@@ -42,7 +55,7 @@ def main():
         ##TODO: Check for lost game
 
         mm = MoveManager()
-        ##After init of board, check for moves 
+        ##After init of board, check for moves
         mm.movables()
         legal_moves = mm.legal_moves
         print(f"Possible moves in Main: {legal_moves}")
@@ -55,7 +68,7 @@ def main():
                 if 'cards' in legal_move:
                     for move in prev_moves:
                         if legal_move['to'] == move['to'] and legal_move['cards'] == move['cards']:
-                            count = count + 1  
+                            count = count + 1
                 if count > 1:
                     removed.append(legal_move)
             for move in removed:
@@ -71,7 +84,7 @@ def main():
             cards = best_move["cards"]
             cards_name = []
             for card in cards:
-                cards_name.append(Cards.getCardName(card))
+                cards_name.append(Cardss.getCardName(card))
             location = sm.best_move()["to"]
             print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
 
@@ -93,6 +106,8 @@ def main():
         print("###################################")
     print("Game ended")
 
-
+cap = getCap()
 if __name__ == '__main__':
     main()
+    #runmycards(cap)
+    #time.sleep(25)
