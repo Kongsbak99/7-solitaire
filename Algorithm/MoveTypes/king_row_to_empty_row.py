@@ -5,6 +5,9 @@
 def kingRowToEmptyRow(move, board):
     row = board["row-stack"][move["to"]]
     card = move["cards"][0]
+    cards = move["cards"]
+
+    cards_reversed = list(reversed(cards))
 
     # Find original row of card
     if card in board["row-stack"]["row-1"]:
@@ -24,11 +27,13 @@ def kingRowToEmptyRow(move, board):
     else:
         print("ERROR - Cannot find row for card with ID: " + str(card))
 
-    # Remove the card from the row
-    board["row-stack"][original_row].remove(card)
+    # Remove the cards from the orignal row
+    for card in cards_reversed:
+        board["row-stack"][original_row].remove(card)
 
     # Add the card to the empty row
-    row.append(card)
+    for card in cards_reversed:
+        row.append(card)
 
     # Make top leftover card visible if not
     # But only if there are cards left

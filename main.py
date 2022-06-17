@@ -80,13 +80,13 @@ def main():
             cards_name = []
             for card in cards:
                 cards_name.append(Cards.getCardName(card))
-            location = sm.best_move()["to"]
+            location = best_move["to"]
             print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
 
         print("Confirm that move is performed with ENTER")
         input_confirmer = input()
         ##Make move
-        board_after_move = mm.doMove(sm.best_move())  ##complete board
+        board_after_move = mm.doMove(best_move)  ##complete board
         print("Board after move")
         ##Finally update board to new state
         new_input = hm.update_board(board_after_move)

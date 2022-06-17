@@ -105,7 +105,7 @@ class StrategyManager:
                         ## Check that it is a row (not waste pile)
                         if self.board['row-stack'][row][0] == move['cards'][0]:
                             total_length = len(self.board['row-stack'][row])
-                            move_type = self.board['row-stack'][row]
+                            move_type = move['moveType']
                             unknown_size = 0
                             for card in self.board['row-stack'][row]:
                                 if card == 0:
@@ -116,7 +116,9 @@ class StrategyManager:
             for row in rows:
                 if row['unknown_size'] < best_move['unknown_size']:
                     best_move = row
-            return best_move
+            for move in moves:
+                if move['moveId'] == best_move['moveId']:
+                    return move
         
         else: return moves[0] ##If only one move, return that
 
