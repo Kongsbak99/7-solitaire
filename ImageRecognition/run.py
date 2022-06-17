@@ -99,6 +99,7 @@ def setup():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             cap.release()
+            break
 
 
 def main():
@@ -219,7 +220,7 @@ def main():
 
 
 if __name__ == '__main__':
-    #setup()
-    main()
+    setup()
+    #main()
     # runmycards(cap)
     # time.sleep(25)
