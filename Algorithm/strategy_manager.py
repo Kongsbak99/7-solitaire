@@ -33,14 +33,18 @@ class StrategyManager:
                 moves.append(self.moves[i])
         if len(moves) > 0:
             best_move = self.king_move(moves)
-            return best_move
+            if best_move == 'skip':
+                moves = []
+            else: return best_move
         ## Check for row move
         for i in range(len(self.moves)):
             if self.moves[i]['moveType'] == 3 or self.moves[i]['moveType'] == 2:
                 moves.append(self.moves[i])
         if len(moves) > 0:
             best_move = self.row_stack_move(moves)
-            return best_move
+            if best_move == 'skip':
+                moves = []
+            else: return best_move
 
         ##no moves doesny have a move type yet 
         for i in range(len(self.moves)): 
@@ -60,15 +64,14 @@ class StrategyManager:
             if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
                 return move
             else:
-                #TODO if suit move is not A or 2, handle case
                 board = self.board
                 count = 0
                 for row in board['row-stack']: 
                     if len(board['row-stack'][row]) > 0:
-                        row_card = Cards.getCardValue(board['row-stack'][row][0]) 
+                        row_card = Cards.getCardValue(board['row-stack'][row][0])
                         for card in board['row-stack'][row]:
                             if card != 0:
-                                row_card = Cards.getCardValue(card) 
+                                row_card = Cards.getCardValue(card)
                                 if row_card == move_card-2:
                                     count = count + 1
                 for stack in board['suit-stack']:
@@ -82,21 +85,8 @@ class StrategyManager:
                     return move
                 else:
                     return 'skip'
-                
-                
-        
-        # Basic Strategy
-        # Suit stack move = The highest value
-        # Is suit stack available?
-        # If yes -> return this move
-        # Advanced strategy
-        # Is suit stack available?
-        # If yes -> is cardValue-2 for all suits in play?
-        # If yes -> move to suit stack
-        # If no -> ignore move
-        # If no and no other moves available -> return this move
 
-    # This function can probably be ignored
+
     def king_move(self, moves):
         
         ## If stock pile % 3 == 0, we choose the waste pile move, to make sure the stock pile doesnt get locked. 
@@ -131,6 +121,13 @@ class StrategyManager:
         else: return moves[0] ##If only one move, return that
 
     def row_stack_move(self, moves):
+        ##Check if only move is movetype  2
+        movetype_3_found = False
+        for move in moves:
+            if move['moveType'] == 3:
+                movetype_3_found = True
+        if movetype_3_found == False: return moves[0]
+
         # Check if a King is available
         king_available = False
         for row in self.board['row-stack']:
@@ -142,39 +139,38 @@ class StrategyManager:
             if self.board['waste-pile'][0] == 13 or self.board['waste-pile'][0] == 26 or self.board['waste-pile'][0] == 39 or self.board['waste-pile'][0] == 52:
                 king_available = True
         
-        if len(moves) > 1:
-            rows = [] ## Rows moves are moved from
-            for row in self.board['row-stack']:
-                for move in moves:
-                    if self.board["row-stack"][row]:
-                        if self.board['row-stack'][row][0] == move['cards'][0]:
-                            total_length = len(self.board['row-stack'][row])
-                            unknown_size = 0
-                            for card in self.board['row-stack'][row]:
-                                if card == 0:
-                                    unknown_size = unknown_size + 1
-                            rows.append({'moved_from': row, 'moveId': move['moveId'], 'unknown_size': unknown_size, 'total_length': total_length})
+        rows = [] ## Rows moves are moved from
+        for row in self.board['row-stack']:
+            for move in moves:
+                if self.board["row-stack"][row]:
+                    if self.board['row-stack'][row][0] == move['cards'][0]:
+                        total_length = len(self.board['row-stack'][row])
+                        unknown_size = 0
+                        for card in self.board['row-stack'][row]:
+                            if card == 0:
+                                unknown_size = unknown_size + 1
+                        rows.append({'moved_from': row, 'moveId': move['moveId'], 'unknown_size': unknown_size, 'total_length': total_length})
 
-            # TODO: best_move[] er nogen gange tom?? = Indekseringsfejl (list index out of range)
-            best_move = rows[0]
-            if king_available == True:
-                ## Check which row is the smallest
-                for row in rows:
-                    if row['total_length'] < best_move['total_length']:
-                        best_move = row
-            else:       
-                ## Check which row has the most 0'
-                for row in rows:
-                    if row['unknown_size'] > best_move['unknown_size']:
-                        best_move = row
+        best_move = rows[0]
+        if king_available == True:
+            ## Check which row is the smallest
+            for row in rows:
+                if row['total_length'] < best_move['total_length']:
+                    best_move = row
+        else:       
+            ## Check which row has the most 0'
+            for row in rows:
+                if row['unknown_size'] > best_move['unknown_size']:
+                    best_move = row
 
+        if best_move['unknown_size'] == 0 and king_available == False:
+            return 'skip'
+        else:
             ## Find the best move and return
             for move in moves:
                 if move['moveId'] == best_move['moveId']:
                     return move
-            
-        else:
-            return moves[0]
+
 
     # This function can probably be ignored
     def no_moves(self, moves):

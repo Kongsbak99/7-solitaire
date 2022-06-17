@@ -5,7 +5,7 @@ import time
 from Algorithm.OldMainPlayFunctions.new_look_for_unkown_cards import unknownCards
 #from Algorithm.MainPlayFunctions.mock_input import mockImageRec
 #from Algorithm.MainPlayFunctions.play_loop import playLoop
-from Algorithm.cardss import Cardss
+from Algorithm.cards import Cards
 from Algorithm.history_manager import HistoryManager
 from Algorithm.OldMainPlayFunctions.old_mock_input import init_mock_input
 from Algorithm.move_manager import MoveManager
@@ -20,11 +20,6 @@ from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockIma
 
 import json
 
-from ImageRecognition.run import runAllCards
-
-
-#await runAllCards(cap)
-from ImageRecognition.runrun import getCap, runmycards
 
 
 def main():
@@ -40,9 +35,9 @@ def main():
     confirmer = input()
 
     #TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
-    imgrec_input = runAllCards(cap) # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    #imgrec_input = runAllCards(cap) # TODO i stedet for imgrec_metode(), deres imgrec metode metode
     time.sleep(1)
-    init_input = imgrec_service(imgrec_input)
+    init_input = init_mock_input() #imgrec_service(imgrec_input)
     hm = HistoryManager(init_input)  ##init game
     with open('board.json') as f:
         board = json.load(f)
@@ -76,15 +71,15 @@ def main():
 
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(legal_moves)
+        best_move = sm.best_move()
         # Check the best move
-        if sm.best_move()["moveType"] == 7:
+        if best_move["moveType"] == 7:
             print("Best move is turning the stockpile ONCE")
         else:
-            best_move = sm.best_move()
             cards = best_move["cards"]
             cards_name = []
             for card in cards:
-                cards_name.append(Cardss.getCardName(card))
+                cards_name.append(Cards.getCardName(card))
             location = sm.best_move()["to"]
             print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
 
@@ -100,13 +95,14 @@ def main():
         # Check for victory
         game_end = hm.check_for_victory()
 
-        prev_moves.append(best_move)
-
+        if 'cards' in best_move:
+            prev_moves.append(best_move)
+        if len(prev_moves) > 5:
+            prev_moves.pop(0)
 
         print("###################################")
     print("Game ended")
 
-cap = getCap()
 if __name__ == '__main__':
     main()
     #runmycards(cap)
