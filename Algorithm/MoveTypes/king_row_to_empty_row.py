@@ -33,7 +33,7 @@ def kingRowToEmptyRow(move, board):
 
     # Add the card to the empty row
     for card in cards_reversed:
-        row.append(card)
+        row.append(0, card)
 
     # Make top leftover card visible if not
     # But only if there are cards left
