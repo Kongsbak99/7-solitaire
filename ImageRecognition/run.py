@@ -162,15 +162,16 @@ def main():
             for move in removed:
                 legal_moves.remove(move)
 
-
         ##Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(legal_moves)
         # Check the best move
         next_move_string = "Best move is turning the stockpile ONCE"
-        if sm.best_move()["moveType"] == 7:
+        best_move = sm.best_move()
+
+        if best_move["moveType"] == 7:
             print("Best move is turning the stockpile ONCE")
         else:
-            cards = sm.best_move()["cards"]
+            cards = best_move["cards"]
             cards_name = []
             for card in cards:
                 cards_name.append(Cardss.getCardName(card))
@@ -225,11 +226,15 @@ def main():
 
         # Check for victory
         game_end = hm.check_for_victory()
-
+        if 'cards' in best_move:
+            prev_moves.append(best_move)
+        if len(prev_moves) > 20:
+            prev_moves.pop(0)
         print("###################################")
+
     print("Game ended")
 
 
 if __name__ == '__main__':
-    setup()
-    #main()
+    #setup()
+    main()
