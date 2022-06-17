@@ -237,8 +237,6 @@ class MoveManager:
        # with open('board.json', 'w') as h:
         #    json.dump(board, h)
 
-
-
     def make_move(self, move, board):
 
         try:

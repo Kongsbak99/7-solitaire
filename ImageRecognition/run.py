@@ -4,6 +4,7 @@ from Algorithm.PlayLoopFunctions.mock_input import imgrec_service
 from Algorithm.history_manager import HistoryManager, findUnknownCard
 from Algorithm.move_manager import MoveManager
 from Algorithm.strategy_manager import StrategyManager
+from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 from ImageRecognition.CardDetection import ObjectDetection
 from ImageRecognition.edgeDetectionLive2 import GetCardCorner
 from ImageRecognition.write_on_image import write_on_image
@@ -169,7 +170,11 @@ def main():
         best_move = sm.best_move()
 
         if best_move["moveType"] == 7:
-            print("Best move is turning the stockpile ONCE")
+            stockpile = len(board_after_move["stock-pile"])
+            if stockpile >= 3:
+                print("Best move is turning the stockpile ONCE")
+            elif stockpile < 3:
+                print("Best move is turning the waste-pile")
         else:
             cards = best_move["cards"]
             cards_name = []
