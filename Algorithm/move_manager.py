@@ -1,4 +1,4 @@
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss
 from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 from Algorithm.MoveTypes.wastepile_to_suitstack import wastepileToSuitStack
 from Algorithm.MoveTypes.wastepile_to_row import wastepileToRow
@@ -30,11 +30,11 @@ class MoveManager:
 
     # Check whether 1st card can be put on top of 2nd card in the rows (E.g. Ace of Spaces on Two of Hearts)
     def canOverlay(self, card_id_1, card_id_2):
-        card_1_value = Cards.getCardValue(card_id_1)
-        card_1_suit = Cards.getCardSuit(card_id_1)
+        card_1_value = Cardss.getCardValue(card_id_1)
+        card_1_suit = Cardss.getCardSuit(card_id_1)
 
-        card_2_value = Cards.getCardValue(card_id_2)
-        card_2_suit = Cards.getCardSuit(card_id_2)
+        card_2_value = Cardss.getCardValue(card_id_2)
+        card_2_suit = Cardss.getCardSuit(card_id_2)
 
         # Card has to be 1 lower...
         # Verify a row's top card isn't ID: 0
@@ -178,7 +178,7 @@ class MoveManager:
                 if self.canOverlay(check_card, topcard):
                     self.createMoveObject(card_set, self.getRow(topcard), 3)
             # Check if any of the sets are only kings, and if there's an empty row
-            if (card_set == [13] or card_set == [26] or card_set == [39] or card_set == [52]) and empty_rows:
+            if (card_set[len(card_set) - 1] == [13] or card_set[len(card_set) - 1] == [26] or card_set[len(card_set) - 1] == [39] or card_set[len(card_set) - 1] == [52]) and empty_rows:
                 for empty_row in empty_rows:
                     self.createMoveObject(card_set, empty_row, 5)
 
