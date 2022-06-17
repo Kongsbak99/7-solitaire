@@ -116,9 +116,12 @@ class StrategyManager:
             for row in rows:
                 if row['unknown_size'] < best_move['unknown_size']:
                     best_move = row
-            for move in moves:
-                if move['moveId'] == best_move['moveId']:
-                    return move
+            if best_move['moveId'] == 5 and best_move['unknown_size'] == 0:
+                return 'skip'
+            else:
+                for move in moves:
+                    if move['moveId'] == best_move['moveId']:
+                        return move
         
         else: return moves[0] ##If only one move, return that
 
