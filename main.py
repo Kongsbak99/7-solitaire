@@ -1,7 +1,6 @@
 #from Algorithm.MainPlayFunctions.image_rec_confirmer import confirmCard
 import time
 
-import cv2
 
 from Algorithm.OldMainPlayFunctions.new_look_for_unkown_cards import unknownCards
 #from Algorithm.MainPlayFunctions.mock_input import mockImageRec
@@ -37,6 +36,8 @@ def main():
 
     #TODO fjern init_input her:
     # init_input = init_mock_input()
+    print("Best move is turning the stockpile ONCE")
+    confirmer = input()
 
     #TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
     imgrec_input = runAllCards(cap) # TODO i stedet for imgrec_metode(), deres imgrec metode metode
@@ -67,7 +68,7 @@ def main():
                 if 'cards' in legal_move:
                     for move in prev_moves:
                         if legal_move['to'] == move['to'] and legal_move['cards'] == move['cards']:
-                            count = count + 1  
+                            count = count + 1
                 if count > 1:
                     removed.append(legal_move)
             for move in removed:
