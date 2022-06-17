@@ -60,7 +60,6 @@ class StrategyManager:
             if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
                 return move
             else:
-                #TODO if suit move is not A or 2, handle case
                 board = self.board
                 count = 0
                 for row in board['row-stack']: 
@@ -82,21 +81,8 @@ class StrategyManager:
                     return move
                 else:
                     return 'skip'
-                
-                
-        
-        # Basic Strategy
-        # Suit stack move = The highest value
-        # Is suit stack available?
-        # If yes -> return this move
-        # Advanced strategy
-        # Is suit stack available?
-        # If yes -> is cardValue-2 for all suits in play?
-        # If yes -> move to suit stack
-        # If no -> ignore move
-        # If no and no other moves available -> return this move
 
-    # This function can probably be ignored
+
     def king_move(self, moves):
         
         ## If stock pile % 3 == 0, we choose the waste pile move, to make sure the stock pile doesnt get locked. 
