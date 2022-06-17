@@ -15,16 +15,12 @@ def GetCardCorner(frame):
 
     # Converting image to a binary image
     # ( black and white only image).
-    # blur = cv2.GaussianBlur(imgGray, (5, 5), cv2.BORDER_DEFAULT)
     blur = cv2.blur(imgGray, (5, 5))
     _, threshold = cv2.threshold(blur, 130, 255, cv2.THRESH_BINARY)
     # Detecting contours in image.
     contours, _ = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-    #print("Number of Contours found = " + str(len(contours)))
 
-    # cv2.drawContours(img, contours, 3, (0, 255, 0), 3)
-
-    # cv2.imshow("contours", img)
+    # print("Number of Contours found = " + str(len(contours)))
 
     # The math executed if more cards are stacked which makes the card seem higher.
     def shorten(x1, x2, height, width):
@@ -35,13 +31,13 @@ def GetCardCorner(frame):
 
     def botShortenY(y1, y2, height, width):
         y2 = y2 - y1
-        y2 = (y2 / height) * (width / 0.9)  #1.4
+        y2 = (y2 / height) * (width / 0.9)  # 1.4
         y2 = y2 + y1
         return y2
 
     def botShortenX(x1, x2, height, width):
         x2 = x2 - x1
-        x2 = (x2 / width) * (width / 1.5)     #3
+        x2 = (x2 / width) * (width / 1.5)  # 3
         x2 = x2 + x1
         return x2
 
@@ -54,32 +50,25 @@ def GetCardCorner(frame):
 
             # Find corner with lowest number (lowest should be top left corner)
             for u in range(0, len(n), 2):
-                # print("==== is " + str(n[u]) + " less than " + str(min_x))
-                # print("--- " + str(u) + " to " + str(u+1))
-                # print("--- " + str(n[u]) + ", " + str(n[u+1]) + " = " + str(n[u] + n[u+1]) + "\n")
-                # if n[u] < min_x and n[u+1] < min_y:
                 if n[u] + n[u + 1] < min_x + min_y:
                     min_x = n[u]
                     min_y = n[u + 1]
-            #print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
+            # print("============ min-x and min-y: " + str(min_x) + ", " + str(min_y))
 
             # Figure out how many indexes to shift array so corner with the lowest value is top-left
             if min_x in n:
                 move_amount = np.where(n == min_x)
                 move_amount = int(move_amount[0])
-                #print("indexes to move: " + str(move_amount))
+                # print("indexes to move: " + str(move_amount))
 
             # Finally shift array left
             if move_amount != 0:
                 corrected = np.roll(n, -move_amount)
-                #print("finished rotating")
-
-                # for q in range(0, len(n), 2):
-                #    print(str(corrected[q]) + ", " + str(corrected[q+1]))
+                # print("finished rotating")
                 return corrected
             return n
         except:
-            #print("Error in correctOrientation()")
+            # print("Error in correctOrientation()")
             return n
 
     # removes vectors with odd angles if there's 5 or 6 vectors.
@@ -143,7 +132,7 @@ def GetCardCorner(frame):
         elif deg5 > 100:
             n = np.delete(n, [8, 9])
 
-        #print("finished")
+        # print("finished")
         return n
 
     def calcAngle(a, b):
@@ -161,18 +150,6 @@ def GetCardCorner(frame):
         i = 0
 
         for j in n:
-            # try:
-            #     linelength = round(math.sqrt(((n[i + 2] - n[i]) ** 2) + ((n[i + 3] - n[i + 1]) ** 2)), 2)
-            #
-            #     if linelength > minLineSize:
-            #         cv2.drawContours(img, [approx], -1, (0, 0, 255), 3)
-            #         #cv2.imshow("contours", img)
-            #         #print("coordinates: " + "\n" + str([approx]))  # + ", " + (n[i + 2])
-            #     else:
-            #         break  # breaks a lot
-            # except:
-            #     i = i  # Cannot be empty..
-
             try:
                 linelength = round(math.sqrt(((n[i + 2] - n[i]) ** 2) + ((n[i + 3] - n[i + 1]) ** 2)), 2)
                 if linelength > minLineSize:
@@ -210,14 +187,14 @@ def GetCardCorner(frame):
                         n[7] = shorten(n[5], n[7], height, width)
 
                         if height > width * 1.5:
-                            #print("CARDS ARE STACKED")
+                            # print("CARDS ARE STACKED")
                             cardCoordinates = np.float32([
                                 [n[0], n[1]],
                                 [n[2], n[3]],
                                 [n[4], n[5]],
                                 [n[6], n[7]]
                             ])
-                            #print(cardCoordinates)
+                            # print(cardCoordinates)
 
                         # cardCoordinates = coordinates of the cards corners in image
                         # ptsCut = Size of card we want after warp
@@ -237,20 +214,8 @@ def GetCardCorner(frame):
 
                         botCut = np.float32(
                             [[0, 0], [0, 250], [150, 250], [150, 0]])  # the coordinates/size of the new image
-                        botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut) #120, 257
+                        botM = cv2.getPerspectiveTransform(CornerCutCoordinates, botCut)  # 120, 257
                         botDst = cv2.warpPerspective(dst, botM, (150, 250))  # imgGray
-
-                        # Remove noise from the image. THIS USES A LOT OF PROCESSING POWER
-                        # Also works with a video stream: check out cv2.fastNlMeansDenoisingMulti()
-                        # _, thresholdblackwhite = cv2.threshold(botDst, 190, 255, cv2.THRESH_BINARY)
-                        # denoised = cv2.fastNlMeansDenoising(botDst, None, 7, 21)
-                        # blurDenoised = cv2.GaussianBlur(botDst, (5, 5), 0)
-                        # cv2.imshow("Denoised", blurDenoised)
-                        # inverted = cv2.bitwise_not(blurDenoised)
-                        # cv2.imshow("inverted", inverted)
-                        # _, thresholdblackwhite = cv2.threshold(dst, 190, 255, cv2.THRESH_BINARY)
-                        # denoisedblackwhite = cv2.fastNlMeansDenoising(thresholdblackwhite, None, 7, 21)
-                        # cv2.imshow("black white", denoisedblackwhite)
 
                         cv2.putText(img, string, (x, y),
                                     font, 0.6, (184, 22, 167))
@@ -259,7 +224,7 @@ def GetCardCorner(frame):
                         return botDst
 
             except:
-                print("Something went wrong finding card in box")
+                i = i
             i = i + 1
 
     # Showing the final image.
