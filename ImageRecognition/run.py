@@ -49,12 +49,11 @@ def run(listOfFrames):
     # Create a new object and execute.
     try:
         for i in range(len(listOfCorners)):
-            for y in range(2):  # int is amount of times it tries again, if no card is found
+            for y in range(3):  # int is amount of times it tries again, if no card is found
                 card = getCard(i, listOfCorners)  # Finds the card in the box
                 if "null" != card:
                     break
                 print("trying again")
-
             listofResults.append(Cards(i, card))  # Adds the found card to the list
     except:
         print("could not append to list")
@@ -66,15 +65,26 @@ def run(listOfFrames):
 
 
 # function to run image recognition and returns list of all cards on board
-def runAllCards(frame):
+def runAllCards(frame, framenum, listofResults):
     # _, frame = cap.read()
     listOfFrames = draw_boxes(frame)  # separates frames
     # cv2.imshow('preview', frame)
 
-    listofResults = run(listOfFrames)
-    # for i in range(len(listofResults)):
-    #     write_on_image(frame, listofResults[i].row, listofResults[i].card)
-    # cv2.imshow('preview', frame)
+    if framenum == -1:
+        listofResults = run(listOfFrames)
+    else:
+        try:
+            listOfCorners = []
+            for i in range(len(listOfFrames)):
+                listOfCorners.append(GetCardCorner(listOfFrames[i]))
+        except:
+            print("could not find card corner")
+        try:
+            listofResults[framenum] = Cards(framenum, getCard(framenum, listOfCorners))
+        except:
+            print("error finding new card in frame: " + framenum)
+
+
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
@@ -83,10 +93,10 @@ def runAllCards(frame):
 
 
 def showImage(frame, listofResults):
-    if len(listofResults) > 1:
+    #if len(listofResults) > 1:
         # print("length is > 1... Showing found cards on image")
-        for i in range(len(listofResults)):
-            write_on_image(frame, listofResults[i].row, listofResults[i].card)
+#        for i in range(len(listofResults)):
+            #write_on_image(frame, listofResults[i].row, listofResults[i].card)
     draw_boxes(frame)  # draws boxes
     cv2.imshow('preview', frame)
 
@@ -113,7 +123,7 @@ def main():
     # TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
     _, frame = cap.read()
     showImage(frame, listofResults)
-    imgrec_input = runAllCards(frame)  # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    imgrec_input = runAllCards(frame, -1, [])  # TODO i stedet for imgrec_metode(), deres imgrec metode metode
     listofResults = imgrec_input
     showImage(frame, listofResults)
     # time.sleep(1)
@@ -178,7 +188,7 @@ def main():
         input_confirmer = input()
 
         # Nyt billede
-        listofResults.clear()
+        #listofResults.clear()
         write_on_image(frame, 7, "")
         showImage(frame, listofResults)
         _, frame = cap.read()
@@ -223,5 +233,3 @@ def main():
 if __name__ == '__main__':
     setup()
     #main()
-    # runmycards(cap)
-    # time.sleep(25)
