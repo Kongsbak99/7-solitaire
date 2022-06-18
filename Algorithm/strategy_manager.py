@@ -1,7 +1,6 @@
 import json
 
-from Algorithm.cards import Cards
-
+from Algorithm.cardss import Cardss
 
 
 class StrategyManager:
@@ -18,7 +17,7 @@ class StrategyManager:
     # main method for general flow of strategy manager
     def best_move(self):
         moves = []
-        ## Check for suit move
+        # Check for suit move
         for i in range(len(self.moves)):
             if self.moves[i]['moveType'] == 4 or self.moves[i]['moveType'] == 1:
                 moves.append(self.moves[i])
@@ -27,18 +26,18 @@ class StrategyManager:
             if best_move == 'skip':
                 moves = []
             else: return best_move
-        ## Check for king move
+        # Check for king row move
         for i in range(len(self.moves)):
-            if self.moves[i]['moveType'] == 5 or self.moves[i]['moveType'] == 6:
+            if self.moves[i]['moveType'] == 5:
                 moves.append(self.moves[i])
         if len(moves) > 0:
             best_move = self.king_move(moves)
             if best_move == 'skip':
                 moves = []
             else: return best_move
-        ## Check for row move
+        # Check for row move
         for i in range(len(self.moves)):
-            if self.moves[i]['moveType'] == 3 or self.moves[i]['moveType'] == 2:
+            if self.moves[i]['moveType'] == 3:
                 moves.append(self.moves[i])
         if len(moves) > 0:
             best_move = self.row_stack_move(moves)
@@ -46,7 +45,23 @@ class StrategyManager:
                 moves = []
             else: return best_move
 
-        ##no moves doesny have a move type yet 
+        # Check for king waste move
+        for i in range(len(self.moves)):
+            if self.moves[i]['moveType'] == 6:
+                moves.append(self.moves[i])
+        if len(moves) > 0:
+            best_move = self.king_move(moves)
+            return best_move
+
+        # Check for waste row move
+        for i in range(len(self.moves)):
+            if self.moves[i]['moveType'] == 2:
+                moves.append(self.moves[i])
+        if len(moves) > 0:
+            best_move = self.row_stack_move(moves)
+            return best_move
+
+        # Turn stockpile move
         for i in range(len(self.moves)): 
             if self.moves[i]['moveType'] == 7:
                 moves.append(self.moves[i])
@@ -54,12 +69,11 @@ class StrategyManager:
             best_move = self.no_moves(moves)
             return best_move
 
-    # This function can probably be ignored
     def suit_stack_move(self, moves):
         
         for move in moves:
             card = move['cards'][0]
-            move_card = Cards.getCardValue(card)
+            move_card = Cardss.getCardValue(card)
 
             if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
                 return move
@@ -76,7 +90,7 @@ class StrategyManager:
                                     count = count + 1
                 for stack in board['suit-stack']:
                     if len(board['suit-stack'][stack]) > 1:
-                        suit_card = Cards.getCardValue(board['suit-stack'][stack][1])
+                        suit_card = Cardss.getCardValue(board['suit-stack'][stack][1])
 
                         if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
                             count = count + 1
@@ -86,23 +100,22 @@ class StrategyManager:
                 else:
                     return 'skip'
 
-
     def king_move(self, moves):
         
-        ## If stock pile % 3 == 0, we choose the waste pile move, to make sure the stock pile doesnt get locked. 
+        # If stock pile % 3 == 0, we choose the waste pile move, to make sure the stock pile doesnt get locked.
         for move in moves: 
             if move['moveType'] == 6:
                 stock_pile = self.board['stock-pile']
                 if len(stock_pile) % 3 == 0:
                     return move
-        ## Else we consider the rest of the possible king moves
-        ## If more than one king move, we choose the one moving from a pile with more unknown cards. 
+        # Else we consider the rest of the possible king moves
+        # If more than one king move, we choose the one moving from a pile with more unknown cards.
         if len(moves) > 1:
-            rows = [] ## Rows moves are moved from
+            rows = [] # Rows moves are moved from
             for row in self.board['row-stack']:
                 for move in moves:
                     if self.board['row-stack'][row]:
-                        ## Check that it is a row (not waste pile)
+                        # Check that it is a row (not waste pile)
                         if self.board['row-stack'][row][0] == move['cards'][0]:
                             total_length = len(self.board['row-stack'][row])
                             move_type = move['moveType']
@@ -111,7 +124,7 @@ class StrategyManager:
                                 if card == 0:
                                     unknown_size = unknown_size + 1
                             rows.append({'moved_from': row, 'moveId': move['moveId'], 'move_type': move_type, 'unknown_size': unknown_size, 'total_length': total_length})
-            ## Best move = the move with the most unknowns underneath. 
+            # Best move = the move with the most unknowns underneath.
             best_move = rows[0]
             for row in rows:
                 if row['unknown_size'] < best_move['unknown_size']:

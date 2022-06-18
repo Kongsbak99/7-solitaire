@@ -11,9 +11,7 @@ def unknownCards(board):
     }
     if mock_input['waste-pile']:
         if mock_input['waste-pile'][0] == -1:
-            rec_card = mockImageRec()
-            actual_card = confirmCard(rec_card)
-            mock_input['waste-pile'] = actual_card
+            return True
     for row in mock_input['row-stack']:
         if mock_input['row-stack'][row][0] == -1:
             rec_card = mockImageRec()

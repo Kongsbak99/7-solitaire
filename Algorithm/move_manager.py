@@ -1,4 +1,4 @@
-from Algorithm.cards import Cards
+from Algorithm.cardss import Cardss
 from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 from Algorithm.MoveTypes.wastepile_to_suitstack import wastepileToSuitStack
 from Algorithm.MoveTypes.wastepile_to_row import wastepileToRow
@@ -30,11 +30,11 @@ class MoveManager:
 
     # Check whether 1st card can be put on top of 2nd card in the rows (E.g. Ace of Spaces on Two of Hearts)
     def canOverlay(self, card_id_1, card_id_2):
-        card_1_value = Cards.getCardValue(card_id_1)
-        card_1_suit = Cards.getCardSuit(card_id_1)
+        card_1_value = Cardss.getCardValue(card_id_1)
+        card_1_suit = Cardss.getCardSuit(card_id_1)
 
-        card_2_value = Cards.getCardValue(card_id_2)
-        card_2_suit = Cards.getCardSuit(card_id_2)
+        card_2_value = Cardss.getCardValue(card_id_2)
+        card_2_suit = Cardss.getCardSuit(card_id_2)
 
         # Card has to be 1 lower...
         # Verify a row's top card isn't ID: 0
@@ -236,8 +236,6 @@ class MoveManager:
         return board
        # with open('board.json', 'w') as h:
         #    json.dump(board, h)
-
-
 
     def make_move(self, move, board):
 
