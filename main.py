@@ -67,7 +67,7 @@ def main():
                     for move in prev_moves:
                         if legal_move['to'] == move['to'] and legal_move['cards'] == move['cards']:
                             count = count + 1
-                if count > 1:
+                if count > 0:
                     removed.append(legal_move)
             for move in removed:
                 legal_moves.remove(move)

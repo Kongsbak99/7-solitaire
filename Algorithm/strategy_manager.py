@@ -89,7 +89,7 @@ class StrategyManager:
                                 if row_card == move_card-2:
                                     count = count + 1
                 for stack in board['suit-stack']:
-                    if len(board['suit-stack'][stack]) > 2:
+                    if len(board['suit-stack'][stack]) > 1:
                         #suit_card = Cardss.getCardValue(board['suit-stack'][stack][len(board['suit-stack'][stack])-2])
                         for card in range(len(board['suit-stack'][stack])):
                             if card != 0:
@@ -104,8 +104,7 @@ class StrategyManager:
 
                 if count == 4:
                     return move
-                else:
-                    return 'skip'
+        return 'skip'
 
     def king_move(self, moves):
         
@@ -136,7 +135,7 @@ class StrategyManager:
             for row in rows:
                 if row['unknown_size'] < best_move['unknown_size']:
                     best_move = row
-            if best_move['moveId'] == 5 and best_move['unknown_size'] == 0:
+            if best_move['move_type'] == 5 and best_move['unknown_size'] == 0:
                 return 'skip'
             else:
                 for move in moves:
