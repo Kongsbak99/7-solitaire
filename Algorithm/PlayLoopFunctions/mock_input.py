@@ -10,15 +10,15 @@ def mockImageRec():
 def init_mock_input():
     
     mock_input = {
-    "waste-pile": [44],
+    "waste-pile": [45],
     "row-stack": {
-        "row-1": 1,
-        "row-2": 30,
-        "row-3": 28,
-        "row-4": 29,
-        "row-5": 41,
-        "row-6": 42, 
-        "row-7": 36
+        "row-1": 10,
+        "row-2": 17,
+        "row-3": 3,
+        "row-4": 11,
+        "row-5": 24,
+        "row-6": 25,
+        "row-7": 23
       }
     }
 

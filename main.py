@@ -17,6 +17,9 @@ from Algorithm.PlayLoopFunctions.mock_input import mockImageRec
 from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 from Algorithm.PlayLoopFunctions.mock_input import imgrec_service, mock, mockImageRec
 
+from Algorithm.cardss import Cardss
+
+
 
 import json
 
@@ -79,7 +82,7 @@ def main():
             cards = best_move["cards"]
             cards_name = []
             for card in cards:
-                cards_name.append(Cards.getCardName(card))
+                cards_name.append(Cardss.getCardName(card))
             location = best_move["to"]
             print("Best move is moving card(s): " + str(cards_name) + ", to " + str(location))
 

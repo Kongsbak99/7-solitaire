@@ -82,20 +82,27 @@ class StrategyManager:
                 count = 0
                 for row in board['row-stack']: 
                     if len(board['row-stack'][row]) > 0:
-                        row_card = Cards.getCardValue(board['row-stack'][row][0])
+                        row_card = Cardss.getCardValue(board['row-stack'][row][0])
                         for card in board['row-stack'][row]:
                             if card != 0:
-                                row_card = Cards.getCardValue(card)
+                                row_card = Cardss.getCardValue(card)
                                 if row_card == move_card-2:
                                     count = count + 1
                 for stack in board['suit-stack']:
-                    if len(board['suit-stack'][stack]) > 1:
-                        suit_card = Cardss.getCardValue(board['suit-stack'][stack][1])
+                    if len(board['suit-stack'][stack]) > 2:
+                        #suit_card = Cardss.getCardValue(board['suit-stack'][stack][len(board['suit-stack'][stack])-2])
+                        for card in range(len(board['suit-stack'][stack])):
+                            if card != 0:
+                                suit_card = Cardss.getCardValue(board['suit-stack'][stack][card])
+                                if suit_card == move_card-2:
+                                    count = count + 1
+                        #if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
+                        #    count = count + 1
+                        #suit_card = Cardss.getCardValue(board['suit-stack'][stack][len(board['suit-stack'][stack])-1])
+                        #if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
+                        #    count = count + 1
 
-                        if suit_card > move_card or suit_card == move_card or suit_card == move_card-1 or suit_card == move_card-2:
-                            count = count + 1
-
-                if count == 3:
+                if count == 4:
                     return move
                 else:
                     return 'skip'

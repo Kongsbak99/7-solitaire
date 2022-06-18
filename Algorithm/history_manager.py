@@ -27,7 +27,7 @@ def findUnknownCard(board):
 
 class HistoryManager():
     def __init__(self, input):
-        with open('../initBoard.json') as f:
+        with open('./initBoard.json') as f:
             self.data = json.load(f)
 
         ## init input from image rec
@@ -63,10 +63,10 @@ class HistoryManager():
 
     ##Find where unknown card is.
     ##Change to new input
-    def update_board(self, board, runAllCards):
+    def update_board(self, board):
         if board['waste-pile']:
             if board['waste-pile'][0] == -1:
-                imgrec_input = runAllCards  # TODO i stedet for mock(), deres metode
+                imgrec_input = mock()#runAllCards  # TODO i stedet for mock(), deres metode
                 imgrec_to_json = imgrec_service(imgrec_input)
                 # TODO Fjern linje:
                 # rec_card = mockImageRec()
@@ -78,7 +78,7 @@ class HistoryManager():
         for row in board['row-stack']:
             if board["row-stack"][row]:
                 if board['row-stack'][row][0] == -1:
-                    imgrec_input = runAllCards  # TODO i stedet for mock(), deres metode
+                    imgrec_input = mock()#runAllCards  # TODO i stedet for mock(), deres metode
                     imgrec_to_json = imgrec_service(imgrec_input)
                     # TODO Fjern:
                     # rec_card = mockImageRec()
