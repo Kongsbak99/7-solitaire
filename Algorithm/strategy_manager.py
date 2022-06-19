@@ -75,6 +75,16 @@ class StrategyManager:
             card = move['cards'][0]
             move_card = Cardss.getCardValue(card)
 
+            #Do not make waste to suit stack move, if it will make the stock+waste pile % 3 = 0 because then it locks the pile. 
+            if move['moveType'] == 1:
+                stock_pile = self.board['stock-pile']
+                waste_pile = self.board['waste-pile']
+                test = (len(stock_pile)+len(waste_pile)-1) % 3
+                if len(stock_pile)+len(waste_pile) == 1:
+                    return move
+                if (len(stock_pile)+len(waste_pile)-1) % 3 == 0:
+                    continue ##So if making the move would lock the pile, continue (skip this move)
+
             if card == 1 or card == 14 or card == 27 or card == 40 or card == 2 or card == 15 or card == 28 or card == 41:
                 return move
             else:
@@ -112,37 +122,44 @@ class StrategyManager:
         for move in moves: 
             if move['moveType'] == 6:
                 stock_pile = self.board['stock-pile']
-                if len(stock_pile) % 3 == 0:
+                waste_pile = self.board['waste-pile']
+                if (len(stock_pile)+len(waste_pile)) % 3 == 0:
                     return move
+        
+        if len(moves) == 1 and moves[0]['moveType'] == 6:
+            return moves[0]
         # Else we consider the rest of the possible king moves
         # If more than one king move, we choose the one moving from a pile with more unknown cards.
-        if len(moves) > 1:
-            rows = [] # Rows moves are moved from
-            for row in self.board['row-stack']:
-                for move in moves:
-                    if self.board['row-stack'][row]:
-                        # Check that it is a row (not waste pile)
-                        if self.board['row-stack'][row][0] == move['cards'][0]:
-                            total_length = len(self.board['row-stack'][row])
-                            move_type = move['moveType']
-                            unknown_size = 0
-                            for card in self.board['row-stack'][row]:
-                                if card == 0:
-                                    unknown_size = unknown_size + 1
-                            rows.append({'moved_from': row, 'moveId': move['moveId'], 'move_type': move_type, 'unknown_size': unknown_size, 'total_length': total_length})
-            # Best move = the move with the most unknowns underneath.
-            best_move = rows[0]
-            for row in rows:
-                if row['unknown_size'] < best_move['unknown_size']:
-                    best_move = row
-            if best_move['move_type'] == 5 and best_move['unknown_size'] == 0:
-                return 'skip'
-            else:
-                for move in moves:
-                    if move['moveId'] == best_move['moveId']:
-                        return move
+        #if len(moves) > 1:
+        rows = [] # Rows moves are moved from
+        for row in self.board['row-stack']:
+            for move in moves:
+                if self.board['row-stack'][row]:
+                    # Check that it is a row (not waste pile)
+                    if self.board['row-stack'][row][0] == move['cards'][0]:
+                        total_length = len(self.board['row-stack'][row])
+                        move_type = move['moveType']
+                        unknown_size = 0
+                        for card in self.board['row-stack'][row]:
+                            if card == 0:
+                                unknown_size = unknown_size + 1
+                        rows.append({'moved_from': row, 'moveId': move['moveId'], 'move_type': move_type, 'unknown_size': unknown_size, 'total_length': total_length})
+        # Best move = the move with the most unknowns underneath.
+        best_move = rows[0]
+        for row in rows:
+            if row['unknown_size'] != 0:
+                best_move = row
+        for row in rows:
+            if row['unknown_size'] < best_move['unknown_size'] and row['unknown_size'] != 0:
+                best_move = row
+        if best_move['move_type'] == 5 and best_move['unknown_size'] == 0:
+            return 'skip'
+        else:
+            for move in moves:
+                if move['moveId'] == best_move['moveId']:
+                    return move
         
-        else: return moves[0] ##If only one move, return that
+        #else: return moves[0] ##If only one move, return that
 
     def row_stack_move(self, moves):
         ##Check if only move is movetype  2
@@ -156,9 +173,11 @@ class StrategyManager:
         king_available = False
         for row in self.board['row-stack']:
             if self.board['row-stack'][row]:
-                card = self.board['row-stack'][row][0]
-                if card == 13 or card == 26 or card == 39 or card == 52 and len(self.board['row-stack'][row]) > 1:
-                    king_available = True
+                for card in self.board['row-stack'][row]: 
+                    if self.board['row-stack'][row][len(self.board['row-stack'][row])-1] != 0:
+                        king_available = False
+                    elif (card == 13 or card == 26 or card == 39 or card == 52) and len(self.board['row-stack'][row]) > 1:
+                        king_available = True
         if self.board["waste-pile"]:
             if self.board['waste-pile'][0] == 13 or self.board['waste-pile'][0] == 26 or self.board['waste-pile'][0] == 39 or self.board['waste-pile'][0] == 52:
                 king_available = True
