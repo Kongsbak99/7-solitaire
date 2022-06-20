@@ -25,7 +25,7 @@ class Cards:
 
 # Finds card in specific box.
 # i = 0..11 (location of the card frame)
-# listOfCorers = array of all card frames
+# listOfCorners = array of all card frames
 def getCard(i, listOfCorners):
     try:
         detector = ObjectDetection(capture_index=listOfCorners[i], model_name=True)
@@ -114,22 +114,17 @@ def setup():
 
 
 def main():
-    ##initiate start game
+    # initiate start game
     game_end = False
     listofResults = []
 
-    # TODO fjern init_input her:
-    # init_input = init_mock_input()
-
-    # TODO Fjern hashtag på de 2 linjer under og ændre imgrec_input = deres imgrec metode
     _, frame = cap.read()
     showImage(frame, listofResults)
-    imgrec_input = runAllCards(frame, -1, [])  # TODO i stedet for imgrec_metode(), deres imgrec metode metode
+    imgrec_input = runAllCards(frame, -1, [])
     listofResults = imgrec_input
     showImage(frame, listofResults)
-    # time.sleep(1)
     init_input = imgrec_service(imgrec_input)
-    hm = HistoryManager(init_input)  ##init game
+    hm = HistoryManager(init_input)
     with open('board.json') as f:
         board = json.load(f)
         f.close()
@@ -139,12 +134,12 @@ def main():
     confirmer = input()
 
     prev_moves = []
-    #### General flow of game
-    while game_end == False:  ##Keep while loop active, until game is finished.
+    # General flow of game
+    while game_end == False:  # Keep while loop active, until game is finished.
         ##TODO: Check for lost game
 
         mm = MoveManager()
-        ##After init of board, check for moves
+        # After init of board, check for moves
         mm.movables()
         legal_moves = mm.legal_moves
         print(f"Possible moves in Main: {legal_moves}")
@@ -158,17 +153,18 @@ def main():
                     for move in prev_moves:
                         if legal_move['to'] == move['to'] and legal_move['cards'] == move['cards']:
                             count = count + 1
-                if count > 1:
+                if count > 0:
                     removed.append(legal_move)
             for move in removed:
                 legal_moves.remove(move)
 
-        ##Init Strategy Manager and pass legal moves from Move Manager
+        # Init Strategy Manager and pass legal moves from Move Manager
         sm = StrategyManager(legal_moves)
-        # Check the best move
-        next_move_string = "Best move is turning the stockpile ONCE"
         best_move = sm.best_move()
 
+        next_move_string = "Best move is turning the stockpile ONCE"
+
+        # Check the best move
         if best_move["moveType"] == 7:
             stockpile = len(board_after_move["stock-pile"])
             if stockpile >= 3:
@@ -180,7 +176,7 @@ def main():
             cards_name = []
             for card in cards:
                 cards_name.append(Cardss.getCardName(card))
-            location = sm.best_move()["to"]
+            location = best_move["to"]
             next_move_string = "Best move is moving card(s): " + str(cards_name) + ", to " + str(location)
             print(next_move_string)
 
@@ -194,7 +190,7 @@ def main():
         input_confirmer = input()
 
         # Nyt billede
-        #listofResults.clear()
+        # listofResults.clear()
         write_on_image(frame, 7, "")
         showImage(frame, listofResults)
         _, frame = cap.read()
@@ -204,10 +200,10 @@ def main():
 
         _, frame = cap.read()
 
-        ##Make move
-        board_after_move = mm.doMove(sm.best_move())  ##complete board
+        # Make move
+        board_after_move = mm.doMove(sm.best_move())  # complete board
         print("Board after move")
-        ##Finally update board to new state
+        # Finally update board to new state
         # But only if there's a new unrec'ed card
         unknown_found = False
         if -1 in board_after_move["waste-pile"]:
@@ -231,10 +227,12 @@ def main():
 
         # Check for victory
         game_end = hm.check_for_victory()
+
         if 'cards' in best_move:
             prev_moves.append(best_move)
-        if len(prev_moves) > 20:
-            prev_moves.pop(0)
+        # if len(prev_moves) > 20:
+        #     prev_moves.pop(0)
+
         print("###################################")
 
     print("Game ended")

@@ -160,10 +160,6 @@ class MoveManager:
         elif not self.board["row-stack"]["row-7"]:
             empty_rows.append("row-7")
 
-
-
-        # waste_pile_cards = [self.board["waste-pile"][0], self.board["waste-pile"][1], self.board["waste-pile"][2]]
-
         for row in rows:
             temp_set = []
             for card in row:
@@ -182,9 +178,7 @@ class MoveManager:
                 for empty_row in empty_rows:
                     self.createMoveObject(card_set, empty_row, 5)
 
-
         # Check whether the top waste-pile card can be moved to a row
-
         for topcard in row_topcards:
             if self.board["waste-pile"]:
                 wastepile_card1 = self.board["waste-pile"][0]
@@ -203,7 +197,6 @@ class MoveManager:
             # Check movables of waste pile card to suit stack
             self.canSuitStacked(wastepile_card1, 1)
 
-
         # Force turnover as only move if stockpile + wastepile = 3 cards and they're not in wastepile
         if (len(self.board["stock-pile"]) + len(self.board["waste-pile"]) == 3) and len(self.board["waste-pile"]) < 3:
             self.legal_moves.clear()
@@ -211,7 +204,7 @@ class MoveManager:
         if not (not bool(self.board["stock-pile"]) and len(self.board["waste-pile"]) <= 3):
             self.legal_moves.append({'moveId': int((len(self.legal_moves))), 'moveType': 7})
 
-    def doMove(self, move):  # TODO
+    def doMove(self, move):
         if move["moveType"] == 1:
             board = wastepileToSuitStack(move, self.board)
         elif move["moveType"] == 2:
@@ -228,19 +221,12 @@ class MoveManager:
             board = turnStockpile(self.board)
         else:
             print("ERROR - Unknown moveType: " + str(move["moveType"]))
-        #fil = open('board.json', 'w')
-        #json.dump(board, fil)
-        #print("MM1: " + str(board))
-        #fil.close()
-        #print("MM2: " + str(board))
         return board
-       # with open('board.json', 'w') as h:
-        #    json.dump(board, h)
 
     def make_move(self, move, board):
 
         try:
-            ############ Check if no moves, turn new waste pile ############
+            # Check if no moves, turn new waste pile
             if len(move) == 0:
                 # If more than 3 cards in stock-pile, turn three cards no problem
                 if len(board["stock-pile"]) >= 3:
@@ -252,44 +238,37 @@ class MoveManager:
                 if len(board["stock-pile"]) < 3:
                     print("Under 3 cards in stock pile")
 
-                # board['deprecated-waste'].append(board['waste-pile'])
-                # board['waste-pile'] = [-1, -1, -1]
-                # board['stock-pile'].remove(0)
-                # board['stock-pile'].remove(0)
-                # board['stock-pile'].remove(0)
-
             else:
-                ############ First cleanup old location of card(s) ############
+                # First cleanup old location of card(s)
                 bottom_card = move['cards'][0]
-                ##If moved from waste pile, simply just remove card from array
+                # If moved from waste pile, simply just remove card from array
                 for card in board['waste-pile']:
                     if card == bottom_card:
                         board['waste-pile'].remove(card)
                         board['waste-pile'].insert(0, -1)
-                        
 
-                ##If moved from row stack, create new row with potential unknown card.
+                # If moved from row stack, create new row with potential unknown card.
                 for row in board['row-stack']:
-                    ##if card matches, cleanup row and make unknown (-1)
+                    # if card matches, cleanup row and make unknown (-1)
                     if board['row-stack'][row][0] == bottom_card:
                         new_row = []
                         for card in board['row-stack'][row]:
                             if card == 0:
                                 new_row.append(card)
-                        ##If bottom card is 0, then make that an unknown card (-1)
+                        # If bottom card is 0, then make that an unknown card (-1)
                         if new_row[0] == 0:
                             new_row[0] = -1
                         # Update board with new row.
                         board['row-stack'][row] = new_row
 
-                ############ Then update new location of card(s) ############
+                # Then update new location of card(s)
                 # Check if cards should be moved to suit stack
                 for stack in board['suit-stack']:
                     if stack == move['to']:
                         for card in move['cards']:
                             board['suit-stack'][stack].append(card)
 
-                ##Check if cards should be moved to row stack
+                # Check if cards should be moved to row stack
                 for row in board['row-stack']:
                     if row == move['to']:
                         # make new row in correct order
@@ -299,7 +278,7 @@ class MoveManager:
                         # Update board row.
                         board['row-stack'][row] = new_row
 
-            ############ Finally return the new board, with the move made and a potential new unknown card. ############
+            # Finally return the new board, with the move made and a potential new unknown card
             self.board = board
             return board
 
