@@ -99,5 +99,5 @@ def rowToRow(move, board):
     for card in cards_reversed:
         row.insert(0, card)
 
-    print("R2R: " + str(board))
+    # print("R2R: " + str(board))
     return board
