@@ -13,7 +13,7 @@ from ImageRecognition.imageSplit import draw_boxes
 from Algorithm.cardss import Cardss as Cardss
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensionns to cam object (not cap)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensions to cam object (not cap)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 
@@ -21,6 +21,9 @@ class Cards:
     def __init__(self, row, card):
         self.row = row
         self.card = card
+
+    def __repr__(self):
+        return f'Card("Row: {self.row}", "Card: {self.card}")'
 
 
 # Finds card in specific box.
@@ -129,10 +132,10 @@ def main():
         board = json.load(f)
         f.close()
     f.close()
-
     print("Best move is turning the stockpile ONCE")
+    print("Confirm that move is performed with ENTER")
     confirmer = input()
-
+    print("---------------------------------------------")
     prev_moves = []
     # General flow of game
     while game_end == False:  # Keep while loop active, until game is finished.
@@ -142,8 +145,8 @@ def main():
         # After init of board, check for moves
         mm.movables()
         legal_moves = mm.legal_moves
-        print(f"Possible moves in Main: {legal_moves}")
-        print("")
+        # print(f"Possible moves in Main: {legal_moves}")
+        # print("")
 
         if len(prev_moves) > 0:
             removed = []
@@ -186,6 +189,7 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             cap.release()
+        print("---------------------------------------------")
         print("Confirm that move is performed with ENTER")
         input_confirmer = input()
 
@@ -202,7 +206,7 @@ def main():
 
         # Make move
         board_after_move = mm.doMove(sm.best_move())  # complete board
-        print("Board after move")
+        # print("Board after move")
         # Finally update board to new state
         # But only if there's a new unrec'ed card
         unknown_found = False
@@ -223,7 +227,7 @@ def main():
 
         new_input = hm.update_board(board_after_move, listofResults)
 
-        print("Board after update")
+        # print("Board after update")
 
         # Check for victory
         game_end = hm.check_for_victory()
@@ -233,7 +237,7 @@ def main():
         # if len(prev_moves) > 20:
         #     prev_moves.pop(0)
 
-        print("###################################")
+        # print("###################################")
 
     print("Game ended")
 
