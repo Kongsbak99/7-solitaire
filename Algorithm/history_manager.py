@@ -16,6 +16,8 @@ def findUnknownCard(board):
                 return x
             else:
                 x = x + 1
+        else:
+            x = x + 1
 
 
 class HistoryManager():
