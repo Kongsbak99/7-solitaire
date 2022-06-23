@@ -1,5 +1,3 @@
-# New class to handle different types of moves as to not overpopulate move_manager
-
 ### MoveType: 6 ###
 
 def kingWastepileToEmptyRow(move, board):

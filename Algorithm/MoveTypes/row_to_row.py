@@ -1,7 +1,3 @@
-import json
-
-# New class to handle different types of moves as to not overpopulate move_manager
-
 ### MoveType: 3 ###
 
 def rowToRow_new(move, board):

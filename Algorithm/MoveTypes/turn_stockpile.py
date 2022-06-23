@@ -1,6 +1,4 @@
-# New class to handle different types of moves as to not overpopulate move_manager
-
-### MoveType: Empty ###
+### MoveType: 7 ###
 
 def turnStockpile(board):
     wastepile = board["waste-pile"]
