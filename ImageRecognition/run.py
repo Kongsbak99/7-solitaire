@@ -121,6 +121,7 @@ def main():
     game_end = False
     listofResults = []
 
+
     _, frame = cap.read()
     showImage(frame, listofResults)
     imgrec_input = runAllCards(frame, -1, [])
@@ -139,7 +140,6 @@ def main():
     prev_moves = []
     # General flow of game
     while game_end == False:  # Keep while loop active, until game is finished.
-        ##TODO: Check for lost game
 
         mm = MoveManager()
         # After init of board, check for moves

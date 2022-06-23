@@ -174,7 +174,7 @@ class MoveManager:
                 if self.canOverlay(check_card, topcard):
                     self.createMoveObject(card_set, self.getRow(topcard), 3)
             # Check if any of the sets are only kings, and if there's an empty row
-            if (card_set[len(card_set) - 1] == [13] or card_set[len(card_set) - 1] == [26] or card_set[len(card_set) - 1] == [39] or card_set[len(card_set) - 1] == [52]) and empty_rows:
+            if (card_set[len(card_set) - 1] == 13 or card_set[len(card_set) - 1] == 26 or card_set[len(card_set) - 1] == 39 or card_set[len(card_set) - 1] == 52) and empty_rows:
                 for empty_row in empty_rows:
                     self.createMoveObject(card_set, empty_row, 5)
 
