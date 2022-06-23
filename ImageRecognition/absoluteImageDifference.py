@@ -6,6 +6,10 @@ import cv2
 
 from ImageRecognition.old.image import bw_filter
 
+"""""
+Definitions are inspired by https://github.com/EdjeElectronics/OpenCV-Playing-Card-Detector
+"""""
+
 path = os.path.dirname(os.path.abspath(__file__))
 pathname= path + '/cardCutouts/'
 
