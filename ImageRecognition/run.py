@@ -1,16 +1,16 @@
 import json
 
+import cv2
+
 from Algorithm.PlayLoopFunctions.mock_input import imgrec_service
+from Algorithm.cardss import Cardss as Cardss
 from Algorithm.history_manager import HistoryManager, findUnknownCard
 from Algorithm.move_manager import MoveManager
 from Algorithm.strategy_manager import StrategyManager
-from Algorithm.MoveTypes.turn_stockpile import turnStockpile
 from ImageRecognition.CardDetection import ObjectDetection
-from ImageRecognition.edgeDetectionLive2 import GetCardCorner
+from ImageRecognition.image_processing import GetCardCorner
+from ImageRecognition.image_split import draw_boxes
 from ImageRecognition.write_on_image import write_on_image
-import cv2
-from ImageRecognition.imageSplit import draw_boxes
-from Algorithm.cardss import Cardss as Cardss
 
 cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)  # set new dimensions to cam object (not cap)
@@ -70,9 +70,7 @@ def run(listOfFrames):
 
 # function to run image recognition and returns list of all cards on board
 def runAllCards(frame, framenum, listofResults):
-    # _, frame = cap.read()
     listOfFrames = draw_boxes(frame)  # separates frames
-    # cv2.imshow('preview', frame)
 
     if framenum == -1:
         listofResults = run(listOfFrames)
@@ -88,8 +86,6 @@ def runAllCards(frame, framenum, listofResults):
         except:
             print("error finding new card in frame: " + framenum)
 
-
-
     if cv2.waitKey(1) & 0xFF == ord('q'):
         cv2.destroyAllWindows()
         cap.release()
@@ -97,10 +93,6 @@ def runAllCards(frame, framenum, listofResults):
 
 
 def showImage(frame, listofResults):
-    #if len(listofResults) > 1:
-        # print("length is > 1... Showing found cards on image")
-#        for i in range(len(listofResults)):
-            #write_on_image(frame, listofResults[i].row, listofResults[i].card)
     draw_boxes(frame)  # draws boxes
     cv2.imshow('preview', frame)
 
@@ -120,7 +112,6 @@ def main():
     # initiate start game
     game_end = False
     listofResults = []
-
 
     _, frame = cap.read()
     showImage(frame, listofResults)
@@ -145,8 +136,6 @@ def main():
         # After init of board, check for moves
         mm.movables()
         legal_moves = mm.legal_moves
-        # print(f"Possible moves in Main: {legal_moves}")
-        # print("")
 
         if len(prev_moves) > 0:
             removed = []
@@ -227,21 +216,14 @@ def main():
 
         new_input = hm.update_board(board_after_move, listofResults)
 
-        # print("Board after update")
-
         # Check for victory
         game_end = hm.check_for_victory()
 
         if 'cards' in best_move:
             prev_moves.append(best_move)
-        # if len(prev_moves) > 20:
-        #     prev_moves.pop(0)
-
-        # print("###################################")
-
     print("Game ended")
 
 
 if __name__ == '__main__':
-    #setup()
+    # setup()
     main()
